@@ -1,0 +1,50 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 11;
+---
+
+<Layout title="Git — CI/CD y Branch Protection">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="CI/CD y Branch Protection" id="cicd-branch-protection">
+      <p>Las buenas prácticas documentadas no sirven de nada si el repositorio no las <strong>impone técnicamente</strong>. GitLab permite configurar reglas que hacen obligatorio el cumplimiento.</p>
+      <h3>Configuración de Branch Protection</h3>
+      <p>Aplicar esta configuración tanto a <code>main</code> como a <code>testing</code> en: Settings → Repository → Protected branches.</p>
+      <div class="gitlab-cfg">
+        <div class="gitlab-cfg-header">⚙ Settings → Repository → Protected branches → main & testing</div>
+        <div class="gitlab-cfg-body">
+          <div class="cfg-row"><span class="cfg-name">Allowed to merge</span><span class="cfg-val cfg-val2">Maintainers</span></div>
+          <div class="cfg-row"><span class="cfg-name">Allowed to push</span><span class="cfg-val cfg-off">No one</span></div>
+          <div class="cfg-row"><span class="cfg-name">Allow force push</span><span class="cfg-val cfg-off">Desactivado</span></div>
+          <div class="cfg-row"><span class="cfg-name">Require approval before merging</span><span class="cfg-val cfg-on">Activado (mín. 1)</span></div>
+          <div class="cfg-row"><span class="cfg-name">Code owner approval required</span><span class="cfg-val cfg-on">Activado</span></div>
+        </div>
+      </div>
+      <div class="gitlab-cfg" style="margin-top:16px;">
+        <div class="gitlab-cfg-header">⚙ Settings → General → Merge requests</div>
+        <div class="gitlab-cfg-body">
+          <div class="cfg-row"><span class="cfg-name">Merge method</span><span class="cfg-val cfg-val2">Squash commits</span></div>
+          <div class="cfg-row"><span class="cfg-name">Pipelines must succeed</span><span class="cfg-val cfg-on">Activado</span></div>
+          <div class="cfg-row"><span class="cfg-name">All discussions must be resolved</span><span class="cfg-val cfg-on">Activado</span></div>
+          <div class="cfg-row"><span class="cfg-name">Delete source branch after merge</span><span class="cfg-val cfg-on">Activado</span></div>
+        </div>
+      </div>
+      <h3>Pipeline de CI mínimo recomendado</h3>
+      <p>Todo PR debe pasar un pipeline antes de poder mergearse. Como mínimo el pipeline debe incluir:</p>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">🧪</span><span class="rule-text"><strong>Tests unitarios y de integración.</strong> Si los tests fallan, el PR no puede mergearse, sin importar aprobaciones.</span></div>
+        <div class="rule"><span class="rule-icon">🔍</span><span class="rule-text"><strong>Linter y análisis de código estático.</strong> Para garantizar que el código sigue los estándares del proyecto.</span></div>
+        <div class="rule"><span class="rule-icon">🏗️</span><span class="rule-text"><strong>Build exitoso.</strong> Verificar que la aplicación compila/construye sin errores.</span></div>
+      </div>
+      <div class="tip"><strong>Tip:</strong> Configurar el pipeline en el archivo <code>.gitlab-ci.yml</code> en la raíz del proyecto. GitLab lo detecta automáticamente y lo ejecuta en cada push.</div>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>

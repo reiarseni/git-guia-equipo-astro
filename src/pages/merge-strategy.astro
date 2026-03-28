@@ -1,0 +1,44 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 7;
+---
+
+<Layout title="Git — Merge Strategy">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="Merge Strategy — Squash & Merge" id="merge-strategy">
+      <p>El equipo usa <strong>Squash & Merge</strong> como estrategia estándar al mergear PRs hacia <code>testing</code> y de <code>testing</code> hacia <code>main</code>. Esto mantiene el historial de ambas ramas permanentes limpio y legible: <strong>un PR = un commit</strong>.</p>
+      <div class="squash-visual">
+        <div class="sq-side">
+          <div class="sq-label">Tu rama (múltiples commits)</div>
+          <div class="sq-commit">feat: agrega formulario</div>
+          <div class="sq-commit">fix: corrige validación</div>
+          <div class="sq-commit">chore: elimina console.log</div>
+          <div class="sq-commit">feat: completa el flujo</div>
+        </div>
+        <div class="sq-arrow">→</div>
+        <div class="sq-side">
+          <div class="sq-label">En testing/main (un commit)</div>
+          <div class="sq-commit result">Agrega login con Google [#456]</div>
+        </div>
+      </div>
+      <h3>¿Por qué Squash?</h3>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">📖</span><span class="rule-text">El historial de <code>main</code> y <code>testing</code> queda <strong>limpio y semántico</strong>: cada línea representa una feature o fix completo, no commits intermedios de trabajo.</span></div>
+        <div class="rule"><span class="rule-icon">🔙</span><span class="rule-text">Facilita hacer <strong>revert de un feature completo</strong> con un solo comando si algo falla en producción.</span></div>
+        <div class="rule"><span class="rule-icon">📋</span><span class="rule-text">El historial limpio permite <strong>generar CHANGELOGs automáticos</strong> con herramientas como <code>git log</code> o <code>conventional-changelog</code>.</span></div>
+      </div>
+      <h3>Cómo configurarlo en GitLab</h3>
+      <p>Settings → General → Merge requests → Merge method → seleccionar <strong>"Squash commits"</strong> y marcar como opción requerida.</p>
+      <div class="warn"><strong>Importante:</strong> El título del squash commit en GitLab se toma del título del PR. Por eso es crítico que el título del PR sea claro y siga el formato establecido.</div>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>

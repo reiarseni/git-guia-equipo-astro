@@ -22,7 +22,14 @@
 /* ---- Reset & Base ---- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 68px; /* compensa el topbar fijo en móvil (52px + margen) */
+}
+
+@media (min-width: 1024px) {
+  html { scroll-padding-top: 24px; } /* sin topbar en escritorio */
+}
 
 body {
   background: var(--bg);
@@ -37,20 +44,35 @@ body {
    Mobile-first: móvil sin sidebar visible, escritorio con sidebar fijo
    ============================================================ */
 
-/* Botón hamburguesa — fijo, solo visible en móvil */
-.menu-toggle {
+/* Topbar móvil — barra fija pequeña en la parte superior, solo en móvil */
+.mobile-topbar {
   position: fixed;
-  top: 12px;
-  left: 12px;
+  top: 0;
+  left: 0;
+  right: 0;
   z-index: 400;
+  height: 52px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+}
+
+@media (min-width: 1024px) {
+  .mobile-topbar { display: none; }
+}
+
+/* Botón hamburguesa — dentro del topbar en móvil */
+.menu-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  background: var(--surface);
+  width: 36px;
+  height: 36px;
+  background: transparent;
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: 8px;
   cursor: pointer;
   color: var(--text);
   transition: background 0.15s, border-color 0.15s, color 0.15s;
@@ -65,10 +87,6 @@ body {
 .menu-toggle .icon-close { display: none; }
 .menu-toggle.is-open .icon-hamburger { display: none; }
 .menu-toggle.is-open .icon-close { display: block; }
-
-@media (min-width: 1024px) {
-  .menu-toggle { display: none; }
-}
 
 /* Overlay oscuro (fondo cuando el menú está abierto en móvil) */
 .overlay {
@@ -114,16 +132,16 @@ body {
 /* Contenedor del contenido principal */
 .page-wrapper {
   min-height: 100vh;
-  /* Espacio arriba para el botón hamburguesa en móvil */
-  padding: 72px 18px 80px;
+  /* Espacio arriba para el topbar móvil (52px) */
+  padding: 68px 18px 80px;
 }
 
 @media (min-width: 480px) {
-  .page-wrapper { padding: 72px 24px 80px; }
+  .page-wrapper { padding: 68px 24px 80px; }
 }
 
 @media (min-width: 768px) {
-  .page-wrapper { padding: 72px 40px 96px; }
+  .page-wrapper { padding: 68px 40px 96px; }
 }
 
 @media (min-width: 1024px) {

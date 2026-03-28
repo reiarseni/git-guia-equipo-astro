@@ -1,0 +1,40 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 9;
+---
+
+<Layout title="Git — PR testing → main">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="PR de testing → main" id="release">
+      <p>El PR de integración de <code>testing</code> a <code>main</code> es el último paso antes de producción. Tiene sus propias reglas.</p>
+      <h3>¿Quién lo abre?</h3>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">👤</span><span class="rule-text">Lo abre el <strong>Tech Lead o el responsable del release</strong>, nunca un dev individual. Esta es una decisión de equipo, no personal.</span></div>
+        <div class="rule"><span class="rule-icon">📅</span><span class="rule-text">Se abre <strong>cuando QA aprobó</strong> todos los features que están en <code>testing</code> en ese ciclo. No antes.</span></div>
+      </div>
+      <h3>Formato del título</h3>
+      <pre><code><span class="cm"># Formato — describe el conjunto de features del release</span>
+Release: descripción del ciclo o sprint [testing → main]
+
+<span class="cm"># Ejemplos</span>
+<span class="cs">Release: módulo de login y corrección de descuentos [testing → main]</span>
+<span class="cs">Release: Sprint 12 [testing → main]</span></code></pre>
+      <h3>Reglas del PR testing → main</h3>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">✅</span><span class="rule-text">Requiere aprobación del <strong>Tech Lead + al menos 1 dev senior</strong>.</span></div>
+        <div class="rule"><span class="rule-icon">🧪</span><span class="rule-text">El pipeline de CI debe estar en verde en <code>testing</code> antes de abrir el PR.</span></div>
+        <div class="rule"><span class="rule-icon">📋</span><span class="rule-text">La descripción del PR debe listar todos los issues que incluye este release con sus números: <code>Closes #456, Closes #101, Closes #789</code>.</span></div>
+        <div class="rule"><span class="rule-icon">🚫</span><span class="rule-text">No se mergea si hay features en <code>testing</code> que QA marcó como rechazadas o pendientes de corrección.</span></div>
+      </div>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>

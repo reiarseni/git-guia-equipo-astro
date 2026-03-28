@@ -1,0 +1,30 @@
+export interface SectionInfo {
+  title: string;
+  href: string;
+  group: string;
+}
+
+export const sections: SectionInfo[] = [
+  { title: "Estructura de Ramas",      href: "/estructura-de-ramas",    group: "Ramas" },
+  { title: "Workitems y Ramas",        href: "/workitems-y-ramas",      group: "Ramas" },
+  { title: "Nombrado de Ramas",        href: "/nombrado-de-ramas",      group: "Ramas" },
+  { title: "Flujo de Trabajo Diario",  href: "/flujo-diario",           group: "Flujo de Trabajo" },
+  { title: "Rebase como Estrategia",   href: "/rebase",                 group: "Flujo de Trabajo" },
+  { title: "Commits",                  href: "/commits",                group: "Commits y PRs" },
+  { title: "Pull Requests",            href: "/pull-requests",          group: "Commits y PRs" },
+  { title: "Merge Strategy",           href: "/merge-strategy",         group: "Commits y PRs" },
+  { title: "Draft PRs",                href: "/draft-prs",              group: "Commits y PRs" },
+  { title: "PR testing → main",        href: "/release",                group: "Releases" },
+  { title: "Flujo HotFix",             href: "/hotfix",                 group: "Releases" },
+  { title: "CI/CD y Branch Protection",href: "/cicd-branch-protection", group: "Calidad" },
+  { title: "Code Review",              href: "/code-review",            group: "Calidad" },
+  { title: "Reglas Generales",         href: "/reglas-generales",       group: "Calidad" },
+];
+
+export const groups: { label: string; items: SectionInfo[] }[] = [
+  { label: "Ramas",            items: sections.slice(0, 3)  },
+  { label: "Flujo de Trabajo", items: sections.slice(3, 5)  },
+  { label: "Commits y PRs",    items: sections.slice(5, 9)  },
+  { label: "Releases",         items: sections.slice(9, 11) },
+  { label: "Calidad",          items: sections.slice(11)    },
+];

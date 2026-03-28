@@ -1,30 +1,24 @@
 ---
 interface Props {
-  number: string;
   title: string;
   id: string;
 }
 
-const { number, title, id } = Astro.props;
+const { title, id } = Astro.props;
 ---
 
 <div class="section" id={id}>
-  <div class="section-header">
-    <div class="section-num">{number}</div>
-    <h2>{title}</h2>
-  </div>
+  <h2>{title}</h2>
   <slot />
 </div>
 
 <style>
   .section { margin-bottom: 68px; }
-  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
-  .section-num {
-    font-family: 'JetBrains Mono', monospace; font-size: 11px;
-    color: var(--accent); background: rgba(124,106,247,0.08);
-    border: 1px solid rgba(124,106,247,0.2);
-    width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-    border-radius: 6px; flex-shrink: 0;
+  h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(20px, 3vw, 26px);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 28px;
   }
-  h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: #fff; }
 </style>

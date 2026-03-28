@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 0;
+---
+
+<Layout title="Git — Estructura de Ramas">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="Estructura de Ramas" id="estructura-de-ramas">
+      <p>El repositorio tiene <strong>dos ramas permanentes</strong>. Todas las demás son temporales y se eliminan al fusionarse.</p>
+      <div class="flow">
+        <div class="flow-row">
+          <span class="branch-badge b-feature">story-456/login-google</span>
+          <span class="arrow">→</span>
+          <span class="branch-badge b-testing">testing</span>
+          <span class="arrow">→</span>
+          <span class="branch-badge b-main">main</span>
+        </div>
+        <div class="flow-row" style="margin-top:4px;">
+          <span class="branch-badge b-hotfix">hotfix-202/crash-pagos</span>
+          <span class="arrow">→</span>
+          <span class="branch-badge b-main">main</span>
+          <span style="font-size:13px;color:#ffaa44;font-family:'JetBrains Mono',monospace;">⚡ saltea testing</span>
+        </div>
+        <div style="margin-top:20px;display:grid;gap:8px;">
+          <div class="flow-row" style="margin-bottom:0;"><span class="branch-badge b-main">main</span><span class="flow-desc">Producción. Solo código aprobado y estable.</span></div>
+          <div class="flow-row" style="margin-bottom:0;"><span class="branch-badge b-testing">testing</span><span class="flow-desc">QA e integración. Aquí se validan las features.</span></div>
+          <div class="flow-row" style="margin-bottom:0;"><span class="branch-badge b-feature">&#123;tipo&#125;-&#123;issue&#125;/...</span><span class="flow-desc">Trabajo individual. Una rama por workitem.</span></div>
+          <div class="flow-row" style="margin-bottom:0;"><span class="branch-badge b-hotfix">hotfix-&#123;issue&#125;/...</span><span class="flow-desc">Parche urgente. PR directo a main.</span></div>
+        </div>
+      </div>
+      <div class="alert"><strong>Regla de oro:</strong> Nadie hace push directo a <code>main</code> ni a <code>testing</code>. Todo cambio entra exclusivamente por Pull Request.</div>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>

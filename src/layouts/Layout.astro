@@ -21,18 +21,20 @@ const { title } = Astro.props;
 </head>
 <body>
 
-  <!-- Botón hamburguesa (solo móvil) -->
-  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="sidebar">
-    <svg class="icon-hamburger" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
-      <line x1="3" y1="6" x2="21" y2="6" />
-      <line x1="3" y1="12" x2="21" y2="12" />
-      <line x1="3" y1="18" x2="21" y2="18" />
-    </svg>
-    <svg class="icon-close" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
-      <line x1="18" y1="6" x2="6" y2="18" />
-      <line x1="6" y1="6" x2="18" y2="18" />
-    </svg>
-  </button>
+  <!-- Topbar móvil -->
+  <div class="mobile-topbar" id="mobileTopbar">
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="sidebar">
+      <svg class="icon-hamburger" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+        <line x1="3" y1="6" x2="21" y2="6" />
+        <line x1="3" y1="12" x2="21" y2="12" />
+        <line x1="3" y1="18" x2="21" y2="18" />
+      </svg>
+      <svg class="icon-close" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18" />
+        <line x1="6" y1="6" x2="18" y2="18" />
+      </svg>
+    </button>
+  </div>
 
   <!-- Overlay oscuro (móvil) -->
   <div class="overlay" id="overlay" aria-hidden="true"></div>
@@ -76,9 +78,7 @@ const { title } = Astro.props;
 
     // Cerrar al hacer click en un enlace del menú (en móvil)
     document.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        if (window.innerWidth < 1024) closeMenu();
-      });
+      link.addEventListener('click', closeMenu);
     });
 
     // Tecla Escape cierra el menú
@@ -86,27 +86,6 @@ const { title } = Astro.props;
       if (e.key === 'Escape' && isOpen) closeMenu();
     });
 
-    // Scroll spy — resaltar el enlace activo según la sección visible
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('.section[id]');
-
-    if (sections.length > 0 && navLinks.length > 0) {
-      const observer = new IntersectionObserver((entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            navLinks.forEach(l => l.classList.remove('is-active'));
-            const id = entry.target.getAttribute('id');
-            const active = document.querySelector(`.nav-link[href="#${id}"]`);
-            active?.classList.add('is-active');
-          }
-        }
-      }, {
-        rootMargin: '-8% 0px -72% 0px',
-        threshold: 0,
-      });
-
-      sections.forEach(s => observer.observe(s));
-    }
   </script>
 </body>
 </html>

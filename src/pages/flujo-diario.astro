@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 3;
+---
+
+<Layout title="Git — Flujo de Trabajo Diario">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="Flujo de Trabajo Diario" id="flujo-diario">
+      <h3>Paso 1 — Actualizar y crear tu rama</h3>
+      <pre><code><span class="cm"># Siempre partir desde testing actualizado</span>
+git checkout testing
+git pull origin testing
+
+<span class="cm"># Crear la rama con el número del workitem de GitLab</span>
+git checkout -b <span class="ck">story-456/login-con-google</span></code></pre>
+      <h3>Paso 2 — Trabajar, hacer commits y mantener la rama actualizada</h3>
+      <pre><code>git add .
+git commit -m <span class="cs">"feat: agrega pantalla de login con Google"</span> \
+           -m <span class="cs">"Refs #456"</span>
+
+<span class="cm"># Hacer rebase diario (ver sección Rebase)</span>
+git fetch origin
+git rebase origin/testing
+
+git push origin <span class="ck">story-456/login-con-google</span></code></pre>
+      <h3>Paso 3 — Abrir Pull Request hacia testing</h3>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">📌</span><span class="rule-text">El PR se dirige hacia <strong>testing</strong>, nunca directamente a main (excepto hotfix).</span></div>
+        <div class="rule"><span class="rule-icon">🔍</span><span class="rule-text">Se requiere <strong>al menos 1 revisión aprobada</strong> antes de mergear.</span></div>
+        <div class="rule"><span class="rule-icon">✅</span><span class="rule-text">El <strong>pipeline de CI debe estar en verde</strong> antes de poder mergear.</span></div>
+        <div class="rule"><span class="rule-icon">🧪</span><span class="rule-text">QA valida en <code>testing</code>. Una vez aprobado, se abre el PR de <strong>testing → main</strong>.</span></div>
+        <div class="rule"><span class="rule-icon">🗑️</span><span class="rule-text">Eliminar la rama después del merge para mantener el repo limpio.</span></div>
+      </div>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>

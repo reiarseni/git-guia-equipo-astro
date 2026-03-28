@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 13;
+---
+
+<Layout title="Git — Reglas Generales">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="Reglas Generales" id="reglas-generales">
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">🚫</span><span class="rule-text"><strong>Nunca pushear directamente a main o testing.</strong> Sin excepciones, sin importar la urgencia.</span></div>
+        <div class="rule"><span class="rule-icon">🎫</span><span class="rule-text"><strong>Sin workitem no hay rama.</strong> Toda rama debe estar respaldada por un issue en GitLab.</span></div>
+        <div class="rule"><span class="rule-icon">🌿</span><span class="rule-text"><strong>Una rama por workitem.</strong> No mezclar cambios de distintos issues en la misma rama.</span></div>
+        <div class="rule"><span class="rule-icon">📏</span><span class="rule-text"><strong>PRs pequeños.</strong> Menos de 400 líneas modificadas. Si una feature es grande, dividirla en tareas más pequeñas.</span></div>
+        <div class="rule"><span class="rule-icon">🔄</span><span class="rule-text"><strong>Rebase diario obligatorio.</strong> Hacer rebase sobre testing todos los días antes de comenzar a trabajar.</span></div>
+        <div class="rule"><span class="rule-icon">✅</span><span class="rule-text"><strong>CI verde antes de pedir review.</strong> No asignar un PR para revisión si el pipeline no pasó.</span></div>
+        <div class="rule"><span class="rule-icon">🧹</span><span class="rule-text"><strong>Eliminar ramas mergeadas.</strong> El repo debe estar siempre limpio. GitLab puede hacerlo automáticamente.</span></div>
+        <div class="rule"><span class="rule-icon">🔒</span><span class="rule-text"><strong>Nunca commitear secretos.</strong> Claves de API, passwords y tokens van en variables de entorno, nunca en el código.</span></div>
+        <div class="rule"><span class="rule-icon">📋</span><span class="rule-text"><strong>El .gitignore es sagrado.</strong> Revisar que esté correcto antes del primer push de cualquier proyecto.</span></div>
+      </div>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>

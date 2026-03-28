@@ -1,0 +1,155 @@
+---
+import type { SectionInfo } from '../data/sections';
+
+interface Props {
+  prev?: SectionInfo | null;
+  next?: SectionInfo | null;
+}
+
+const { prev, next } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<nav class="page-nav" aria-label="Navegación entre secciones">
+  <div class="page-nav-inner">
+
+    {prev ? (
+      <a href={base + prev.href} class="nav-card nav-card--prev">
+        <svg class="nav-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+        <div class="nav-card-body">
+          <span class="nav-card-label">Anterior</span>
+          <span class="nav-card-title">{prev.title}</span>
+        </div>
+      </a>
+    ) : (
+      <div class="nav-card-empty" />
+    )}
+
+    {next ? (
+      <a href={base + next.href} class="nav-card nav-card--next">
+        <div class="nav-card-body nav-card-body--right">
+          <span class="nav-card-label">Siguiente</span>
+          <span class="nav-card-title">{next.title}</span>
+        </div>
+        <svg class="nav-arrow" viewBox="0 0 24 24" width="20" height="20" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </a>
+    ) : (
+      <div class="nav-card-empty" />
+    )}
+
+  </div>
+</nav>
+
+<style>
+  .page-nav {
+    margin-top: 72px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+  }
+
+  .page-nav-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-items: stretch;
+  }
+
+  /* ---- Cards ---- */
+  .nav-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--text);
+    transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+    min-width: 0;
+  }
+
+  .nav-card:hover {
+    border-color: rgba(124, 106, 247, 0.45);
+    background: var(--surface2);
+    transform: translateY(-2px);
+  }
+
+  .nav-card--next {
+    justify-content: flex-end;
+    text-align: right;
+  }
+
+  .nav-card-empty { /* placeholder cuando no hay prev o next */ }
+
+  /* ---- Arrow ---- */
+  .nav-arrow {
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+  }
+
+  .nav-card--prev:hover .nav-arrow { transform: translateX(-4px); }
+  .nav-card--next:hover .nav-arrow { transform: translateX(4px); }
+
+  /* ---- Card body ---- */
+  .nav-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .nav-card-body--right { align-items: flex-end; }
+
+  .nav-card-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .nav-card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  /* ---- Mobile: layout vertical ---- */
+  @media (max-width: 640px) {
+    .page-nav-inner {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .nav-card-empty { display: none; }
+
+    .nav-card--next {
+      flex-direction: row-reverse;
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    .nav-card-body--right { align-items: flex-start; }
+
+    .nav-card-title {
+      -webkit-line-clamp: unset;
+      overflow: visible;
+    }
+  }
+</style>

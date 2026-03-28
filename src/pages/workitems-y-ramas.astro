@@ -1,0 +1,27 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 1;
+---
+
+<Layout title="Git — Workitems y Ramas">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="Workitems y Ramas" id="workitems-y-ramas">
+      <p>Cada rama debe estar respaldada por un workitem en GitLab. <strong>No existe rama sin issue.</strong> Esto garantiza trazabilidad total entre el código y las tareas del equipo.</p>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">🔗</span><span class="rule-text">Antes de crear una rama, verificar que el workitem existe y está <strong>asignado a ti</strong> en GitLab.</span></div>
+        <div class="rule"><span class="rule-icon">1️⃣</span><span class="rule-text"><strong>Un workitem = una rama.</strong> No mezclar cambios de distintos issues en la misma rama.</span></div>
+        <div class="rule"><span class="rule-icon">🏗️</span><span class="rule-text">Los <strong>Epics</strong> tienen rama propia cuando implican trabajo técnico directo. Sus Stories y Tasks también tienen sus propias ramas y sus PRs van a <code>testing</code>.</span></div>
+      </div>
+      <div class="tip"><strong>Tip:</strong> GitLab permite crear la rama directamente desde el issue con el botón "Create branch". Usarlo cuando sea posible: genera el nombre con el número del issue automáticamente.</div>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>

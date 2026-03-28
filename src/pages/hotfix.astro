@@ -1,0 +1,55 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 10;
+---
+
+<Layout title="Git — Flujo HotFix">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="Flujo HotFix" id="hotfix">
+      <p>Un HotFix es un parche urgente sobre un bug crítico en producción. <strong>Saltea testing</strong> y va directo a <code>main</code>.</p>
+      <div class="flow">
+        <div class="flow-row">
+          <span class="branch-badge b-hotfix">hotfix-202/crash-pagos</span>
+          <span class="arrow">→</span>
+          <span class="branch-badge b-main">main</span>
+          <span style="font-size:13px;color:#ffaa44;font-family:'JetBrains Mono',monospace;">PR urgente</span>
+        </div>
+        <div class="flow-row">
+          <span class="branch-badge b-main">main</span>
+          <span class="arrow">→</span>
+          <span class="branch-badge b-testing">testing</span>
+          <span style="font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace;">PR de sincronización</span>
+        </div>
+      </div>
+      <pre><code><span class="cm"># 1. Crear la rama desde main (no desde testing)</span>
+git checkout main
+git pull origin main
+git checkout -b <span class="ck">hotfix-202/crash-al-procesar-pago</span>
+
+<span class="cm"># 2. Aplicar el fix y commitear</span>
+git commit -m <span class="cs">"fix: corrige crash al procesar pago con tarjeta"</span> \
+           -m <span class="cs">"Closes #202"</span>
+
+<span class="cm"># 3. Push y abrir PR hacia main</span>
+git push origin <span class="ck">hotfix-202/crash-al-procesar-pago</span>
+
+<span class="cm"># 4. Después de mergear a main, sincronizar testing</span>
+<span class="cm">#    mediante un PR (no merge directo) para que quede registrado</span>
+git checkout main && git pull origin main
+git checkout testing && git pull origin testing
+<span class="cm"># Abrir PR de main → testing en GitLab con título:</span>
+<span class="cm"># "Sync: incorpora hotfix-202 a testing [main → testing]"</span></code></pre>
+      <div class="warn"><strong>Importante:</strong> La sincronización de <code>main</code> → <code>testing</code> después del hotfix debe hacerse por PR, no con merge directo. Así queda registrada en el historial y QA toma nota del cambio.</div>
+      <div class="alert"><strong>La urgencia no elimina el code review.</strong> Un PR de HotFix requiere igual aprobación. Contactar a un compañero disponible de inmediato.</div>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>

@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 12;
+---
+
+<Layout title="Git — Code Review">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="Code Review" id="code-review">
+      <h3>Para quien revisa</h3>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">⏱️</span><span class="rule-text"><strong>Revisar en menos de 24 horas hábiles</strong> para no bloquear al compañero.</span></div>
+        <div class="rule"><span class="rule-icon">💬</span><span class="rule-text">Los comentarios deben ser <strong>constructivos y específicos</strong>. Si algo está mal, sugerir cómo mejorarlo.</span></div>
+        <div class="rule"><span class="rule-icon">🔗</span><span class="rule-text">Verificar que el PR <strong>referencia correctamente el workitem</strong> en el título y en los commits.</span></div>
+        <div class="rule"><span class="rule-icon">✅</span><span class="rule-text">Aprobar solo si el código es correcto, legible, no rompe nada existente y el CI está en verde.</span></div>
+        <div class="rule"><span class="rule-icon">🚫</span><span class="rule-text">No aprobar PRs de más de 400 líneas sin pedir que se divida. Revisar código extenso es ineficaz.</span></div>
+      </div>
+      <h3>Para el autor del PR</h3>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">🔬</span><span class="rule-text">Auto-revisar el PR antes de asignarlo. Ser el primero en detectar errores obvios.</span></div>
+        <div class="rule"><span class="rule-icon">📖</span><span class="rule-text">Completar el template de descripción: qué hace, link al issue, cómo probarlo y checklist.</span></div>
+        <div class="rule"><span class="rule-icon">🤝</span><span class="rule-text">Responder todos los comentarios antes de pedir re-review.</span></div>
+        <div class="rule"><span class="rule-icon">🔄</span><span class="rule-text">Hacer rebase sobre <code>testing</code> antes de incorporar correcciones del review, para mantener la rama actualizada.</span></div>
+      </div>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>

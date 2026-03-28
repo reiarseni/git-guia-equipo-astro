@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 2;
+---
+
+<Layout title="Git — Nombrado de Ramas">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="Nombrado de Ramas" id="nombrado-de-ramas">
+      <p>El formato es: <code style="color:var(--accent3);font-size:14px;">&#123;tipo&#125;-&#123;número-issue&#125;/&#123;descripción-breve-en-español&#125;</code></p>
+      <div class="wi-grid" style="margin-top:20px;">
+        <div class="wi-row"><span class="wi-badge wi-epic">Epic</span><span class="wi-pattern">epic-123/descripción</span><span class="wi-example">epic-123/modulo-facturacion</span></div>
+        <div class="wi-row"><span class="wi-badge wi-story">Story</span><span class="wi-pattern">story-456/descripción</span><span class="wi-example">story-456/login-con-google</span></div>
+        <div class="wi-row"><span class="wi-badge wi-task">Task</span><span class="wi-pattern">task-789/descripción</span><span class="wi-example">task-789/configurar-variables-entorno</span></div>
+        <div class="wi-row"><span class="wi-badge wi-bug">Bug</span><span class="wi-pattern">bug-101/descripción</span><span class="wi-example">bug-101/error-calculo-descuento</span></div>
+        <div class="wi-row"><span class="wi-badge wi-hotfix">HotFix</span><span class="wi-pattern">hotfix-202/descripción</span><span class="wi-example">hotfix-202/crash-pago-tarjeta</span></div>
+      </div>
+      <h3>Reglas de formato</h3>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">🔡</span><span class="rule-text">Todo en <strong>minúsculas</strong>. Palabras separadas por guión medio (<code>-</code>). Sin espacios ni caracteres especiales.</span></div>
+        <div class="rule"><span class="rule-icon">📏</span><span class="rule-text">La descripción debe ser <strong>concisa pero clara</strong>. Máximo 4-5 palabras que identifiquen la tarea.</span></div>
+        <div class="rule"><span class="rule-icon">🌐</span><span class="rule-text">El <strong>tipo va en inglés</strong> (<code>story</code>, <code>task</code>, <code>bug</code>...), la <strong>descripción en español</strong>.</span></div>
+      </div>
+      <pre><code><span class="cm"># ✅ Correctos</span>
+<span class="cs">story-456/login-con-google</span>
+<span class="cs">task-789/migrar-base-de-datos</span>
+<span class="cs">bug-101/error-en-formulario-registro</span>
+<span class="cs">hotfix-202/crash-al-procesar-pago</span>
+
+<span class="cm"># ❌ Incorrectos</span>
+<span class="cd">feature/login                </span><span class="cm">← falta el número de issue</span>
+<span class="cd">456/login con google         </span><span class="cm">← espacios y falta el tipo</span>
+<span class="cd">STORY-456/Login-Google       </span><span class="cm">← mayúsculas</span>
+<span class="cd">story-456/ls                 </span><span class="cm">← descripción no descriptiva</span></code></pre>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>

@@ -1,0 +1,75 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 5;
+---
+
+<Layout title="Git — Commits">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="Commits" id="commits">
+      <p>Usamos <strong>Conventional Commits</strong> con referencia obligatoria al workitem de GitLab.</p>
+      <h3>Anatomía del commit</h3>
+      <div class="commit-block">
+        <div class="commit-line">
+          <div class="commit-label">subject</div>
+          <div class="commit-content">
+            <span class="ck">feat</span>: agrega pantalla de login con Google
+            <div class="commit-note">tipo + descripción corta en presente imperativo. Máximo ~72 caracteres.</div>
+          </div>
+        </div>
+        <div class="commit-line">
+          <div class="commit-label">body</div>
+          <div class="commit-content">
+            <span class="cm">(línea en blanco obligatoria)</span><br>
+            Contexto opcional: por qué se tomó esta decisión técnica.
+            <div class="commit-note">Solo cuando el subject no alcanza para entender el cambio.</div>
+          </div>
+        </div>
+        <div class="commit-line">
+          <div class="commit-label">footer</div>
+          <div class="commit-content">
+            <span class="cs">Refs #456</span><span class="cm">   ← referencia el issue sin cerrarlo</span><br>
+            <span class="cs">Closes #456</span><span class="cm"> ← referencia Y cierra el issue al mergear</span>
+            <div class="commit-note">Usar Closes solo cuando ese commit representa la finalización completa del issue.</div>
+          </div>
+        </div>
+      </div>
+      <h3>Ejemplos completos</h3>
+      <pre><code><span class="cm"># Commit parcial — el issue sigue abierto</span>
+git commit -m <span class="cs">"feat: agrega pantalla de login con Google"</span> \
+           -m <span class="cs">"Refs #456"</span>
+
+<span class="cm"># Commit final — el issue se cierra al mergear el PR</span>
+git commit -m <span class="cs">"feat: completa flujo de autenticación con Google"</span> \
+           -m <span class="cs">"Closes #456"</span>
+
+<span class="cm"># Commit de bug</span>
+git commit -m <span class="cs">"fix: corrige cálculo de descuento en carrito"</span> \
+           -m <span class="cs">"Closes #101"</span></code></pre>
+      <h3>Tipos de commit</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Tipo</th><th>Cuándo usarlo</th></tr></thead>
+          <tbody>
+            <tr><td>feat</td><td>Nueva funcionalidad</td></tr>
+            <tr><td>fix</td><td>Corrección de bug</td></tr>
+            <tr><td>refactor</td><td>Mejora de código sin cambiar comportamiento</td></tr>
+            <tr><td>chore</td><td>Tareas de mantenimiento o configuración</td></tr>
+            <tr><td>docs</td><td>Cambios en documentación</td></tr>
+            <tr><td>test</td><td>Agregar o modificar tests</td></tr>
+            <tr><td>style</td><td>Cambios de formato (espacios, comas, etc.)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="alert"><strong>Prohibido:</strong> Commits tipo <code>wip</code>, <code>cambios</code>, <code>arregle cosas</code> o cualquier commit sin referencia al issue (<code>Refs</code> o <code>Closes</code>).</div>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>
