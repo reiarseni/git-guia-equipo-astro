@@ -13,14 +13,100 @@ const { title } = Astro.props;
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Guía oficial del flujo de trabajo con Git y GitLab para el equipo de desarrollo.">
   <title>{title}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
+
+  <!-- Botón hamburguesa (solo móvil) -->
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="sidebar">
+    <svg class="icon-hamburger" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+      <line x1="3" y1="6" x2="21" y2="6" />
+      <line x1="3" y1="12" x2="21" y2="12" />
+      <line x1="3" y1="18" x2="21" y2="18" />
+    </svg>
+    <svg class="icon-close" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  </button>
+
+  <!-- Overlay oscuro (móvil) -->
+  <div class="overlay" id="overlay" aria-hidden="true"></div>
+
+  <!-- Sidebar de navegación -->
+  <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
+    <slot name="sidebar" />
+  </aside>
+
+  <!-- Contenido principal -->
+  <div class="page-wrapper">
     <slot />
   </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar    = document.getElementById('sidebar');
+    const overlay    = document.getElementById('overlay');
+    let isOpen = false;
+
+    function openMenu() {
+      isOpen = true;
+      sidebar?.classList.add('is-open');
+      overlay?.classList.add('is-visible');
+      menuToggle?.classList.add('is-open');
+      menuToggle?.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      isOpen = false;
+      sidebar?.classList.remove('is-open');
+      overlay?.classList.remove('is-visible');
+      menuToggle?.classList.remove('is-open');
+      menuToggle?.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    menuToggle?.addEventListener('click', () => { isOpen ? closeMenu() : openMenu(); });
+    overlay?.addEventListener('click', closeMenu);
+
+    // Cerrar al hacer click en un enlace del menú (en móvil)
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth < 1024) closeMenu();
+      });
+    });
+
+    // Tecla Escape cierra el menú
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen) closeMenu();
+    });
+
+    // Scroll spy — resaltar el enlace activo según la sección visible
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.section[id]');
+
+    if (sections.length > 0 && navLinks.length > 0) {
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            navLinks.forEach(l => l.classList.remove('is-active'));
+            const id = entry.target.getAttribute('id');
+            const active = document.querySelector(`.nav-link[href="#${id}"]`);
+            active?.classList.add('is-active');
+          }
+        }
+      }, {
+        rootMargin: '-8% 0px -72% 0px',
+        threshold: 0,
+      });
+
+      sections.forEach(s => observer.observe(s));
+    }
+  </script>
 </body>
 </html>
