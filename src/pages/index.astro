@@ -1,0 +1,666 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Toc from '../components/Toc.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Git — Guía de Buenas Prácticas">
+  <Header />
+  <Toc />
+
+  <!-- 01 ESTRUCTURA DE RAMAS -->
+  <Section number="01" title="Estructura de Ramas" id="s1">
+    <p>El repositorio tiene <strong>dos ramas permanentes</strong>. Todas las demás son temporales y se eliminan al fusionarse.</p>
+    <div class="flow">
+      <div class="flow-row">
+        <span class="branch-badge b-feature">story-456/login-google</span>
+        <span class="arrow">→</span>
+        <span class="branch-badge b-testing">testing</span>
+        <span class="arrow">→</span>
+        <span class="branch-badge b-main">main</span>
+      </div>
+      <div class="flow-row" style="margin-top:4px;">
+        <span class="branch-badge b-hotfix">hotfix-202/crash-pagos</span>
+        <span class="arrow">→</span>
+        <span class="branch-badge b-main">main</span>
+        <span style="font-size:13px;color:#ffaa44;font-family:'JetBrains Mono',monospace;">⚡ saltea testing</span>
+      </div>
+      <div style="margin-top:20px;display:grid;gap:8px;">
+        <div class="flow-row" style="margin-bottom:0;"><span class="branch-badge b-main">main</span><span class="flow-desc">Producción. Solo código aprobado y estable.</span></div>
+        <div class="flow-row" style="margin-bottom:0;"><span class="branch-badge b-testing">testing</span><span class="flow-desc">QA e integración. Aquí se validan las features.</span></div>
+        <div class="flow-row" style="margin-bottom:0;"><span class="branch-badge b-feature">&#123;tipo&#125;-&#123;issue&#125;/...</span><span class="flow-desc">Trabajo individual. Una rama por workitem.</span></div>
+        <div class="flow-row" style="margin-bottom:0;"><span class="branch-badge b-hotfix">hotfix-&#123;issue&#125;/...</span><span class="flow-desc">Parche urgente. PR directo a main.</span></div>
+      </div>
+    </div>
+    <div class="alert"><strong>Regla de oro:</strong> Nadie hace push directo a <code>main</code> ni a <code>testing</code>. Todo cambio entra exclusivamente por Pull Request.</div>
+  </Section>
+
+  <!-- 02 WORKITEMS Y RAMAS -->
+  <Section number="02" title="Workitems y Ramas" id="s2">
+    <p>Cada rama debe estar respaldada por un workitem en GitLab. <strong>No existe rama sin issue.</strong> Esto garantiza trazabilidad total entre el código y las tareas del equipo.</p>
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">🔗</span><span class="rule-text">Antes de crear una rama, verificar que el workitem existe y está <strong>asignado a ti</strong> en GitLab.</span></div>
+      <div class="rule"><span class="rule-icon">1️⃣</span><span class="rule-text"><strong>Un workitem = una rama.</strong> No mezclar cambios de distintos issues en la misma rama.</span></div>
+      <div class="rule"><span class="rule-icon">🏗️</span><span class="rule-text">Los <strong>Epics</strong> tienen rama propia cuando implican trabajo técnico directo. Sus Stories y Tasks también tienen sus propias ramas y sus PRs van a <code>testing</code>.</span></div>
+    </div>
+    <div class="tip"><strong>Tip:</strong> GitLab permite crear la rama directamente desde el issue con el botón "Create branch". Usarlo cuando sea posible: genera el nombre con el número del issue automáticamente.</div>
+  </Section>
+
+  <!-- 03 NOMBRADO DE RAMAS -->
+  <Section number="03" title="Nombrado de Ramas" id="s3">
+    <p>El formato es: <code style="color:var(--accent3);font-size:14px;">&#123;tipo&#125;-&#123;número-issue&#125;/&#123;descripción-breve-en-español&#125;</code></p>
+    <div class="wi-grid" style="margin-top:20px;">
+      <div class="wi-row"><span class="wi-badge wi-epic">Epic</span><span class="wi-pattern">epic-123/descripción</span><span class="wi-example">epic-123/modulo-facturacion</span></div>
+      <div class="wi-row"><span class="wi-badge wi-story">Story</span><span class="wi-pattern">story-456/descripción</span><span class="wi-example">story-456/login-con-google</span></div>
+      <div class="wi-row"><span class="wi-badge wi-task">Task</span><span class="wi-pattern">task-789/descripción</span><span class="wi-example">task-789/configurar-variables-entorno</span></div>
+      <div class="wi-row"><span class="wi-badge wi-bug">Bug</span><span class="wi-pattern">bug-101/descripción</span><span class="wi-example">bug-101/error-calculo-descuento</span></div>
+      <div class="wi-row"><span class="wi-badge wi-hotfix">HotFix</span><span class="wi-pattern">hotfix-202/descripción</span><span class="wi-example">hotfix-202/crash-pago-tarjeta</span></div>
+    </div>
+    <h3>Reglas de formato</h3>
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">🔡</span><span class="rule-text">Todo en <strong>minúsculas</strong>. Palabras separadas por guión medio (<code>-</code>). Sin espacios ni caracteres especiales.</span></div>
+      <div class="rule"><span class="rule-icon">📏</span><span class="rule-text">La descripción debe ser <strong>concisa pero clara</strong>. Máximo 4-5 palabras que identifiquen la tarea.</span></div>
+      <div class="rule"><span class="rule-icon">🌐</span><span class="rule-text">El <strong>tipo va en inglés</strong> (<code>story</code>, <code>task</code>, <code>bug</code>...), la <strong>descripción en español</strong>.</span></div>
+    </div>
+    <pre><code><span class="cm"># ✅ Correctos</span>
+<span class="cs">story-456/login-con-google</span>
+<span class="cs">task-789/migrar-base-de-datos</span>
+<span class="cs">bug-101/error-en-formulario-registro</span>
+<span class="cs">hotfix-202/crash-al-procesar-pago</span>
+
+<span class="cm"># ❌ Incorrectos</span>
+<span class="cd">feature/login                </span><span class="cm">← falta el número de issue</span>
+<span class="cd">456/login con google         </span><span class="cm">← espacios y falta el tipo</span>
+<span class="cd">STORY-456/Login-Google       </span><span class="cm">← mayúsculas</span>
+<span class="cd">story-456/ls                 </span><span class="cm">← descripción no descriptiva</span></code></pre>
+  </Section>
+
+  <!-- 04 FLUJO DE TRABAJO DIARIO -->
+  <Section number="04" title="Flujo de Trabajo Diario" id="s4">
+    <h3>Paso 1 — Actualizar y crear tu rama</h3>
+    <pre><code><span class="cm"># Siempre partir desde testing actualizado</span>
+git checkout testing
+git pull origin testing
+
+<span class="cm"># Crear la rama con el número del workitem de GitLab</span>
+git checkout -b <span class="ck">story-456/login-con-google</span></code></pre>
+    <h3>Paso 2 — Trabajar, hacer commits y mantener la rama actualizada</h3>
+    <pre><code>git add .
+git commit -m <span class="cs">"feat: agrega pantalla de login con Google"</span> \
+           -m <span class="cs">"Refs #456"</span>
+
+<span class="cm"># Hacer rebase diario (ver sección 05)</span>
+git fetch origin
+git rebase origin/testing
+
+git push origin <span class="ck">story-456/login-con-google</span></code></pre>
+    <h3>Paso 3 — Abrir Pull Request hacia testing</h3>
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">📌</span><span class="rule-text">El PR se dirige hacia <strong>testing</strong>, nunca directamente a main (excepto hotfix).</span></div>
+      <div class="rule"><span class="rule-icon">🔍</span><span class="rule-text">Se requiere <strong>al menos 1 revisión aprobada</strong> antes de mergear.</span></div>
+      <div class="rule"><span class="rule-icon">✅</span><span class="rule-text">El <strong>pipeline de CI debe estar en verde</strong> antes de poder mergear.</span></div>
+      <div class="rule"><span class="rule-icon">🧪</span><span class="rule-text">QA valida en <code>testing</code>. Una vez aprobado, se abre el PR de <strong>testing → main</strong>.</span></div>
+      <div class="rule"><span class="rule-icon">🗑️</span><span class="rule-text">Eliminar la rama después del merge para mantener el repo limpio.</span></div>
+    </div>
+  </Section>
+
+  <!-- 05 REBASE COMO ESTRATEGIA -->
+  <Section number="05" title="Rebase como Estrategia de Actualización" id="s5">
+    <p>El <strong>rebase</strong> es la herramienta principal para mantener la rama de trabajo sincronizada con <code>testing</code> sin ensuciar el historial. Es una práctica obligatoria en el equipo.</p>
+    <h3>¿Por qué rebase y no merge?</h3>
+    <p>Cuando usas <code>merge</code> para actualizar tu rama con los cambios de <code>testing</code>, Git crea un <em>merge commit</em> que contamina el historial de tu rama con ruido innecesario. El <code>rebase</code> en cambio <strong>reescribe tus commits encima de la punta actual de <code>testing</code></strong>, como si hubieras empezado a trabajar en ese momento.</p>
+    <div class="rebase-visual">
+      <div class="rb-label">Situación inicial — testing avanzó mientras trabajabas</div>
+      <div class="rb-line">
+        <span class="rb-commit rb-c-main">T1</span><span class="rb-arrow">→</span>
+        <span class="rb-commit rb-c-main">T2</span><span class="rb-arrow">→</span>
+        <span class="rb-commit rb-c-main">T3</span><span style="font-size:12px;color:var(--muted);margin-left:8px;font-family:'JetBrains Mono',monospace;">← testing (avanzó)</span>
+      </div>
+      <div class="rb-line" style="margin-left:24px;margin-top:4px;">
+        <span class="rb-commit rb-c-feature">A</span><span class="rb-arrow">→</span>
+        <span class="rb-commit rb-c-feature">B</span><span style="font-size:12px;color:var(--muted);margin-left:8px;font-family:'JetBrains Mono',monospace;">← tu rama (sale de T1)</span>
+      </div>
+      <div class="rb-divider"></div>
+      <div class="rb-label">Después del rebase — tus commits se reaplican sobre T3</div>
+      <div class="rb-line">
+        <span class="rb-commit rb-c-main">T1</span><span class="rb-arrow">→</span>
+        <span class="rb-commit rb-c-main">T2</span><span class="rb-arrow">→</span>
+        <span class="rb-commit rb-c-main">T3</span><span class="rb-arrow">→</span>
+        <span class="rb-commit rb-c-new">A'</span><span class="rb-arrow">→</span>
+        <span class="rb-commit rb-c-new">B'</span><span style="font-size:12px;color:var(--accent2);margin-left:8px;font-family:'JetBrains Mono',monospace;">← tu rama (limpia)</span>
+      </div>
+    </div>
+    <h3>Cuándo hacer rebase</h3>
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">☀️</span><span class="rule-text"><strong>Todos los días al comenzar a trabajar.</strong> Antes de escribir código nuevo, actualiza tu rama con los cambios que han mergeado tus compañeros.</span></div>
+      <div class="rule"><span class="rule-icon">🔀</span><span class="rule-text"><strong>Antes de abrir un PR.</strong> Nunca abrir un PR con la rama desactualizada. El rebase previo garantiza que los conflictos, si existen, los resuelvas tú y no el reviewer.</span></div>
+      <div class="rule"><span class="rule-icon">💬</span><span class="rule-text"><strong>Cuando el reviewer pide cambios.</strong> Antes de pushear las correcciones, hacer rebase para incorporar lo que pudo haber mergeado el equipo mientras esperabas la revisión.</span></div>
+    </div>
+    <h3>Flujo completo de rebase diario</h3>
+    <pre><code><span class="cm"># 1. Al comenzar el día: traer todos los cambios remotos</span>
+git fetch origin
+
+<span class="cm"># 2. Pararte en tu rama</span>
+git checkout <span class="ck">story-456/login-con-google</span>
+
+<span class="cm"># 3. Hacer rebase sobre testing actualizado</span>
+git rebase origin/testing
+
+<span class="cm"># 4a. Si NO hay conflictos → subir la rama actualizada</span>
+git push origin <span class="ck">story-456/login-con-google</span> --force-with-lease
+
+<span class="cm"># 4b. Si HAY conflictos → Git se pausa y avisa qué archivos tienen conflictos</span>
+<span class="cm">#     Abrir cada archivo conflictivo, resolverlo manualmente, luego:</span>
+git add .
+git rebase --continue
+
+<span class="cm">#     Si querés abortar y volver al estado anterior:</span>
+git rebase --abort</code></pre>
+    <h3>Entendiendo los conflictos en rebase</h3>
+    <p>Cuando hay conflictos, Git aplica tus commits de a uno y se detiene en el primero que choca. Vas a ver marcas como estas en el archivo:</p>
+    <pre><code><span class="cd">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD (testing)</span>
+<span class="cs">código que vino de testing</span>
+<span class="cm">======= </span>
+<span class="ck">tu código del commit que se está aplicando</span>
+<span class="cd">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feat: agrega pantalla de login con Google</span></code></pre>
+    <p>Resuelves eligiendo qué código conservar (o combinando ambos), guardas el archivo, ejecutas <code>git add .</code> y continúas con <code>git rebase --continue</code>. Git repite el proceso por cada commit que tenga conflicto.</p>
+    <div class="alert">
+      <strong>Nunca usar</strong> <code>--force</code> a secas después de un rebase. Siempre <code>--force-with-lease</code>: verifica que nadie más haya pusheado a tu rama antes de sobreescribir, evitando pérdida de trabajo.
+    </div>
+    <div class="info">
+      <strong>Rebase interactivo:</strong> Si tu rama acumuló commits de prueba o WIP que no tienen sentido solos, puedes limpiarlos antes del PR con <code>git rebase -i origin/testing</code>. Esto te permite combinar (<em>squash</em>), reordenar o eliminar commits de tu rama antes de presentarla para revisión.
+    </div>
+  </Section>
+
+  <!-- 06 COMMITS -->
+  <Section number="06" title="Commits" id="s6">
+    <p>Usamos <strong>Conventional Commits</strong> con referencia obligatoria al workitem de GitLab.</p>
+    <h3>Anatomía del commit</h3>
+    <div class="commit-block">
+      <div class="commit-line">
+        <div class="commit-label">subject</div>
+        <div class="commit-content">
+          <span class="ck">feat</span>: agrega pantalla de login con Google
+          <div class="commit-note">tipo + descripción corta en presente imperativo. Máximo ~72 caracteres.</div>
+        </div>
+      </div>
+      <div class="commit-line">
+        <div class="commit-label">body</div>
+        <div class="commit-content">
+          <span class="cm">(línea en blanco obligatoria)</span><br>
+          Contexto opcional: por qué se tomó esta decisión técnica.
+          <div class="commit-note">Solo cuando el subject no alcanza para entender el cambio.</div>
+        </div>
+      </div>
+      <div class="commit-line">
+        <div class="commit-label">footer</div>
+        <div class="commit-content">
+          <span class="cs">Refs #456</span><span class="cm">   ← referencia el issue sin cerrarlo</span><br>
+          <span class="cs">Closes #456</span><span class="cm"> ← referencia Y cierra el issue al mergear</span>
+          <div class="commit-note">Usar Closes solo cuando ese commit representa la finalización completa del issue.</div>
+        </div>
+      </div>
+    </div>
+    <h3>Ejemplos completos</h3>
+    <pre><code><span class="cm"># Commit parcial — el issue sigue abierto</span>
+git commit -m <span class="cs">"feat: agrega pantalla de login con Google"</span> \
+           -m <span class="cs">"Refs #456"</span>
+
+<span class="cm"># Commit final — el issue se cierra al mergear el PR</span>
+git commit -m <span class="cs">"feat: completa flujo de autenticación con Google"</span> \
+           -m <span class="cs">"Closes #456"</span>
+
+<span class="cm"># Commit de bug</span>
+git commit -m <span class="cs">"fix: corrige cálculo de descuento en carrito"</span> \
+           -m <span class="cs">"Closes #101"</span></code></pre>
+    <h3>Tipos de commit</h3>
+    <table>
+      <thead><tr><th>Tipo</th><th>Cuándo usarlo</th></tr></thead>
+      <tbody>
+        <tr><td>feat</td><td>Nueva funcionalidad</td></tr>
+        <tr><td>fix</td><td>Corrección de bug</td></tr>
+        <tr><td>refactor</td><td>Mejora de código sin cambiar comportamiento</td></tr>
+        <tr><td>chore</td><td>Tareas de mantenimiento o configuración</td></tr>
+        <tr><td>docs</td><td>Cambios en documentación</td></tr>
+        <tr><td>test</td><td>Agregar o modificar tests</td></tr>
+        <tr><td>style</td><td>Cambios de formato (espacios, comas, etc.)</td></tr>
+      </tbody>
+    </table>
+    <div class="alert"><strong>Prohibido:</strong> Commits tipo <code>wip</code>, <code>cambios</code>, <code>arregle cosas</code> o cualquier commit sin referencia al issue (<code>Refs</code> o <code>Closes</code>).</div>
+  </Section>
+
+  <!-- 07 PULL REQUESTS -->
+  <Section number="07" title="Pull Requests" id="s7">
+    <h3>Formato del título</h3>
+    <p>El número del workitem va <strong>al final</strong> entre corchetes:</p>
+    <pre><code><span class="cm"># Formato</span>
+Descripción clara de qué hace el PR [#número-issue]
+
+<span class="cm"># Ejemplos ✅</span>
+<span class="cs">Agrega login con Google [#456]</span>
+<span class="cs">Corrige error en cálculo de descuento [#101]</span>
+<span class="cs">Migra base de datos a PostgreSQL 15 [#789]</span>
+<span class="cs">Fix crítico en procesamiento de pagos [#202]</span></code></pre>
+    <h3>Template de descripción del PR</h3>
+    <p>Crear el archivo <code>.gitlab/merge_request_templates/default.md</code> en el repo con el siguiente contenido. GitLab lo cargará automáticamente en cada nuevo PR:</p>
+    <div class="template-block">
+      <span class="tpl-section">## ¿Qué hace este PR?</span><br>
+      <span class="tpl-comment">&lt;!-- Descripción breve de los cambios realizados --&gt;</span><br><br>
+      <span class="tpl-section">## Workitem</span><br>
+      <span class="tpl-content">Closes #</span><span class="tpl-comment">&lt;!-- número del issue --&gt;</span><br><br>
+      <span class="tpl-section">## ¿Cómo probarlo?</span><br>
+      <span class="tpl-content">1. </span><span class="tpl-comment">&lt;!-- Paso 1 --&gt;</span><br>
+      <span class="tpl-content">2. </span><span class="tpl-comment">&lt;!-- Paso 2 --&gt;</span><br><br>
+      <span class="tpl-section">## Capturas / Evidencia</span><br>
+      <span class="tpl-comment">&lt;!-- Screenshots o videos si hay cambios de UI. Borrar si no aplica --&gt;</span><br><br>
+      <span class="tpl-section">## Checklist</span><br>
+      <span class="tpl-content">- [ ] Hice rebase sobre testing antes de abrir el PR</span><br>
+      <span class="tpl-content">- [ ] El pipeline de CI está en verde</span><br>
+      <span class="tpl-content">- [ ] Probé los cambios localmente</span><br>
+      <span class="tpl-content">- [ ] El PR tiene menos de 400 líneas modificadas</span>
+    </div>
+    <h3>Límite de tamaño del PR</h3>
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">📏</span><span class="rule-text">Un PR no debería superar las <strong>400 líneas modificadas</strong>. Con más de eso, la revisión se vuelve superficial y aumenta el riesgo de que pasen errores. Si una feature es grande, dividirla en Stories o Tasks más pequeñas.</span></div>
+    </div>
+  </Section>
+
+  <!-- 08 MERGE STRATEGY -->
+  <Section number="08" title="Merge Strategy — Squash & Merge" id="s8">
+    <p>El equipo usa <strong>Squash & Merge</strong> como estrategia estándar al mergear PRs hacia <code>testing</code> y de <code>testing</code> hacia <code>main</code>. Esto mantiene el historial de ambas ramas permanentes limpio y legible: <strong>un PR = un commit</strong>.</p>
+    <div class="squash-visual">
+      <div class="sq-side">
+        <div class="sq-label">Tu rama (múltiples commits)</div>
+        <div class="sq-commit">feat: agrega formulario</div>
+        <div class="sq-commit">fix: corrige validación</div>
+        <div class="sq-commit">chore: elimina console.log</div>
+        <div class="sq-commit">feat: completa el flujo</div>
+      </div>
+      <div class="sq-arrow">→</div>
+      <div class="sq-side">
+        <div class="sq-label">En testing/main (un commit)</div>
+        <div class="sq-commit result">Agrega login con Google [#456]</div>
+      </div>
+    </div>
+    <h3>¿Por qué Squash?</h3>
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">📖</span><span class="rule-text">El historial de <code>main</code> y <code>testing</code> queda <strong>limpio y semántico</strong>: cada línea representa una feature o fix completo, no commits intermedios de trabajo.</span></div>
+      <div class="rule"><span class="rule-icon">🔙</span><span class="rule-text">Facilita hacer <strong>revert de un feature completo</strong> con un solo comando si algo falla en producción.</span></div>
+      <div class="rule"><span class="rule-icon">📋</span><span class="rule-text">El historial limpio permite <strong>generar CHANGELOGs automáticos</strong> con herramientas como <code>git log</code> o <code>conventional-changelog</code>.</span></div>
+    </div>
+    <h3>Cómo configurarlo en GitLab</h3>
+    <p>Settings → General → Merge requests → Merge method → seleccionar <strong>"Squash commits"</strong> y marcar como opción requerida.</p>
+    <div class="warn"><strong>Importante:</strong> El título del squash commit en GitLab se toma del título del PR. Por eso es crítico que el título del PR sea claro y siga el formato establecido (ver sección 07).</div>
+  </Section>
+
+  <!-- 09 DRAFT PRs -->
+  <Section number="09" title="Draft PRs — Trabajo en Progreso" id="s9">
+    <p>Un <strong>Draft PR</strong> (o WIP PR) es un Pull Request marcado explícitamente como trabajo en progreso. GitLab bloquea el merge automáticamente hasta que se marque como listo.</p>
+    <h3>Para qué sirven</h3>
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">👁️</span><span class="rule-text"><strong>Visibilidad temprana:</strong> el equipo puede ver en qué estás trabajando, hacer comentarios anticipados y detectar problemas de arquitectura antes de que estén terminados.</span></div>
+      <div class="rule"><span class="rule-icon">🛡️</span><span class="rule-text"><strong>Protección contra merge accidental:</strong> GitLab impide mergear un Draft PR aunque alguien lo apruebe. Elimina el riesgo de que código incompleto llegue a <code>testing</code>.</span></div>
+      <div class="rule"><span class="rule-icon">💬</span><span class="rule-text"><strong>Feedback continuo:</strong> útil en equipos remotos para mostrar avances diarios sin esperar a tener el trabajo 100% terminado.</span></div>
+    </div>
+    <h3>Cómo usarlos</h3>
+    <pre><code><span class="cm"># Al crear el PR en GitLab:</span>
+<span class="cm"># Tildar el checkbox "Mark as draft" en el formulario</span>
+<span class="cm"># O agregar el prefijo al título manualmente:</span>
+
+<span class="cn">Draft:</span> Agrega login con Google [#456]
+
+<span class="cm"># Cuando el trabajo esté listo para revisión formal:</span>
+<span class="cm"># Hacer clic en "Mark as ready" en GitLab</span>
+<span class="cm"># El prefix Draft: desaparece y el PR queda habilitado para merge</span></code></pre>
+    <div class="tip"><strong>Buena práctica:</strong> Abrir el PR como Draft desde el primer push de la rama. Así el equipo tiene visibilidad desde el inicio, y solo se marca como listo cuando está realmente para revisión.</div>
+  </Section>
+
+  <!-- 10 PR TESTING → MAIN -->
+  <Section number="10" title="PR de testing → main" id="s10">
+    <p>El PR de integración de <code>testing</code> a <code>main</code> es el último paso antes de producción. Tiene sus propias reglas.</p>
+    <h3>¿Quién lo abre?</h3>
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">👤</span><span class="rule-text">Lo abre el <strong>Tech Lead o el responsable del release</strong>, nunca un dev individual. Esta es una decisión de equipo, no personal.</span></div>
+      <div class="rule"><span class="rule-icon">📅</span><span class="rule-text">Se abre <strong>cuando QA aprobó</strong> todos los features que están en <code>testing</code> en ese ciclo. No antes.</span></div>
+    </div>
+    <h3>Formato del título</h3>
+    <pre><code><span class="cm"># Formato — describe el conjunto de features del release</span>
+Release: descripción del ciclo o sprint [testing → main]
+
+<span class="cm"># Ejemplos</span>
+<span class="cs">Release: módulo de login y corrección de descuentos [testing → main]</span>
+<span class="cs">Release: Sprint 12 [testing → main]</span></code></pre>
+    <h3>Reglas del PR testing → main</h3>
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">✅</span><span class="rule-text">Requiere aprobación del <strong>Tech Lead + al menos 1 dev senior</strong>.</span></div>
+      <div class="rule"><span class="rule-icon">🧪</span><span class="rule-text">El pipeline de CI debe estar en verde en <code>testing</code> antes de abrir el PR.</span></div>
+      <div class="rule"><span class="rule-icon">📋</span><span class="rule-text">La descripción del PR debe listar todos los issues que incluye este release con sus números: <code>Closes #456, Closes #101, Closes #789</code>.</span></div>
+      <div class="rule"><span class="rule-icon">🚫</span><span class="rule-text">No se mergea si hay features en <code>testing</code> que QA marcó como rechazadas o pendientes de corrección.</span></div>
+    </div>
+  </Section>
+
+  <!-- 11 HOTFIX -->
+  <Section number="11" title="Flujo HotFix" id="s11">
+    <p>Un HotFix es un parche urgente sobre un bug crítico en producción. <strong>Saltea testing</strong> y va directo a <code>main</code>.</p>
+    <div class="flow">
+      <div class="flow-row">
+        <span class="branch-badge b-hotfix">hotfix-202/crash-pagos</span>
+        <span class="arrow">→</span>
+        <span class="branch-badge b-main">main</span>
+        <span style="font-size:13px;color:#ffaa44;font-family:'JetBrains Mono',monospace;">PR urgente</span>
+      </div>
+      <div class="flow-row">
+        <span class="branch-badge b-main">main</span>
+        <span class="arrow">→</span>
+        <span class="branch-badge b-testing">testing</span>
+        <span style="font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace;">PR de sincronización</span>
+      </div>
+    </div>
+    <pre><code><span class="cm"># 1. Crear la rama desde main (no desde testing)</span>
+git checkout main
+git pull origin main
+git checkout -b <span class="ck">hotfix-202/crash-al-procesar-pago</span>
+
+<span class="cm"># 2. Aplicar el fix y commitear</span>
+git commit -m <span class="cs">"fix: corrige crash al procesar pago con tarjeta"</span> \
+           -m <span class="cs">"Closes #202"</span>
+
+<span class="cm"># 3. Push y abrir PR hacia main</span>
+git push origin <span class="ck">hotfix-202/crash-al-procesar-pago</span>
+
+<span class="cm"># 4. Después de mergear a main, sincronizar testing</span>
+<span class="cm">#    mediante un PR (no merge directo) para que quede registrado</span>
+git checkout main
+git pull origin main
+git checkout testing
+git pull origin testing
+<span class="cm"># Abrir PR de main → testing en GitLab con título:</span>
+<span class="cm"># "Sync: incorpora hotfix-202 a testing [main → testing]"</span></code></pre>
+    <div class="warn"><strong>Importante:</strong> La sincronización de <code>main</code> → <code>testing</code> después del hotfix debe hacerse por PR, no con merge directo. Así queda registrada en el historial y QA toma nota del cambio.</div>
+    <div class="alert"><strong>La urgencia no elimina el code review.</strong> Un PR de HotFix requiere igual aprobación. Contactar a un compañero disponible de inmediato.</div>
+  </Section>
+
+  <!-- 12 CI/CD Y BRANCH PROTECTION -->
+  <Section number="12" title="CI/CD y Branch Protection" id="s12">
+    <p>Las buenas prácticas documentadas no sirven de nada si el repositorio no las <strong>impone técnicamente</strong>. GitLab permite configurar reglas que hacen obligatorio el cumplimiento.</p>
+    <h3>Configuración de Branch Protection</h3>
+    <p>Aplicar esta configuración tanto a <code>main</code> como a <code>testing</code> en: Settings → Repository → Protected branches.</p>
+    <div class="gitlab-cfg">
+      <div class="gitlab-cfg-header">⚙ Settings → Repository → Protected branches → main & testing</div>
+      <div class="gitlab-cfg-body">
+        <div class="cfg-row"><span class="cfg-name">Allowed to merge</span><span class="cfg-val cfg-val2">Maintainers</span></div>
+        <div class="cfg-row"><span class="cfg-name">Allowed to push</span><span class="cfg-val cfg-off">No one</span></div>
+        <div class="cfg-row"><span class="cfg-name">Allow force push</span><span class="cfg-val cfg-off">Desactivado</span></div>
+        <div class="cfg-row"><span class="cfg-name">Require approval before merging</span><span class="cfg-val cfg-on">Activado (mín. 1)</span></div>
+        <div class="cfg-row"><span class="cfg-name">Code owner approval required</span><span class="cfg-val cfg-on">Activado</span></div>
+      </div>
+    </div>
+    <div class="gitlab-cfg" style="margin-top:16px;">
+      <div class="gitlab-cfg-header">⚙ Settings → General → Merge requests</div>
+      <div class="gitlab-cfg-body">
+        <div class="cfg-row"><span class="cfg-name">Merge method</span><span class="cfg-val cfg-val2">Squash commits</span></div>
+        <div class="cfg-row"><span class="cfg-name">Pipelines must succeed</span><span class="cfg-val cfg-on">Activado</span></div>
+        <div class="cfg-row"><span class="cfg-name">All discussions must be resolved</span><span class="cfg-val cfg-on">Activado</span></div>
+        <div class="cfg-row"><span class="cfg-name">Delete source branch after merge</span><span class="cfg-val cfg-on">Activado</span></div>
+      </div>
+    </div>
+    <h3>Pipeline de CI mínimo recomendado</h3>
+    <p>Todo PR debe pasar un pipeline antes de poder mergearse. Como mínimo el pipeline debe incluir:</p>
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">🧪</span><span class="rule-text"><strong>Tests unitarios y de integración.</strong> Si los tests fallan, el PR no puede mergearse, sin importar aprobaciones.</span></div>
+      <div class="rule"><span class="rule-icon">🔍</span><span class="rule-text"><strong>Linter y análisis de código estático.</strong> Para garantizar que el código sigue los estándares del proyecto.</span></div>
+      <div class="rule"><span class="rule-icon">🏗️</span><span class="rule-text"><strong>Build exitoso.</strong> Verificar que la aplicación compila/construye sin errores.</span></div>
+    </div>
+    <div class="tip"><strong>Tip:</strong> Configurar el pipeline en el archivo <code>.gitlab-ci.yml</code> en la raíz del proyecto. GitLab lo detecta automáticamente y lo ejecuta en cada push.</div>
+  </Section>
+
+  <!-- 13 CODE REVIEW -->
+  <Section number="13" title="Code Review" id="s13">
+    <h3>Para quien revisa</h3>
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">⏱️</span><span class="rule-text"><strong>Revisar en menos de 24 horas hábiles</strong> para no bloquear al compañero.</span></div>
+      <div class="rule"><span class="rule-icon">💬</span><span class="rule-text">Los comentarios deben ser <strong>constructivos y específicos</strong>. Si algo está mal, sugerir cómo mejorarlo.</span></div>
+      <div class="rule"><span class="rule-icon">🔗</span><span class="rule-text">Verificar que el PR <strong>referencia correctamente el workitem</strong> en el título y en los commits.</span></div>
+      <div class="rule"><span class="rule-icon">✅</span><span class="rule-text">Aprobar solo si el código es correcto, legible, no rompe nada existente y el CI está en verde.</span></div>
+      <div class="rule"><span class="rule-icon">🚫</span><span class="rule-text">No aprobar PRs de más de 400 líneas sin pedir que se divida. Revisar código extenso es ineficaz.</span></div>
+    </div>
+    <h3>Para el autor del PR</h3>
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">🔬</span><span class="rule-text">Auto-revisar el PR antes de asignarlo. Ser el primero en detectar errores obvios.</span></div>
+      <div class="rule"><span class="rule-icon">📖</span><span class="rule-text">Completar el template de descripción: qué hace, link al issue, cómo probarlo y checklist.</span></div>
+      <div class="rule"><span class="rule-icon">🤝</span><span class="rule-text">Responder todos los comentarios antes de pedir re-review.</span></div>
+      <div class="rule"><span class="rule-icon">🔄</span><span class="rule-text">Hacer rebase sobre <code>testing</code> antes de incorporar correcciones del review, para mantener la rama actualizada.</span></div>
+    </div>
+  </Section>
+
+  <!-- 14 REGLAS GENERALES -->
+  <Section number="14" title="Reglas Generales" id="s14">
+    <div class="rules">
+      <div class="rule"><span class="rule-icon">🚫</span><span class="rule-text"><strong>Nunca pushear directamente a main o testing.</strong> Sin excepciones, sin importar la urgencia.</span></div>
+      <div class="rule"><span class="rule-icon">🎫</span><span class="rule-text"><strong>Sin workitem no hay rama.</strong> Toda rama debe estar respaldada por un issue en GitLab.</span></div>
+      <div class="rule"><span class="rule-icon">🌿</span><span class="rule-text"><strong>Una rama por workitem.</strong> No mezclar cambios de distintos issues en la misma rama.</span></div>
+      <div class="rule"><span class="rule-icon">📏</span><span class="rule-text"><strong>PRs pequeños.</strong> Menos de 400 líneas modificadas. Si una feature es grande, dividirla en tareas más pequeñas.</span></div>
+      <div class="rule"><span class="rule-icon">🔄</span><span class="rule-text"><strong>Rebase diario obligatorio.</strong> Hacer rebase sobre testing todos los días antes de comenzar a trabajar.</span></div>
+      <div class="rule"><span class="rule-icon">✅</span><span class="rule-text"><strong>CI verde antes de pedir review.</strong> No asignar un PR para revisión si el pipeline no pasó.</span></div>
+      <div class="rule"><span class="rule-icon">🧹</span><span class="rule-text"><strong>Eliminar ramas mergeadas.</strong> El repo debe estar siempre limpio. GitLab puede hacerlo automáticamente.</span></div>
+      <div class="rule"><span class="rule-icon">🔒</span><span class="rule-text"><strong>Nunca commitear secretos.</strong> Claves de API, passwords y tokens van en variables de entorno, nunca en el código.</span></div>
+      <div class="rule"><span class="rule-icon">📋</span><span class="rule-text"><strong>El .gitignore es sagrado.</strong> Revisar que esté correcto antes del primer push de cualquier proyecto.</span></div>
+    </div>
+  </Section>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* SECTIONS */
+  .section { margin-bottom: 68px; }
+  .section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--accent); background: rgba(124,106,247,0.08);
+    border: 1px solid rgba(124,106,247,0.2);
+    width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+    border-radius: 6px; flex-shrink: 0;
+  }
+  h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: #fff; }
+  h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 12px; margin-top: 28px; }
+  h4 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: var(--muted); margin-bottom: 8px; margin-top: 20px; text-transform: uppercase; letter-spacing: 0.06em; }
+  p { color: #b0b0c8; margin-bottom: 12px; }
+
+  /* CODE */
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 20px; overflow-x: auto; margin: 16px 0;
+  }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.9; color: #c9d1d9; }
+  .cm { color: var(--muted); }
+  .ck { color: var(--accent); }
+  .cs { color: var(--accent2); }
+  .cn { color: var(--accent3); }
+  .cd { color: var(--danger); }
+
+  /* WORKITEM GRID */
+  .wi-grid { display: grid; gap: 10px; margin: 16px 0; }
+  .wi-row {
+    display: grid; grid-template-columns: 90px 180px 1fr;
+    gap: 16px; align-items: center;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 18px;
+  }
+  .wi-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500;
+    padding: 3px 10px; border-radius: 5px; text-align: center; white-space: nowrap;
+  }
+  .wi-epic   { background: rgba(247,199,106,0.12); color: var(--accent3); border: 1px solid rgba(247,199,106,0.3); }
+  .wi-story  { background: rgba(78,205,196,0.10);  color: var(--accent2); border: 1px solid rgba(78,205,196,0.25); }
+  .wi-task   { background: rgba(124,106,247,0.10); color: var(--accent);  border: 1px solid rgba(124,106,247,0.2); }
+  .wi-bug    { background: rgba(255,107,107,0.10); color: var(--danger);  border: 1px solid rgba(255,107,107,0.2); }
+  .wi-hotfix { background: rgba(255,140,0,0.12);   color: #ffaa44;        border: 1px solid rgba(255,140,0,0.3); }
+  .wi-pattern { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); }
+  .wi-example { font-size: 13px; color: var(--muted); }
+
+  /* FLOW */
+  .flow {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 28px; margin-bottom: 16px;
+  }
+  .flow-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .branch-badge {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    padding: 4px 12px; border-radius: 6px; font-weight: 500; white-space: nowrap;
+  }
+  .b-main    { background: rgba(247,199,106,0.12); color: var(--accent3); border: 1px solid rgba(247,199,106,0.3); }
+  .b-testing { background: rgba(78,205,196,0.10);  color: var(--accent2); border: 1px solid rgba(78,205,196,0.25); }
+  .b-feature { background: rgba(124,106,247,0.10); color: var(--accent);  border: 1px solid rgba(124,106,247,0.2); }
+  .b-hotfix  { background: rgba(255,140,0,0.12);   color: #ffaa44;        border: 1px solid rgba(255,140,0,0.3); }
+  .arrow { color: var(--muted); font-size: 18px; }
+  .flow-desc { font-size: 13px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th {
+    font-family: 'Syne', sans-serif; font-weight: 600; font-size: 12px;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    color: var(--muted); padding: 10px 16px; text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  td { padding: 12px 16px; border-bottom: 1px solid rgba(42,42,53,0.5); color: #b0b0c8; vertical-align: top; }
+  td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); }
+  tr:last-child td { border-bottom: none; }
+
+  /* RULES */
+  .rules { display: grid; gap: 12px; }
+  .rule {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 18px;
+  }
+  .rule-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .rule-text { font-size: 14px; color: #b0b0c8; }
+  .rule-text strong { color: var(--text); font-weight: 500; }
+
+  /* ALERTS */
+  .alert {
+    border-left: 3px solid var(--danger); background: rgba(255,107,107,0.06);
+    border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0;
+    font-size: 14px; color: #c0b0b0;
+  }
+  .alert strong { color: var(--danger); }
+
+  .tip {
+    border-left: 3px solid var(--accent2); background: rgba(78,205,196,0.06);
+    border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0;
+    font-size: 14px; color: #b0c0c0;
+  }
+  .tip strong { color: var(--accent2); }
+
+  .warn {
+    border-left: 3px solid var(--accent3); background: rgba(247,199,106,0.06);
+    border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0;
+    font-size: 14px; color: #c0c0b0;
+  }
+  .warn strong { color: var(--accent3); }
+
+  .info {
+    border-left: 3px solid var(--accent); background: rgba(124,106,247,0.06);
+    border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0;
+    font-size: 14px; color: #b8b0c8;
+  }
+  .info strong { color: var(--accent); }
+
+  /* COMMIT BLOCK */
+  .commit-block {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden; margin: 16px 0;
+  }
+  .commit-line { display: flex; align-items: stretch; border-bottom: 1px solid var(--border); }
+  .commit-line:last-child { border-bottom: none; }
+  .commit-label {
+    width: 80px; flex-shrink: 0; background: var(--surface);
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+    display: flex; align-items: center; padding: 14px 12px;
+    border-right: 1px solid var(--border);
+  }
+  .commit-content {
+    padding: 14px 18px; font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; line-height: 1.7; color: #c9d1d9; flex: 1;
+  }
+  .commit-note { font-size: 12px; color: var(--muted); margin-top: 6px; font-family: 'Inter', sans-serif; }
+
+  /* TEMPLATE BLOCK */
+  .template-block {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; padding: 22px; margin: 16px 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.9;
+    color: #c9d1d9;
+  }
+  .tpl-section { color: var(--accent3); }
+  .tpl-comment { color: var(--muted); }
+  .tpl-content { color: #c9d1d9; }
+
+  /* REBASE VISUAL */
+  .rebase-visual {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px; margin: 16px 0; overflow-x: auto;
+  }
+  .rb-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .rb-line { display: flex; align-items: center; gap: 0; margin-bottom: 6px; flex-wrap: nowrap; }
+  .rb-commit {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    padding: 5px 12px; border-radius: 6px; white-space: nowrap;
+  }
+  .rb-c-main    { background: rgba(247,199,106,0.12); color: var(--accent3); border: 1px solid rgba(247,199,106,0.3); }
+  .rb-c-feature { background: rgba(124,106,247,0.10); color: var(--accent);  border: 1px solid rgba(124,106,247,0.2); }
+  .rb-c-new     { background: rgba(78,205,196,0.10);  color: var(--accent2); border: 1px solid rgba(78,205,196,0.25); }
+  .rb-arrow { color: var(--muted); margin: 0 6px; font-size: 14px; }
+  .rb-divider { border-top: 1px dashed var(--border); margin: 16px 0; }
+
+  /* SQUASH VISUAL */
+  .squash-visual {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    gap: 16px; align-items: center; margin: 16px 0;
+  }
+  .sq-side { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .sq-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .sq-commit {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    padding: 5px 10px; border-radius: 5px; margin-bottom: 6px;
+    background: rgba(124,106,247,0.08); color: var(--accent); border: 1px solid rgba(124,106,247,0.15);
+  }
+  .sq-commit.result { background: rgba(78,205,196,0.10); color: var(--accent2); border: 1px solid rgba(78,205,196,0.25); }
+  .sq-arrow { font-size: 28px; color: var(--muted); text-align: center; }
+
+  /* GITLAB CONFIG BLOCK */
+  .gitlab-cfg {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden; margin: 16px 0;
+  }
+  .gitlab-cfg-header {
+    background: rgba(124,106,247,0.08); border-bottom: 1px solid var(--border);
+    padding: 12px 18px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .gitlab-cfg-body { padding: 16px 18px; display: grid; gap: 10px; }
+  .cfg-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 12px; background: var(--code-bg); border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .cfg-name { font-size: 14px; color: #b0b0c8; }
+  .cfg-val {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    padding: 3px 10px; border-radius: 4px;
+  }
+  .cfg-on  { background: rgba(78,205,196,0.12); color: var(--accent2); border: 1px solid rgba(78,205,196,0.25); }
+  .cfg-off { background: rgba(255,107,107,0.10); color: var(--danger);  border: 1px solid rgba(255,107,107,0.2); }
+  .cfg-val2{ background: rgba(247,199,106,0.10); color: var(--accent3); border: 1px solid rgba(247,199,106,0.25); }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 52px 0; }
+</style>

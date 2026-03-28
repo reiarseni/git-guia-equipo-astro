@@ -1,0 +1,44 @@
+<header>
+  <div class="tag">v3.0 — Estándar del Equipo</div>
+  <h1>Buenas Prácticas<br>con <span>Git</span></h1>
+  <p class="subtitle">Guía oficial del flujo de trabajo con Git y GitLab para todo el equipo de desarrollo.</p>
+  <div class="pillars">
+    <span class="pillar">Shared Repository</span>
+    <span class="pillar">Feature Branches</span>
+    <span class="pillar">Pull Requests</span>
+    <span class="pillar">main + testing</span>
+    <span class="pillar">GitLab Workitems</span>
+    <span class="pillar">CI/CD</span>
+    <span class="pillar">Squash Merge</span>
+  </div>
+</header>
+
+<style>
+  header { border-bottom: 1px solid var(--border); padding-bottom: 40px; margin-bottom: 56px; }
+
+  .tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(124,106,247,0.1);
+    border: 1px solid rgba(124,106,247,0.25);
+    padding: 4px 12px; border-radius: 4px; margin-bottom: 20px;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; color: #fff;
+  }
+  h1 span { color: var(--accent); }
+
+  .subtitle { margin-top: 14px; color: var(--muted); font-size: 16px; max-width: 560px; }
+
+  .pillars { display: flex; gap: 10px; margin-top: 28px; flex-wrap: wrap; }
+  .pillar {
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    padding: 5px 12px; border-radius: 20px;
+    border: 1px solid var(--border); color: var(--muted);
+  }
+</style>
