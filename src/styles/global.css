@@ -1,9 +1,13 @@
-/* Global CSS - Git Guía Equipo */
+/* ============================================================
+   Global CSS — Git Guía Equipo
+   Mobile-first · Sidebar layout · Dark theme
+   ============================================================ */
 
-/* Variables */
+/* ---- Variables ---- */
 :root {
   --bg: #0e0e11;
   --surface: #16161a;
+  --surface2: #1c1c22;
   --border: #2a2a35;
   --accent: #7c6af7;
   --accent2: #4ecdc4;
@@ -12,10 +16,13 @@
   --text: #e8e8f0;
   --muted: #7a7a90;
   --code-bg: #121216;
+  --sidebar-w: 264px;
 }
 
-/* Reset & Base */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ---- Reset & Base ---- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
 
 body {
   background: var(--bg);
@@ -23,220 +30,690 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: 15px;
   line-height: 1.7;
-  padding: 40px 20px 80px;
 }
 
-.container { max-width: 880px; margin: 0 auto; }
+/* ============================================================
+   LAYOUT — Sidebar + contenido principal
+   Mobile-first: móvil sin sidebar visible, escritorio con sidebar fijo
+   ============================================================ */
 
-/* SECTIONS */
-.section { margin-bottom: 68px; }
-.section-header { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+/* Botón hamburguesa — fijo, solo visible en móvil */
+.menu-toggle {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--text);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.menu-toggle:hover {
+  background: rgba(124, 106, 247, 0.1);
+  border-color: rgba(124, 106, 247, 0.3);
+  color: var(--accent);
+}
+
+.menu-toggle .icon-close { display: none; }
+.menu-toggle.is-open .icon-hamburger { display: none; }
+.menu-toggle.is-open .icon-close { display: block; }
+
+@media (min-width: 1024px) {
+  .menu-toggle { display: none; }
+}
+
+/* Overlay oscuro (fondo cuando el menú está abierto en móvil) */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  z-index: 200;
+}
+
+.overlay.is-visible { display: block; }
+
+/* Sidebar — se desliza desde la izquierda en móvil, fijo en escritorio */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--sidebar-w);
+  height: 100%;
+  height: 100dvh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow: hidden;
+  z-index: 300;
+  transform: translateX(-100%);
+  transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar.is-open {
+  transform: translateX(0);
+  box-shadow: 8px 0 32px rgba(0, 0, 0, 0.4);
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    transform: translateX(0);
+    box-shadow: none;
+  }
+}
+
+/* Contenedor del contenido principal */
+.page-wrapper {
+  min-height: 100vh;
+  /* Espacio arriba para el botón hamburguesa en móvil */
+  padding: 72px 18px 80px;
+}
+
+@media (min-width: 480px) {
+  .page-wrapper { padding: 72px 24px 80px; }
+}
+
+@media (min-width: 768px) {
+  .page-wrapper { padding: 72px 40px 96px; }
+}
+
+@media (min-width: 1024px) {
+  .page-wrapper {
+    margin-left: var(--sidebar-w);
+    padding: 56px 48px 96px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .page-wrapper { padding: 56px 72px 96px; }
+}
+
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   DIVISORES DE GRUPO (secciones lógicas del contenido)
+   ============================================================ */
+.group-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 12px 0 52px;
+  font-family: 'Syne', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.group-divider::before,
+.group-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ============================================================
+   SECCIONES
+   ============================================================ */
+.section { margin-bottom: 64px; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 26px;
+}
+
 .section-num {
-  font-family: 'JetBrains Mono', monospace; font-size: 11px;
-  color: var(--accent); background: rgba(124,106,247,0.08);
-  border: 1px solid rgba(124,106,247,0.2);
-  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
-  border-radius: 6px; flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  background: rgba(124, 106, 247, 0.08);
+  border: 1px solid rgba(124, 106, 247, 0.2);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  flex-shrink: 0;
 }
-h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; color: #fff; }
-h3 { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 12px; margin-top: 28px; }
-h4 { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 600; color: var(--muted); margin-bottom: 8px; margin-top: 20px; text-transform: uppercase; letter-spacing: 0.06em; }
-p { color: #b0b0c8; margin-bottom: 12px; }
-p strong { color: var(--text); font-weight: 500; }
-code { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
 
-/* CODE */
-pre {
-  background: var(--code-bg); border: 1px solid var(--border);
-  border-radius: 8px; padding: 20px; overflow-x: auto; margin: 16px 0;
+/* ============================================================
+   TIPOGRAFÍA
+   ============================================================ */
+h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(18px, 3vw, 22px);
+  font-weight: 700;
+  color: #fff;
 }
-code { font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.9; color: #c9d1d9; }
+
+h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 12px;
+  margin-top: 28px;
+}
+
+h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 8px;
+  margin-top: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+p {
+  color: #b0b0c8;
+  margin-bottom: 12px;
+  font-size: clamp(14px, 2vw, 15px);
+}
+
+p strong { color: var(--text); font-weight: 500; }
+
+code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+}
+
+/* ============================================================
+   BLOQUES DE CÓDIGO
+   ============================================================ */
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 20px;
+  overflow-x: auto;
+  margin: 16px 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.9;
+  color: #c9d1d9;
+}
+
+@media (max-width: 480px) {
+  pre { padding: 14px 16px; font-size: 12px; }
+  code { font-size: 12px; }
+}
+
+/* Colores de sintaxis */
 .cm { color: var(--muted); }
 .ck { color: var(--accent); }
 .cs { color: var(--accent2); }
 .cn { color: var(--accent3); }
 .cd { color: var(--danger); }
 
-/* WORKITEM GRID */
+/* ============================================================
+   GRILLA DE WORKITEMS
+   ============================================================ */
 .wi-grid { display: grid; gap: 10px; margin: 16px 0; }
+
 .wi-row {
-  display: grid; grid-template-columns: 90px 180px 1fr;
-  gap: 16px; align-items: center;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 8px; padding: 14px 18px;
+  display: grid;
+  grid-template-columns: 88px 170px 1fr;
+  gap: 14px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 13px 16px;
 }
+
+@media (max-width: 640px) {
+  .wi-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+
 .wi-badge {
-  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500;
-  padding: 3px 10px; border-radius: 5px; text-align: center; white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 10px;
+  border-radius: 5px;
+  text-align: center;
+  white-space: nowrap;
+  width: fit-content;
 }
+
 .wi-epic   { background: rgba(247,199,106,0.12); color: var(--accent3); border: 1px solid rgba(247,199,106,0.3); }
 .wi-story  { background: rgba(78,205,196,0.10);  color: var(--accent2); border: 1px solid rgba(78,205,196,0.25); }
 .wi-task   { background: rgba(124,106,247,0.10); color: var(--accent);  border: 1px solid rgba(124,106,247,0.2); }
 .wi-bug    { background: rgba(255,107,107,0.10); color: var(--danger);  border: 1px solid rgba(255,107,107,0.2); }
 .wi-hotfix { background: rgba(255,140,0,0.12);   color: #ffaa44;        border: 1px solid rgba(255,140,0,0.3); }
+
 .wi-pattern { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); }
 .wi-example { font-size: 13px; color: var(--muted); }
 
-/* FLOW */
+/* ============================================================
+   FLUJO (DIAGRAMAS DE RAMAS)
+   ============================================================ */
 .flow {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; padding: 28px; margin-bottom: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
-.flow-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+
+.flow-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
 .branch-badge {
-  font-family: 'JetBrains Mono', monospace; font-size: 12px;
-  padding: 4px 12px; border-radius: 6px; font-weight: 500; white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  white-space: nowrap;
 }
+
 .b-main    { background: rgba(247,199,106,0.12); color: var(--accent3); border: 1px solid rgba(247,199,106,0.3); }
 .b-testing { background: rgba(78,205,196,0.10);  color: var(--accent2); border: 1px solid rgba(78,205,196,0.25); }
 .b-feature { background: rgba(124,106,247,0.10); color: var(--accent);  border: 1px solid rgba(124,106,247,0.2); }
 .b-hotfix  { background: rgba(255,140,0,0.12);   color: #ffaa44;        border: 1px solid rgba(255,140,0,0.3); }
+
 .arrow { color: var(--muted); font-size: 18px; }
 .flow-desc { font-size: 13px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
 
-/* TABLE */
-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+/* ============================================================
+   TABLA
+   ============================================================ */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 16px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  min-width: 360px;
+}
+
 th {
-  font-family: 'Syne', sans-serif; font-weight: 600; font-size: 12px;
-  letter-spacing: 0.05em; text-transform: uppercase;
-  color: var(--muted); padding: 10px 16px; text-align: left;
+  font-family: 'Syne', sans-serif;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 10px 16px;
+  text-align: left;
   border-bottom: 1px solid var(--border);
 }
-td { padding: 12px 16px; border-bottom: 1px solid rgba(42,42,53,0.5); color: #b0b0c8; vertical-align: top; }
-td:first-child { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent); }
+
+td {
+  padding: 11px 16px;
+  border-bottom: 1px solid rgba(42,42,53,0.5);
+  color: #b0b0c8;
+  vertical-align: top;
+}
+
+td:first-child {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+}
+
 tr:last-child td { border-bottom: none; }
 
-/* RULES */
-.rules { display: grid; gap: 12px; }
+/* ============================================================
+   REGLAS (CARDS DE REGLAS)
+   ============================================================ */
+.rules { display: grid; gap: 10px; }
+
 .rule {
-  display: flex; gap: 14px; align-items: flex-start;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 8px; padding: 16px 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 15px 16px;
+  transition: border-color 0.15s;
 }
+
+.rule:hover { border-color: rgba(124,106,247,0.2); }
+
 .rule-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-.rule-text { font-size: 14px; color: #b0b0c8; }
+
+.rule-text {
+  font-size: 14px;
+  color: #b0b0c8;
+  line-height: 1.6;
+}
+
 .rule-text strong { color: var(--text); font-weight: 500; }
 
-/* ALERTS */
+/* ============================================================
+   ALERTAS / CALLOUTS
+   ============================================================ */
 .alert {
-  border-left: 3px solid var(--danger); background: rgba(255,107,107,0.06);
-  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0;
-  font-size: 14px; color: #c0b0b0;
+  border-left: 3px solid var(--danger);
+  background: rgba(255,107,107,0.06);
+  border-radius: 0 8px 8px 0;
+  padding: 13px 16px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #c0b0b0;
+  line-height: 1.6;
 }
 .alert strong { color: var(--danger); }
 
 .tip {
-  border-left: 3px solid var(--accent2); background: rgba(78,205,196,0.06);
-  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0;
-  font-size: 14px; color: #b0c0c0;
+  border-left: 3px solid var(--accent2);
+  background: rgba(78,205,196,0.06);
+  border-radius: 0 8px 8px 0;
+  padding: 13px 16px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #b0c0c0;
+  line-height: 1.6;
 }
 .tip strong { color: var(--accent2); }
 
 .warn {
-  border-left: 3px solid var(--accent3); background: rgba(247,199,106,0.06);
-  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0;
-  font-size: 14px; color: #c0c0b0;
+  border-left: 3px solid var(--accent3);
+  background: rgba(247,199,106,0.06);
+  border-radius: 0 8px 8px 0;
+  padding: 13px 16px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #c0c0b0;
+  line-height: 1.6;
 }
 .warn strong { color: var(--accent3); }
 
 .info {
-  border-left: 3px solid var(--accent); background: rgba(124,106,247,0.06);
-  border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 16px 0;
-  font-size: 14px; color: #b8b0c8;
+  border-left: 3px solid var(--accent);
+  background: rgba(124,106,247,0.06);
+  border-radius: 0 8px 8px 0;
+  padding: 13px 16px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #b8b0c8;
+  line-height: 1.6;
 }
 .info strong { color: var(--accent); }
 
-/* COMMIT BLOCK */
+/* ============================================================
+   BLOQUE DE COMMIT
+   ============================================================ */
 .commit-block {
-  background: var(--code-bg); border: 1px solid var(--border);
-  border-radius: 8px; overflow: hidden; margin: 16px 0;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 16px 0;
 }
-.commit-line { display: flex; align-items: stretch; border-bottom: 1px solid var(--border); }
+
+.commit-line {
+  display: flex;
+  align-items: stretch;
+  border-bottom: 1px solid var(--border);
+}
+
 .commit-line:last-child { border-bottom: none; }
+
 .commit-label {
-  width: 80px; flex-shrink: 0; background: var(--surface);
-  font-family: 'JetBrains Mono', monospace; font-size: 10px;
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
-  display: flex; align-items: center; padding: 14px 12px;
+  width: 76px;
+  flex-shrink: 0;
+  background: var(--surface);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  padding: 13px 12px;
   border-right: 1px solid var(--border);
 }
-.commit-content {
-  padding: 14px 18px; font-family: 'JetBrains Mono', monospace;
-  font-size: 13px; line-height: 1.7; color: #c9d1d9; flex: 1;
-}
-.commit-note { font-size: 12px; color: var(--muted); margin-top: 6px; font-family: 'Inter', sans-serif; }
 
-/* TEMPLATE BLOCK */
-.template-block {
-  background: var(--code-bg); border: 1px solid var(--border);
-  border-radius: 8px; padding: 22px; margin: 16px 0;
-  font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.9;
+.commit-content {
+  padding: 13px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.75;
   color: #c9d1d9;
+  flex: 1;
+  min-width: 0;
 }
+
+.commit-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 5px;
+  font-family: 'Inter', sans-serif;
+}
+
+@media (max-width: 480px) {
+  .commit-line { flex-direction: column; }
+  .commit-label {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 8px 14px;
+  }
+}
+
+/* ============================================================
+   BLOQUE DE TEMPLATE
+   ============================================================ */
+.template-block {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 16px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.9;
+  color: #c9d1d9;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .tpl-section { color: var(--accent3); }
 .tpl-comment { color: var(--muted); }
 .tpl-content { color: #c9d1d9; }
 
-/* REBASE VISUAL */
+/* ============================================================
+   VISUALIZACIÓN DE REBASE
+   ============================================================ */
 .rebase-visual {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; padding: 24px; margin: 16px 0; overflow-x: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px;
+  margin: 16px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
+
 .rb-label {
-  font-family: 'JetBrains Mono', monospace; font-size: 11px;
-  color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
-.rb-line { display: flex; align-items: center; gap: 0; margin-bottom: 6px; flex-wrap: nowrap; }
+
+.rb-line {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 6px;
+  flex-wrap: nowrap;
+}
+
 .rb-commit {
-  font-family: 'JetBrains Mono', monospace; font-size: 12px;
-  padding: 5px 12px; border-radius: 6px; white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
 }
+
 .rb-c-main    { background: rgba(247,199,106,0.12); color: var(--accent3); border: 1px solid rgba(247,199,106,0.3); }
 .rb-c-feature { background: rgba(124,106,247,0.10); color: var(--accent);  border: 1px solid rgba(124,106,247,0.2); }
 .rb-c-new     { background: rgba(78,205,196,0.10);  color: var(--accent2); border: 1px solid rgba(78,205,196,0.25); }
-.rb-arrow { color: var(--muted); margin: 0 6px; font-size: 14px; }
-.rb-divider { border-top: 1px dashed var(--border); margin: 16px 0; }
 
-/* SQUASH VISUAL */
+.rb-arrow { color: var(--muted); margin: 0 5px; font-size: 14px; }
+.rb-divider { border-top: 1px dashed var(--border); margin: 14px 0; }
+
+/* ============================================================
+   VISUALIZACIÓN DE SQUASH
+   ============================================================ */
 .squash-visual {
-  display: grid; grid-template-columns: 1fr auto 1fr;
-  gap: 16px; align-items: center; margin: 16px 0;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: center;
+  margin: 16px 0;
 }
-.sq-side { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
-.sq-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+
+@media (max-width: 580px) {
+  .squash-visual {
+    grid-template-columns: 1fr;
+  }
+  .sq-arrow {
+    text-align: center;
+    transform: rotate(90deg);
+  }
+}
+
+.sq-side {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.sq-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+
 .sq-commit {
-  font-family: 'JetBrains Mono', monospace; font-size: 12px;
-  padding: 5px 10px; border-radius: 5px; margin-bottom: 6px;
-  background: rgba(124,106,247,0.08); color: var(--accent); border: 1px solid rgba(124,106,247,0.15);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-bottom: 6px;
+  background: rgba(124,106,247,0.08);
+  color: var(--accent);
+  border: 1px solid rgba(124,106,247,0.15);
 }
-.sq-commit.result { background: rgba(78,205,196,0.10); color: var(--accent2); border: 1px solid rgba(78,205,196,0.25); }
+
+.sq-commit.result {
+  background: rgba(78,205,196,0.10);
+  color: var(--accent2);
+  border: 1px solid rgba(78,205,196,0.25);
+}
+
 .sq-arrow { font-size: 28px; color: var(--muted); text-align: center; }
 
-/* GITLAB CONFIG BLOCK */
+/* ============================================================
+   BLOQUE DE CONFIGURACIÓN DE GITLAB
+   ============================================================ */
 .gitlab-cfg {
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 10px; overflow: hidden; margin: 16px 0;
-}
-.gitlab-cfg-header {
-  background: rgba(124,106,247,0.08); border-bottom: 1px solid var(--border);
-  padding: 12px 18px;
-  font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--accent);
-  display: flex; align-items: center; gap: 8px;
-}
-.gitlab-cfg-body { padding: 16px 18px; display: grid; gap: 10px; }
-.cfg-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 10px 12px; background: var(--code-bg); border-radius: 6px;
+  background: var(--surface);
   border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 16px 0;
 }
-.cfg-name { font-size: 14px; color: #b0b0c8; }
-.cfg-val {
-  font-family: 'JetBrains Mono', monospace; font-size: 12px;
-  padding: 3px 10px; border-radius: 4px;
-}
-.cfg-on  { background: rgba(78,205,196,0.12); color: var(--accent2); border: 1px solid rgba(78,205,196,0.25); }
-.cfg-off { background: rgba(255,107,107,0.10); color: var(--danger);  border: 1px solid rgba(255,107,107,0.2); }
-.cfg-val2{ background: rgba(247,199,106,0.10); color: var(--accent3); border: 1px solid rgba(247,199,106,0.25); }
 
-/* HR */
-hr { border: none; border-top: 1px solid var(--border); margin: 52px 0; }
+.gitlab-cfg-header {
+  background: rgba(124,106,247,0.08);
+  border-bottom: 1px solid var(--border);
+  padding: 11px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gitlab-cfg-body {
+  padding: 14px 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.cfg-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--code-bg);
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cfg-name { font-size: 14px; color: #b0b0c8; flex: 1; min-width: 140px; }
+
+.cfg-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.cfg-on   { background: rgba(78,205,196,0.12); color: var(--accent2); border: 1px solid rgba(78,205,196,0.25); }
+.cfg-off  { background: rgba(255,107,107,0.10); color: var(--danger);  border: 1px solid rgba(255,107,107,0.2); }
+.cfg-val2 { background: rgba(247,199,106,0.10); color: var(--accent3); border: 1px solid rgba(247,199,106,0.25); }
+
+/* ============================================================
+   SEPARADOR HORIZONTAL
+   ============================================================ */
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 48px 0;
+}
