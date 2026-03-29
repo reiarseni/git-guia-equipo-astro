@@ -2,304 +2,172 @@
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
-<!-- Overlay de fondo -->
-<div id="pwa-overlay" role="dialog" aria-modal="true" aria-label="Instalar aplicación" hidden>
-
-  <!-- MODAL CHROMIUM: Desktop y Android -->
-  <div id="pwa-modal-chromium" class="pwa-modal" hidden>
-    <button class="pwa-close" id="btn-chromium-close" aria-label="Cerrar">✕</button>
-    <img src={`${base}/icons/icon-192.svg`} alt="Git Guía Equipo" class="pwa-icon" width="72" height="72" />
-    <h2 class="pwa-title">Instala la app</h2>
-    <p class="pwa-desc" id="chromium-desc"></p>
-    <div class="pwa-actions">
-      <button id="btn-install" class="btn-primary">Instalar</button>
-      <button id="btn-dismiss" class="btn-secondary">Ahora no</button>
-    </div>
+<!-- Banner Chromium (Desktop / Android) -->
+<div id="pwa-chromium" class="pwa-banner" hidden role="dialog" aria-label="Instalar aplicación">
+  <img src={`${base}/icons/icon-192.svg`} alt="" class="pwa-banner-icon" width="36" height="36" aria-hidden="true" />
+  <div class="pwa-banner-body">
+    <span class="pwa-banner-title">Instala la app</span>
+    <span class="pwa-banner-sub" id="chromium-sub"></span>
   </div>
+  <button id="btn-install" class="pwa-btn-install">Instalar</button>
+  <button id="btn-chromium-close" class="pwa-btn-close" aria-label="Cerrar">✕</button>
+</div>
 
-  <!-- MODAL iOS: Safari iPhone / iPad -->
-  <div id="pwa-modal-ios" class="pwa-modal" hidden>
-    <button class="pwa-close" id="btn-ios-close" aria-label="Cerrar">✕</button>
-    <img src={`${base}/icons/icon-192.svg`} alt="Git Guía Equipo" class="pwa-icon" width="72" height="72" />
-    <h2 class="pwa-title">Añadir a inicio</h2>
-    <p class="pwa-subtitle">Sigue estos pasos en Safari:</p>
-    <ol class="ios-steps">
-      <li>
-        <span class="step-icon" aria-hidden="true">⬆️</span>
-        <span>Toca el botón <strong>Compartir</strong> en la barra de Safari</span>
-      </li>
-      <li>
-        <span class="step-icon" aria-hidden="true">➕</span>
-        <span>Desplázate y toca <strong>"Añadir a pantalla de inicio"</strong></span>
-      </li>
-      <li>
-        <span class="step-icon" aria-hidden="true">✅</span>
-        <span>Toca <strong>"Añadir"</strong> para confirmar</span>
-      </li>
-    </ol>
-    <button id="btn-ios-ok" class="btn-primary">Entendido</button>
+<!-- Banner iOS -->
+<div id="pwa-ios" class="pwa-banner" hidden role="dialog" aria-label="Añadir a pantalla de inicio">
+  <img src={`${base}/icons/icon-192.svg`} alt="" class="pwa-banner-icon" width="36" height="36" aria-hidden="true" />
+  <div class="pwa-banner-body">
+    <span class="pwa-banner-title">Añade esta app a tu inicio</span>
+    <span class="pwa-banner-sub">Toca <strong>Compartir</strong> ⬆ → <strong>Añadir a inicio</strong></span>
   </div>
-
+  <button id="btn-ios-ok" class="pwa-btn-install">Entendido</button>
+  <button id="btn-ios-close" class="pwa-btn-close" aria-label="Cerrar">✕</button>
 </div>
 
 <style>
-  /* ── Overlay ─────────────────────────────────────────── */
-  #pwa-overlay {
+  .pwa-banner {
     position: fixed;
-    inset: 0;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(calc(100% + 24px));
     z-index: 9999;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(4px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 300ms ease;
+    width: calc(100% - 32px);
+    max-width: 480px;
+    background: #1e1e2e;
+    border: 1px solid rgba(124, 106, 247, 0.3);
+    border-radius: 14px;
+    padding: 12px 14px;
     display: flex;
-    align-items: flex-end;
-    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1), opacity 300ms ease;
+    opacity: 0;
   }
 
-  #pwa-overlay.visible {
+  .pwa-banner.visible {
+    transform: translateX(-50%) translateY(0);
     opacity: 1;
-    pointer-events: auto;
   }
 
-  /* ── Modal base (mobile bottom-sheet) ───────────────── */
-  .pwa-modal {
-    background: #1a1a2e;
-    color: #e2e2f0;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-    border-radius: 20px 20px 0 0;
-    padding: 28px 24px 32px;
-    position: relative;
-    box-sizing: border-box;
-    transform: translateY(100%);
-    transition: transform 300ms ease;
+  .pwa-banner-icon {
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .pwa-banner-body {
+    flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    gap: 2px;
   }
 
-  #pwa-overlay.visible .pwa-modal {
-    transform: translateY(0);
-  }
-
-  /* ── Desktop: modal centrado ─────────────────────────── */
-  @media (min-width: 768px) {
-    #pwa-overlay {
-      align-items: center;
-    }
-
-    .pwa-modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -46%) scale(0.95);
-      opacity: 0;
-      transition: opacity 300ms ease, transform 300ms ease;
-      max-width: 420px;
-      width: 100%;
-      border-radius: 20px;
-    }
-
-    #pwa-overlay.visible .pwa-modal {
-      transform: translate(-50%, -50%) scale(1);
-      opacity: 1;
-    }
-  }
-
-  /* ── Icono ───────────────────────────────────────────── */
-  .pwa-icon {
-    border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
-    margin: 0 auto 4px;
-    display: block;
-  }
-
-  /* ── Textos ──────────────────────────────────────────── */
-  .pwa-title {
+  .pwa-banner-title {
     font-family: 'Syne', sans-serif;
-    font-size: 1.4rem;
+    font-size: 13px;
     font-weight: 700;
-    margin: 14px 0 8px;
     color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .pwa-desc,
-  .pwa-subtitle {
-    font-size: 0.95rem;
+  .pwa-banner-sub {
+    font-size: 12px;
     color: #a0a0b8;
-    margin: 0 0 20px;
-    line-height: 1.5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  /* ── Botón cerrar ────────────────────────────────────── */
-  .pwa-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    width: 44px;
-    height: 44px;
+  .pwa-banner-sub strong { color: #d0d0e8; font-weight: 500; }
+
+  .pwa-btn-install {
+    background: var(--accent, #7c6af7);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+    white-space: nowrap;
+    min-height: 34px;
+    transition: filter 200ms;
+  }
+
+  .pwa-btn-install:hover        { filter: brightness(1.12); }
+  .pwa-btn-install:focus-visible {
+    outline: 2px solid var(--accent, #7c6af7);
+    outline-offset: 2px;
+  }
+
+  .pwa-btn-close {
     background: transparent;
     border: none;
-    color: #a0a0b8;
-    font-size: 1.1rem;
+    color: #666680;
+    font-size: 14px;
     cursor: pointer;
-    border-radius: 8px;
+    padding: 4px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    min-width: 28px;
+    min-height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 200ms;
+    transition: color 150ms, background 150ms;
   }
 
-  .pwa-close:hover,
-  .pwa-close:focus-visible {
+  .pwa-btn-close:hover,
+  .pwa-btn-close:focus-visible {
+    color: #e0e0f0;
     background: rgba(255, 255, 255, 0.08);
     outline: none;
   }
 
-  /* ── Acciones ────────────────────────────────────────── */
-  .pwa-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
-    margin-top: 4px;
-  }
-
-  /* ── Botones ─────────────────────────────────────────── */
-  .btn-primary {
-    background: var(--accent, #7c6af7);
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    padding: 14px 24px;
-    width: 100%;
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: filter 200ms;
-    min-height: 44px;
-  }
-
-  .btn-primary:hover     { filter: brightness(1.12); }
-  .btn-primary:focus-visible {
-    outline: 2px solid var(--accent, #7c6af7);
-    outline-offset: 3px;
-  }
-
-  .btn-secondary {
-    background: transparent;
-    border: none;
-    color: #a0a0b8;
-    border-radius: 12px;
-    padding: 14px 24px;
-    width: 100%;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 200ms;
-    min-height: 44px;
-  }
-
-  .btn-secondary:hover        { background: rgba(255, 255, 255, 0.06); }
-  .btn-secondary:focus-visible {
-    outline: 2px solid var(--accent, #7c6af7);
-    outline-offset: 3px;
-  }
-
-  /* ── Pasos iOS ───────────────────────────────────────── */
-  .ios-steps {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px;
-    width: 100%;
-    text-align: left;
-  }
-
-  .ios-steps li {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    padding: 12px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    font-size: 0.95rem;
-    line-height: 1.4;
-  }
-
-  .ios-steps li:last-child { border-bottom: none; }
-
-  .step-icon {
-    font-size: 1.5rem;
-    width: 32px;
-    flex-shrink: 0;
-    text-align: center;
-  }
-
-  /* ── Light mode ──────────────────────────────────────── */
-  @media (prefers-color-scheme: light) {
-    .pwa-modal          { background: #ffffff; color: #1a1a2e; }
-    .pwa-title          { color: #1a1a2e; }
-    .pwa-desc,
-    .pwa-subtitle       { color: #555577; }
-    .pwa-close          { color: #555577; }
-    .pwa-close:hover    { background: rgba(0, 0, 0, 0.06); }
-    .ios-steps li       { border-bottom-color: rgba(0, 0, 0, 0.08); }
-    .btn-secondary      { color: #555577; }
-    .btn-secondary:hover { background: rgba(0, 0, 0, 0.05); }
+  @media (max-width: 400px) {
+    .pwa-banner { bottom: 12px; padding: 10px 12px; gap: 10px; }
+    .pwa-banner-sub { display: none; }
   }
 </style>
 
 <script>
-  // ── Captura inmediata (antes del timeout) ─────────────
   interface BeforeInstallPromptEvent extends Event {
     prompt(): Promise<{ outcome: 'accepted' | 'dismissed' }>;
   }
 
+  // ── Captura inmediata ─────────────────────────────────
   let deferredPrompt: BeforeInstallPromptEvent | null = null;
-
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e as BeforeInstallPromptEvent;
   });
 
-  // ── Anti-spam localStorage ────────────────────────────
-  const STORAGE_KEY = 'pwa-install-state';
+  // ── Anti-spam ─────────────────────────────────────────
+  const KEY = 'pwa-install-state';
 
-  interface PwaState {
-    permanent?: boolean;
-    dismissCount?: number;
-    lastShown?: number;
-  }
-
-  function debeMostrarPrompt(): boolean {
-    const raw = localStorage.getItem(STORAGE_KEY);
+  function debeMostrar(): boolean {
+    const raw = localStorage.getItem(KEY);
     if (!raw) return true;
-    const data: PwaState = JSON.parse(raw);
-    if (data.permanent) return false;
-    if ((data.dismissCount ?? 0) >= 2) return false;
-    if (data.lastShown) {
-      const dias = (Date.now() - data.lastShown) / 86_400_000;
-      if (dias < 7) return false;
-    }
+    const d = JSON.parse(raw);
+    if (d.permanent) return false;
+    if (d.lastShown && (Date.now() - d.lastShown) / 86_400_000 < 7) return false;
     return true;
   }
 
-  function registrarDismiss(): void {
-    const data: PwaState = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}');
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      dismissCount: (data.dismissCount ?? 0) + 1,
-      lastShown: Date.now(),
-    }));
+  function cerrar(): void {
+    localStorage.setItem(KEY, JSON.stringify({ permanent: true }));
   }
 
-  function registrarInstalada(): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ permanent: true }));
+  function instalada(): void {
+    localStorage.setItem(KEY, JSON.stringify({ permanent: true }));
   }
 
-  // ── Detección de plataforma ───────────────────────────
-  function yaEstaInstalada(): boolean {
+  // ── Detección ─────────────────────────────────────────
+  function yaInstalada(): boolean {
     return window.matchMedia('(display-mode: standalone)').matches
         || (navigator as Navigator & { standalone?: boolean }).standalone === true;
   }
@@ -313,102 +181,69 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     return !/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
   }
 
-  // ── Overlay ───────────────────────────────────────────
-  function mostrarOverlay(): void {
-    const overlay = document.getElementById('pwa-overlay')!;
-    overlay.hidden = false;
-    requestAnimationFrame(() => overlay.classList.add('visible'));
+  // ── Mostrar / ocultar banner ──────────────────────────
+  function mostrar(id: string): void {
+    const el = document.getElementById(id)!;
+    el.hidden = false;
+    requestAnimationFrame(() => el.classList.add('visible'));
   }
 
-  function ocultarOverlay(): void {
-    const overlay = document.getElementById('pwa-overlay')!;
-    overlay.classList.remove('visible');
-    setTimeout(() => { overlay.hidden = true; }, 300);
+  function ocultar(id: string): void {
+    const el = document.getElementById(id)!;
+    el.classList.remove('visible');
+    setTimeout(() => { el.hidden = true; }, 300);
   }
 
-  // ── Focus trap ────────────────────────────────────────
-  function trapFocus(modal: HTMLElement): () => void {
-    const sel = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-    const nodes = [...modal.querySelectorAll<HTMLElement>(sel)];
-    const first = nodes[0];
-    const last  = nodes[nodes.length - 1];
-
-    const handler = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-
-    modal.addEventListener('keydown', handler);
-    first?.focus();
-    return () => modal.removeEventListener('keydown', handler);
-  }
+  // ── ESC cierra cualquier banner visible ───────────────
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    ['pwa-chromium', 'pwa-ios'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el.hidden) { ocultar(id); cerrar(); }
+    });
+  });
 
   // ── Flujo principal ───────────────────────────────────
   setTimeout(() => {
-    if (yaEstaInstalada()) return;
-    if (!debeMostrarPrompt()) return;
+    if (yaInstalada()) return;
+    if (!debeMostrar()) return;
 
     if (deferredPrompt) {
-      // Chromium Desktop o Android
-      document.getElementById('chromium-desc')!.textContent = esDesktop()
-        ? 'Úsala desde tu escritorio como una app nativa, sin abrir el navegador.'
-        : 'Añádela a tu pantalla de inicio para acceso rápido sin abrir el browser.';
+      document.getElementById('chromium-sub')!.textContent = esDesktop()
+        ? 'Disponible como app nativa en tu escritorio.'
+        : 'Acceso rápido desde tu pantalla de inicio.';
 
-      const modal = document.getElementById('pwa-modal-chromium')!;
-      modal.hidden = false;
-      mostrarOverlay();
-      const releaseChromium = trapFocus(modal);
+      mostrar('pwa-chromium');
 
       document.getElementById('btn-install')!.addEventListener('click', async () => {
-        releaseChromium();
-        ocultarOverlay();
+        ocultar('pwa-chromium');
         const { outcome } = await deferredPrompt!.prompt();
         deferredPrompt = null;
-        outcome === 'accepted' ? registrarInstalada() : registrarDismiss();
-      });
-
-      document.getElementById('btn-dismiss')!.addEventListener('click', () => {
-        releaseChromium();
-        ocultarOverlay();
-        registrarDismiss();
+        outcome === 'accepted' ? instalada() : cerrar();
       });
 
       document.getElementById('btn-chromium-close')!.addEventListener('click', () => {
-        releaseChromium();
-        ocultarOverlay();
-        registrarDismiss();
+        ocultar('pwa-chromium');
+        cerrar();
       });
 
     } else if (esIOS()) {
-      const modal = document.getElementById('pwa-modal-ios')!;
-      modal.hidden = false;
-      mostrarOverlay();
-      const releaseIOS = trapFocus(modal);
+      mostrar('pwa-ios');
 
       document.getElementById('btn-ios-ok')!.addEventListener('click', () => {
-        releaseIOS();
-        ocultarOverlay();
-        registrarDismiss();
+        ocultar('pwa-ios');
+        cerrar();
       });
 
       document.getElementById('btn-ios-close')!.addEventListener('click', () => {
-        releaseIOS();
-        ocultarOverlay();
-        registrarDismiss();
+        ocultar('pwa-ios');
+        cerrar();
       });
     }
-    // Firefox / browser sin soporte → noop
   }, 2000);
 
-  // ── Instalación completada desde cualquier vía ────────
   window.addEventListener('appinstalled', () => {
-    ocultarOverlay();
-    registrarInstalada();
+    ocultar('pwa-chromium');
+    instalada();
   });
 </script>
