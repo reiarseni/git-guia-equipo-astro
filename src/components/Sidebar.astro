@@ -2,7 +2,7 @@
 import { groups } from '../data/sections';
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, ''); // e.g. '/git-guia-equipo-astro'
-const pathname = Astro.url.pathname.replace(/\/$/, '') || base || '/';
+const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
 <div class="sidebar-inner">
@@ -132,27 +132,17 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || base || '/';
     width: 100%;
   }
 
-  .nav-link:hover {
+  .nav-link:hover,
+  .nav-link:focus-visible {
     background: rgba(255, 255, 255, 0.05);
     color: var(--text);
+    outline: none;
   }
 
   .nav-link.is-active {
     background: rgba(124, 106, 247, 0.12);
     color: var(--accent);
   }
-
-  .nav-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--accent);
-    opacity: 0.45;
-    flex-shrink: 0;
-    transition: opacity 0.14s;
-  }
-
-  .nav-link:hover .nav-num,
-  .nav-link.is-active .nav-num { opacity: 1; }
 
   .nav-text {
     flex: 1;

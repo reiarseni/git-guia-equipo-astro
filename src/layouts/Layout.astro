@@ -77,8 +77,8 @@ const { title } = Astro.props;
     overlay?.addEventListener('click', closeMenu);
 
     // Cerrar al hacer click en un enlace del menú (en móvil)
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', closeMenu);
+    document.getElementById('sidebar')?.addEventListener('click', (e) => {
+      if ((e.target as Element).closest('.nav-link')) closeMenu();
     });
 
     // Tecla Escape cierra el menú

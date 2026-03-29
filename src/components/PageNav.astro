@@ -77,10 +77,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     min-width: 0;
   }
 
-  .nav-card:hover {
+  .nav-card:hover,
+  .nav-card:focus-visible {
     border-color: rgba(124, 106, 247, 0.45);
     background: var(--surface2);
     transform: translateY(-2px);
+    outline: none;
   }
 
   .nav-card--next {

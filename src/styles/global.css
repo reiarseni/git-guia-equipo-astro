@@ -78,10 +78,12 @@ body {
   transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
-.menu-toggle:hover {
+.menu-toggle:hover,
+.menu-toggle:focus-visible {
   background: rgba(124, 106, 247, 0.1);
   border-color: rgba(124, 106, 247, 0.3);
   color: var(--accent);
+  outline: none;
 }
 
 .menu-toggle .icon-close { display: none; }

@@ -14,7 +14,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     <!-- Hero -->
     <header class="hero">
       <div class="hero-tag">v3.0 — Estándar del Equipo</div>
-      <h1 class="hero-title">Buenas Prácticas<br>con <span>Git</span></h1>
+      <h1 class="hero-title"><span class="hero-title-line">Buenas Prácticas</span>con <span class="hero-title-accent">Git</span></h1>
       <p class="hero-sub">Guía oficial del flujo de trabajo con Git y GitLab para el equipo de desarrollo.</p>
       <div class="pillars">
         <span class="pillar">Shared Repository</span>
@@ -84,7 +84,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     margin-bottom: 18px;
   }
 
-  .hero-title span { color: var(--accent); }
+  .hero-title-line { display: block; }
+  .hero-title-accent { color: var(--accent); }
 
   .hero-sub {
     font-size: clamp(14px, 2vw, 16px);
@@ -130,6 +131,11 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     transform: translateY(-1px);
   }
 
+  .cta-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
   .toc {
     display: flex;
     flex-direction: column;
@@ -169,6 +175,12 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     border-color: rgba(124, 106, 247, 0.4);
     background: var(--surface2);
     transform: translateX(4px);
+  }
+
+  .toc-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-color: rgba(124, 106, 247, 0.4);
   }
 
   .toc-num {

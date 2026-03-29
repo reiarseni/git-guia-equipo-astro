@@ -13,10 +13,13 @@ pnpm-debug.log*
 
 # environment variables
 .env
+.env.local
+.env.*.local
 .env.production
 
-# macOS-specific files
+# OS-specific files
 .DS_Store
+Thumbs.db
 
 # editor directories and files
 .vscode/
