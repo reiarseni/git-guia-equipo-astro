@@ -11,6 +11,9 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
       <span class="sidebar-badge">v3.0</span>
       <p class="sidebar-title">Git Guía <span>del Equipo</span></p>
     </a>
+    <div class="offline-pill offline-pill--sidebar" id="offlineBadgeSidebar" aria-live="polite" aria-atomic="true" hidden>
+      <span class="offline-dot" aria-hidden="true"></span>Sin conexión
+    </div>
   </div>
 
   <nav class="sidebar-nav" aria-label="Secciones de la guía">

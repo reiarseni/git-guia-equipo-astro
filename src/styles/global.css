@@ -63,6 +63,47 @@ body {
   .mobile-topbar { display: none; }
 }
 
+/* Pill de sin conexión — topbar (móvil) y sidebar (desktop) */
+.offline-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #f0a040;
+  background: rgba(240, 160, 64, 0.1);
+  border: 1px solid rgba(240, 160, 64, 0.28);
+  border-radius: 20px;
+  padding: 3px 10px 3px 8px;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
+
+.offline-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f0a040;
+  flex-shrink: 0;
+  animation: offline-blink 1.6s ease-in-out infinite;
+}
+
+@keyframes offline-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* En el topbar el pill se empuja al centro/derecha, antes del hamburguesa */
+.mobile-topbar .offline-pill {
+  margin-left: auto;
+  margin-right: 10px;
+}
+
+/* En el sidebar aparece debajo del título */
+.offline-pill--sidebar {
+  margin-top: 12px;
+}
+
 /* Botón hamburguesa — dentro del topbar en móvil */
 .menu-toggle {
   display: flex;
