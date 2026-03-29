@@ -1,0 +1,123 @@
+<svg width="192" height="192" viewBox="0 0 192 192" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg" cx="45%" cy="38%" r="65%">
+      <stop offset="0%" stop-color="#1a2540"/>
+      <stop offset="100%" stop-color="#080c14"/>
+    </radialGradient>
+
+    <filter id="glow-c" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-o" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-p" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-head" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+
+    <linearGradient id="grad-main" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#22d3ee" stop-opacity="0.65"/>
+      <stop offset="50%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#22d3ee" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="grad-feat" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#fb923c"/>
+    </linearGradient>
+    <linearGradient id="grad-hot" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#c4b5fd"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="192" height="192" rx="42" fill="url(#bg)"/>
+
+  <!-- Ambient light blooms -->
+  <ellipse cx="86" cy="60" rx="60" ry="45" fill="#22d3ee" opacity="0.05"/>
+  <ellipse cx="124" cy="115" rx="38" ry="30" fill="#f97316" opacity="0.06"/>
+  <ellipse cx="56" cy="100" rx="30" ry="26" fill="#a78bfa" opacity="0.05"/>
+
+  <!-- ══════════════════════════════════ -->
+  <!--          BRANCH LINES             -->
+  <!-- ══════════════════════════════════ -->
+
+  <!-- MAIN BRANCH (cyan) -->
+  <line x1="86" y1="36" x2="86" y2="162"
+        stroke="url(#grad-main)" stroke-width="2"
+        stroke-linecap="round" filter="url(#glow-c)" opacity="0.9"/>
+
+  <!-- HOTFIX BRANCH (purple) — left -->
+  <path d="M 86 65 C 78 70 58 74 56 83"
+        stroke="url(#grad-hot)" stroke-width="1.8" fill="none"
+        stroke-linecap="round" filter="url(#glow-p)"/>
+  <line x1="56" y1="83" x2="56" y2="97"
+        stroke="url(#grad-hot)" stroke-width="1.8"
+        stroke-linecap="round" filter="url(#glow-p)"/>
+  <path d="M 56 97 C 62 106 78 103 86 102"
+        stroke="url(#grad-hot)" stroke-width="1.8" fill="none"
+        stroke-linecap="round" filter="url(#glow-p)"/>
+
+  <!-- FEATURE BRANCH (orange) — right -->
+  <path d="M 86 104 C 98 107 118 112 124 120"
+        stroke="url(#grad-feat)" stroke-width="1.8" fill="none"
+        stroke-linecap="round" filter="url(#glow-o)"/>
+  <line x1="124" y1="120" x2="124" y2="144"
+        stroke="url(#grad-feat)" stroke-width="1.8"
+        stroke-linecap="round" filter="url(#glow-o)"/>
+  <path d="M 124 145 C 117 153 99 151 86 150"
+        stroke="url(#grad-feat)" stroke-width="1.8" fill="none"
+        stroke-linecap="round" filter="url(#glow-o)"/>
+
+  <!-- ══════════════════════════════════ -->
+  <!--          COMMIT NODES             -->
+  <!-- ══════════════════════════════════ -->
+
+  <!-- Main: initial -->
+  <circle cx="86" cy="40" r="4.5" fill="#080c14" stroke="#22d3ee" stroke-width="1.8" filter="url(#glow-c)"/>
+  <circle cx="86" cy="40" r="1.5" fill="#22d3ee" opacity="0.8"/>
+
+  <!-- Main: before hotfix split -->
+  <circle cx="86" cy="62" r="4" fill="#080c14" stroke="#22d3ee" stroke-width="1.5" filter="url(#glow-c)"/>
+
+  <!-- Main: merge hotfix + feature split (larger — merge commit) -->
+  <circle cx="86" cy="102" r="5.5" fill="#080c14" stroke="#22d3ee" stroke-width="2" filter="url(#glow-c)"/>
+  <circle cx="86" cy="102" r="2" fill="#22d3ee" opacity="0.55"/>
+
+  <!-- Main: merge feature -->
+  <circle cx="86" cy="150" r="5.5" fill="#080c14" stroke="#22d3ee" stroke-width="2" filter="url(#glow-c)"/>
+  <circle cx="86" cy="150" r="2" fill="#22d3ee" opacity="0.55"/>
+
+  <!-- HEAD — filled glowing -->
+  <circle cx="86" cy="163" r="7" fill="#22d3ee" filter="url(#glow-head)"/>
+  <circle cx="86" cy="163" r="7" fill="#22d3ee"/>
+  <circle cx="86" cy="163" r="3" fill="#080c14"/>
+
+  <!-- Hotfix nodes (purple) -->
+  <circle cx="56" cy="84" r="4" fill="#080c14" stroke="#a78bfa" stroke-width="1.5" filter="url(#glow-p)"/>
+  <circle cx="56" cy="84" r="1.4" fill="#a78bfa" opacity="0.7"/>
+  <circle cx="56" cy="97" r="4" fill="#080c14" stroke="#a78bfa" stroke-width="1.5" filter="url(#glow-p)"/>
+
+  <!-- Feature nodes (orange) -->
+  <circle cx="124" cy="122" r="4" fill="#080c14" stroke="#f97316" stroke-width="1.5" filter="url(#glow-o)"/>
+  <circle cx="124" cy="122" r="1.4" fill="#f97316" opacity="0.7"/>
+  <circle cx="124" cy="136" r="4" fill="#080c14" stroke="#f97316" stroke-width="1.5" filter="url(#glow-o)"/>
+  <circle cx="124" cy="145" r="4" fill="#080c14" stroke="#f97316" stroke-width="1.5" filter="url(#glow-o)"/>
+
+  <!-- ══════════════════════════════════ -->
+  <!-- Decorative star field (subtle)    -->
+  <!-- ══════════════════════════════════ -->
+  <circle cx="30" cy="34" r="0.8" fill="#22d3ee" opacity="0.3"/>
+  <circle cx="165" cy="42" r="0.6" fill="#f97316" opacity="0.3"/>
+  <circle cx="158" cy="165" r="0.8" fill="#a78bfa" opacity="0.25"/>
+  <circle cx="26" cy="152" r="0.6" fill="#22d3ee" opacity="0.2"/>
+  <circle cx="170" cy="96" r="0.6" fill="#f97316" opacity="0.2"/>
+  <circle cx="22" cy="80" r="0.8" fill="#a78bfa" opacity="0.2"/>
+</svg>

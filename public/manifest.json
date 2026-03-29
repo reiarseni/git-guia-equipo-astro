@@ -1,0 +1,25 @@
+{
+  "name": "Git Guía Equipo",
+  "short_name": "Git Guía",
+  "description": "Guía oficial del flujo de trabajo con Git y GitLab para el equipo de desarrollo.",
+  "start_url": "/git-guia-equipo-astro/",
+  "scope": "/git-guia-equipo-astro/",
+  "display": "standalone",
+  "background_color": "#0e0e11",
+  "theme_color": "#7c6af7",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/git-guia-equipo-astro/icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/git-guia-equipo-astro/icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
