@@ -21,6 +21,8 @@
 
 /* ---- Reset & Base ---- */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* Garantiza que [hidden] siempre oculta, incluso cuando hay display: flex/inline-flex en el selector de clase */
+[hidden] { display: none !important; }
 
 html {
   scroll-behavior: smooth;

@@ -1,7 +1,7 @@
 // Service Worker — Git Guía Equipo
 // Estrategia: install-time shell + stale-while-revalidate + progressive background cache
 
-const CACHE = 'git-guia-v2';
+const CACHE = 'git-guia-v3';
 const BASE  = '/git-guia-equipo-astro';
 
 // ── Shell: se cachea en install (bloquea hasta tenerlo) ──────────
@@ -85,10 +85,20 @@ self.addEventListener('fetch', (e) => {
 });
 
 // Stale-While-Revalidate para páginas HTML
+// → normaliza trailing slash (evita ERR_FAILED por 301 de GitHub Pages)
 // → sirve desde caché inmediatamente (sin esperar red)
 // → actualiza la caché en segundo plano
 // → si no hay caché y falla la red → offline.html
 async function handleNavigation(request) {
+  const url = new URL(request.url);
+
+  // GitHub Pages emite 301 para rutas sin trailing slash.
+  // Resolver aquí evita que el browser reciba una respuesta redirect
+  // que puede derivar en ERR_FAILED en algunos contextos de SW.
+  if (!url.pathname.endsWith('/') && !url.pathname.split('/').pop().includes('.')) {
+    return Response.redirect(url.origin + url.pathname + '/' + url.search, 301);
+  }
+
   const cache  = await caches.open(CACHE);
   const cached = await matchNormalized(cache, request);
 
