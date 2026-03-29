@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sin conexión — Git Guía Equipo</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0e0e11;
+      color: #e8e8f0;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    .card {
+      background: #16161a;
+      border: 1px solid #2a2a35;
+      border-radius: 16px;
+      padding: 32px 28px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .icon {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .section-name {
+      display: inline-block;
+      font-family: monospace;
+      font-size: 12px;
+      color: #7c6af7;
+      background: rgba(124, 106, 247, 0.1);
+      border: 1px solid rgba(124, 106, 247, 0.25);
+      padding: 3px 10px;
+      border-radius: 5px;
+      margin-bottom: 14px;
+    }
+
+    .desc {
+      font-size: 14px;
+      color: #7a7a90;
+      margin-bottom: 24px;
+      line-height: 1.55;
+    }
+
+    .desc strong { color: #b0b0c8; font-weight: 500; }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: filter 180ms;
+    }
+
+    .btn:hover { filter: brightness(1.12); }
+
+    .btn-primary {
+      background: #7c6af7;
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: #1c1c22;
+      border: 1px solid #2a2a35;
+      color: #b0b0c8;
+    }
+
+    .hint {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #4a4a60;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <span class="icon" aria-hidden="true">📡</span>
+    <p class="title">Sección no disponible sin conexión</p>
+    <span class="section-name" id="section-label"></span>
+    <p class="desc">
+      Esta sección todavía no se ha descargado en tu dispositivo.<br>
+      <strong>Visítala con conexión</strong> para que quede disponible offline la próxima vez.
+    </p>
+    <div class="actions">
+      <a href="/git-guia-equipo-astro/" class="btn btn-primary">← Ir al inicio</a>
+      <button onclick="location.reload()" class="btn btn-secondary">↻ Reintentar</button>
+    </div>
+    <p class="hint">La guía completa se descarga automáticamente en segundo plano.</p>
+  </div>
+
+  <script>
+    const SECTION_NAMES = {
+      '/git-guia-equipo-astro/estructura-de-ramas':     'Estructura de Ramas',
+      '/git-guia-equipo-astro/workitems-y-ramas':       'Workitems y Ramas',
+      '/git-guia-equipo-astro/nombrado-de-ramas':       'Nombrado de Ramas',
+      '/git-guia-equipo-astro/flujo-diario':            'Flujo de Trabajo Diario',
+      '/git-guia-equipo-astro/rebase':                  'Rebase como Estrategia',
+      '/git-guia-equipo-astro/commits':                 'Commits',
+      '/git-guia-equipo-astro/pull-requests':           'Pull Requests',
+      '/git-guia-equipo-astro/merge-strategy':          'Merge Strategy',
+      '/git-guia-equipo-astro/draft-prs':               'Draft PRs',
+      '/git-guia-equipo-astro/release':                 'PR testing → main',
+      '/git-guia-equipo-astro/hotfix':                  'Flujo HotFix',
+      '/git-guia-equipo-astro/cicd-branch-protection':  'CI/CD y Branch Protection',
+      '/git-guia-equipo-astro/code-review':             'Code Review',
+      '/git-guia-equipo-astro/reglas-generales':        'Reglas Generales',
+    };
+
+    const path = location.pathname.replace(/\/$/, '');
+    const name = SECTION_NAMES[path] ?? path.split('/').pop() ?? 'Página';
+    document.getElementById('section-label').textContent = name;
+  </script>
+</body>
+</html>
