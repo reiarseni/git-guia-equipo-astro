@@ -1,60 +1,126 @@
 # Git — Guía de Buenas Prácticas
 
 Guía oficial del flujo de trabajo con Git y GitLab para equipos de desarrollo.
+Disponible en: **https://reiarseni.github.io/git-guia-equipo-astro/**
 
-## 🚀 Despliegue
+---
 
-Este proyecto está configurado para desplegarse automáticamente en **GitHub Pages**.
-
-### Activar GitHub Pages
-
-1. Ve a **Settings** → **Pages** del repositorio
-2. En **Build and deployment** → **Source**, selecciona **Deploy from a branch**
-3. Selecciona la rama **main** y la carpeta **/(root)**
-4. Guarda los cambios
-
-El sitio estará disponible en: `https://reiarseni.github.io/git-guia-equipo-astro/`
-
-### Despliegue manual
+## Desarrollo local
 
 ```bash
 npm install
-npm run build
+npm run dev        # http://localhost:4321
+npm run build      # genera dist/
+npm run preview    # previsualiza el build
+npx astro check    # type-check TypeScript
 ```
 
-El resultado se genera en la carpeta `dist/`.
+---
 
-## 🛠️ Desarrollo local
+## Despliegue
 
-```bash
-npm run dev
-```
+El sitio se despliega automáticamente en **GitHub Pages** al hacer push a `main`
+mediante GitHub Actions (`.github/workflows/deploy.yml`).
 
-El servidor de desarrollo estará disponible en `http://localhost:4321`
+Para activarlo por primera vez en un fork:
+1. **Settings → Pages → Source** → seleccionar `GitHub Actions`
+2. Hacer push a `main` para disparar el primer deploy
 
-## 📁 Estructura
+---
+
+## Contenido (14 secciones)
+
+| Grupo | Secciones |
+|---|---|
+| Ramas | Estructura de Ramas · Workitems y Ramas · Nombrado de Ramas |
+| Flujo de Trabajo | Flujo de Trabajo Diario · Rebase como Estrategia |
+| Commits y PRs | Commits · Pull Requests · Merge Strategy · Draft PRs |
+| Releases | PR testing → main · Flujo HotFix |
+| Calidad | CI/CD y Branch Protection · Code Review · Reglas Generales |
+
+---
+
+## Arquitectura
 
 ```
 src/
-├── components/    # Componentes reutilizables
-├── layouts/       # Layout principal
-├── pages/         # Páginas Astro
-└── styles/        # Estilos globales
+├── components/
+│   ├── Footer.astro          # Pie de página
+│   ├── PageNav.astro         # Navegación anterior/siguiente
+│   ├── PwaInstallPrompt.astro# Prompt de instalación PWA
+│   ├── Section.astro         # Wrapper de sección de contenido
+│   └── Sidebar.astro         # Navegación lateral
+├── data/
+│   └── sections.ts           # Fuente de verdad de rutas y grupos
+├── layouts/
+│   └── Layout.astro          # Layout principal (sidebar + PWA + SW)
+├── pages/
+│   ├── index.astro           # Portada con índice
+│   └── *.astro               # 14 páginas de contenido
+└── styles/
+    └── global.css            # Variables CSS, dark theme, componentes
+public/
+├── icons/                    # Iconos SVG para PWA
+├── manifest.json             # Web App Manifest
+└── sw.js                     # Service Worker (cache-first)
 ```
 
-## 📋 Contenido
+**Patrón de cada página de contenido:**
+```astro
+const idx = N; // posición en sections[]
+<Layout title="...">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="..." id="...">...</Section>
+    <PageNav prev={sections[idx-1]} next={sections[idx+1]} />
+    <Footer />
+  </div>
+</Layout>
+```
 
-La guía cubre:
-- Estructura de ramas (main + testing)
-- Workitems y ramas
-- Nombrado de ramas
-- Flujo de trabajo diario
-- Rebase como estrategia
-- Commits (Conventional Commits)
-- Pull Requests
-- Merge Strategy (Squash & Merge)
-- Draft PRs
-- Flujo HotFix
-- CI/CD y Branch Protection
-- Code Review
-- Reglas Generales
+Para añadir una nueva sección: registrarla primero en `src/data/sections.ts`.
+
+---
+
+## PWA
+
+El sitio es instalable como Progressive Web App en Android, iOS y Desktop:
+
+- **Android / Chrome / Edge** — prompt nativo de instalación
+- **iOS Safari** — instrucciones paso a paso (Share → Añadir a inicio)
+- **Anti-spam** — no vuelve a mostrar el prompt si se rechazó 2 veces o en los últimos 7 días
+- **Service Worker** — estrategia cache-first, funciona offline tras la primera visita
+
+Para resetear el estado del prompt en desarrollo:
+```js
+localStorage.removeItem('pwa-install-state')
+```
+
+---
+
+## Roadmap
+
+Próximas features planeadas. Requieren migrar a **Supabase** como backend
+(client-side, compatible con GitHub Pages).
+Ver guía de implementación detallada en [`dinamic-features-guide.md`](./dinamic-features-guide.md).
+
+### Progreso de lectura
+- Seguimiento anónimo por dispositivo (UUID en localStorage)
+- Secciones leídas marcadas con checkmark en el sidebar
+- Badge "X / 14 secciones completadas"
+
+### Comentarios, dudas y sugerencias
+- Auth con GitHub OAuth (solo usuarios en lista aprobada)
+- Tres tipos de entrada: 💬 Comentario · ❓ Duda · 💡 Sugerencia
+- Visibles para todos, identificados con avatar y username de GitHub
+- Soporte para bloques de código con ` ``` `
+- Actualizaciones en tiempo real (Supabase Realtime)
+- Borrado por autor o por admin
+
+### Quiz de evaluación
+- Disponible para usuarios logueados y aprobados
+- 10 preguntas · 10 puntos cada una · total 100 pts
+- Evaluación por sección del flujo de trabajo
+- Resultado con desglose: secciones aprobadas vs. a repasar
+- Historial de intentos guardado por usuario
+- Umbrales: ✅ 90–100 listo · ⚠️ 70–89 casi · ❌ <70 repasar
