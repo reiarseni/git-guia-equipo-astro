@@ -1,7 +1,7 @@
 // Service Worker — Git Guía Equipo
 // Estrategia: install-time shell + stale-while-revalidate + progressive background cache
 
-const CACHE = 'git-guia-v3';
+const CACHE = 'git-guia-v4';
 const BASE  = '/git-guia-equipo-astro';
 
 // ── Shell: se cachea en install (bloquea hasta tenerlo) ──────────
