@@ -28,15 +28,15 @@ Para activarlo por primera vez en un fork:
 
 ---
 
-## Contenido (14 secciones)
+## Contenido (16 secciones)
 
 | Grupo | Secciones |
 |---|---|
 | Ramas | Estructura de Ramas · Workitems y Ramas · Nombrado de Ramas |
-| Flujo de Trabajo | Flujo de Trabajo Diario · Rebase como Estrategia |
+| Flujo de Trabajo | Flujo de Trabajo Diario · Merge como Estrategia |
 | Commits y PRs | Commits · Pull Requests · Merge Strategy · Draft PRs |
-| Releases | PR testing → main · Flujo HotFix |
-| Calidad | CI/CD y Branch Protection · Code Review · Reglas Generales |
+| Releases | Versionado y Tags · Flujo HotFix |
+| Calidad | CI/CD y Branch Protection · Code Review · Reglas Generales · Gitignore · Trazabilidad de Testing |
 
 ---
 
@@ -56,7 +56,7 @@ src/
 │   └── Layout.astro          # Layout principal (sidebar + PWA + SW)
 ├── pages/
 │   ├── index.astro           # Portada con índice
-│   └── *.astro               # 14 páginas de contenido
+│   └── *.astro               # 16 páginas de contenido
 └── styles/
     └── global.css            # Variables CSS, dark theme, componentes
 public/
@@ -107,7 +107,7 @@ Ver guía de implementación detallada en [`dinamic-features-guide.md`](./dinami
 ### Progreso de lectura
 - Seguimiento anónimo por dispositivo (UUID en localStorage)
 - Secciones leídas marcadas con checkmark en el sidebar
-- Badge "X / 14 secciones completadas"
+- Badge "X / 16 secciones completadas"
 
 ### Comentarios, dudas y sugerencias
 - Auth con GitHub OAuth (solo usuarios en lista aprobada)

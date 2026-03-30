@@ -49,7 +49,7 @@ const idx = 0;
               <th>Configuración</th>
               <th><code>main</code></th>
               <th><code>testing</code></th>
-              <th><code>stage</code></th>
+              <th><code>next / stage</code></th>
             </tr>
           </thead>
           <tbody>
@@ -66,14 +66,28 @@ const idx = 0;
               <td>Maintainers</td>
             </tr>
             <tr>
+              <td>Force push</td>
+              <td>Desactivado</td>
+              <td>Desactivado</td>
+              <td>Desactivado</td>
+            </tr>
+            <tr>
               <td>Approval MR</td>
               <td>Sí (mín. 1)</td>
               <td>N/A</td>
               <td>N/A</td>
             </tr>
+            <tr>
+              <td>Pipeline debe pasar</td>
+              <td>Sí</td>
+              <td>Sí</td>
+              <td>Sí</td>
+            </tr>
           </tbody>
         </table>
       </div>
+
+      <div class="info"><strong>Justificación de permisos en <code>testing</code>:</strong> <code>testing</code> es un entorno volátil y reconstruible. Permitir push/merge directo por developers agiliza los procesos de integración y QA, evitando esperas innecesarias por aprobación del Team Leader para desplegar cambios al ambiente de pruebas.</div>
 
       <h3>Reset periódico de <code>testing</code></h3>
       <p><code>testing</code> puede acumular estado corrupto. Se recomienda resetearlo periódicamente (force-push de <code>main</code> a <code>testing</code>) solo por el Team Leader.</p>

@@ -33,6 +33,18 @@ const idx = 11;
           <div class="cfg-row"><span class="cfg-name">Allowed to push</span><span class="cfg-val cfg-val2">Developers</span></div>
           <div class="cfg-row"><span class="cfg-name">Allow force push</span><span class="cfg-val cfg-off">Desactivado</span></div>
           <div class="cfg-row"><span class="cfg-name">Require approval</span><span class="cfg-val cfg-off">N/A (no requiere MR)</span></div>
+          <div class="cfg-row"><span class="cfg-name">Pipeline must pass</span><span class="cfg-val cfg-on">Recomendado (no bloqueante)</span></div>
+        </div>
+      </div>
+
+      <div class="gitlab-cfg" style="margin-top:16px;">
+        <div class="gitlab-cfg-header">⚙ Settings → Repository → Protected branches → next / stage</div>
+        <div class="gitlab-cfg-body">
+          <div class="cfg-row"><span class="cfg-name">Allowed to merge</span><span class="cfg-val cfg-val2">Maintainers</span></div>
+          <div class="cfg-row"><span class="cfg-name">Allowed to push</span><span class="cfg-val cfg-val2">Maintainers</span></div>
+          <div class="cfg-row"><span class="cfg-name">Allow force push</span><span class="cfg-val cfg-off">Desactivado</span></div>
+          <div class="cfg-row"><span class="cfg-name">Require approval</span><span class="cfg-val cfg-off">N/A (no requiere MR)</span></div>
+          <div class="cfg-row"><span class="cfg-name">Pipeline must pass</span><span class="cfg-val cfg-on">Activado</span></div>
         </div>
       </div>
 
@@ -48,7 +60,7 @@ const idx = 11;
       </div>
 
       <h3>Pipeline de CI mínimo recomendado</h3>
-      <p>Todo MR hacia <code>main</code> (o <code>stage</code>) debe pasar el pipeline. Para <code>testing</code> es recomendado pero no bloqueante antes del push.</p>
+      <p>Todo MR hacia <code>main</code> (o <code>next</code>/<code>stage</code>) debe pasar el pipeline. Para <code>testing</code> es recomendado pero no bloqueante. El pipeline se configura en <code>.gitlab-ci.yml</code> en la raíz del proyecto.</p>
       <div class="rules">
         <div class="rule"><span class="rule-icon">🧪</span><span class="rule-text"><strong>Tests unitarios e integración:</strong> el MR no puede mergearse si fallan.</span></div>
         <div class="rule"><span class="rule-icon">🔍</span><span class="rule-text"><strong>Linter y análisis estático:</strong> garantiza estándares de calidad de código.</span></div>

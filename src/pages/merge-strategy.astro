@@ -42,17 +42,17 @@ const idx = 7;
           <tbody>
             <tr>
               <td><code>testing</code></td>
-              <td>Merge directo</td>
+              <td>Merge directo (sin MR, sin squash)</td>
               <td>Preserva historial completo para troubleshooting de QA.</td>
             </tr>
             <tr>
               <td><code>next / stage</code></td>
-              <td>Merge directo</td>
+              <td>Merge directo (sin MR, sin squash, solo TL/PM)</td>
               <td>Historial detallado, requiere aprobación de Maintainer.</td>
             </tr>
             <tr>
               <td><code>main</code></td>
-              <td><strong>Squash & Merge</strong></td>
+              <td><strong>Squash & Merge vía MR</strong></td>
               <td>Un commit limpio por feature, facilita rollback y changelog.</td>
             </tr>
           </tbody>
@@ -73,6 +73,7 @@ const idx = 7;
         <div class="gitlab-cfg-body">
           <div class="cfg-row"><span class="cfg-name">Squash commits when merging</span><span class="cfg-val cfg-on">Encourage / Require</span></div>
           <div class="cfg-row"><span class="cfg-name">Pipelines must succeed</span><span class="cfg-val cfg-on">Activado</span></div>
+          <div class="cfg-row"><span class="cfg-name">All discussions must be resolved</span><span class="cfg-val cfg-on">Activado</span></div>
           <div class="cfg-row"><span class="cfg-name">Delete source branch after merge</span><span class="cfg-val cfg-on">Activado</span></div>
         </div>
       </div>

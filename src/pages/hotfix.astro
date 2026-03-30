@@ -53,11 +53,12 @@ git merge <span class="ck">fix/202-crash-pago-tarjeta</span>
 git push origin testing</code></pre>
 
       <h3>Excepción: Producción completamente caído</h3>
-      <p>Solo en caso de que la instancia de producción se encuentre <strong>inoperativa</strong> (no una funcionalidad parcial):</p>
+      <p>Solo en caso de que la instancia de producción se encuentre <strong>completamente caída o inoperativa</strong>. Una funcionalidad rota o un error en parte del flujo <strong>no califica</strong> como excepción.</p>
       <div class="rules">
         <div class="rule"><span class="rule-icon">⚡</span><span class="rule-text">El hotfix puede mergearse a <code>main</code> con aprobación del <strong>Team Leader</strong>.</span></div>
         <div class="rule"><span class="rule-icon">🔄</span><span class="rule-text">Inmediatamente después del merge, integrar a <code>testing</code> para validación retroactiva.</span></div>
         <div class="rule"><span class="rule-icon">📄</span><span class="rule-text">Documentar el incidente y realizar una retrospectiva obligatoria.</span></div>
+        <div class="rule"><span class="rule-icon">👤</span><span class="rule-text">El <strong>Team Leader asume la responsabilidad</strong> de esta decisión.</span></div>
       </div>
 
       <div class="alert"><strong>La urgencia no elimina el code review.</strong> Incluso en la excepción, se requiere aprobación del Team Leader antes del merge.</div>
