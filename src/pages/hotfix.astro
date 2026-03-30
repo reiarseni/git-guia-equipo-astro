@@ -64,6 +64,9 @@ git push origin testing</code></pre>
       <div class="alert"><strong>La urgencia no elimina el code review.</strong> Incluso en la excepción, se requiere aprobación del Team Leader antes del merge.</div>
     </Section>
 
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+
     <Section title="Anexo: Diagrama del Flujo HotFix" id="diagrama-hotfix">
       <p>Flujo urgente desde la detección del bug en producción hasta el merge. Pasa por <code>testing</code> para validación QA incluso en contexto de urgencia.</p>
 
@@ -123,8 +126,5 @@ git push origin testing</code></pre>
         <text x="22" y="272" fill="#ff4757" font-size="10" font-weight="700">⚠ No omitir testing salvo que producción esté completamente caída — en ese caso: merge directo a main con approval del TL, luego retroactivo a testing</text>
       </svg>
     </Section>
-
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
-    <Footer />
   </div>
 </Layout>

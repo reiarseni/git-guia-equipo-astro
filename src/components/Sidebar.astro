@@ -8,8 +8,8 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 <div class="sidebar-inner">
   <div class="sidebar-head">
     <a href={import.meta.env.BASE_URL} class="sidebar-home-link">
-      <span class="sidebar-badge">v3.0</span>
-      <p class="sidebar-title">Git Guía <span>del Equipo</span></p>
+
+      <p class="sidebar-title">Git Guía v4.0</p>
     </a>
     <div class="offline-pill offline-pill--sidebar" id="offlineBadgeSidebar" aria-live="polite" aria-atomic="true" hidden>
       <span class="offline-dot" aria-hidden="true"></span>Sin conexión
@@ -37,9 +37,6 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
     ))}
   </nav>
 
-  <div class="sidebar-foot">
-    <span class="sidebar-foot-text">git-guia-equipo · actualizar cuando el equipo lo decida</span>
-  </div>
 </div>
 
 <style>

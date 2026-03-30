@@ -69,6 +69,9 @@ git push origin <span class="ck">feat/456-login-con-google</span></code></pre>
       <div class="tip"><strong>Buena práctica:</strong> Hacer esto periódicamente — al menos al comenzar cada día de trabajo — para minimizar conflictos al momento del MR.</div>
     </Section>
 
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+
     <Section title="Anexo: Diagrama del Flujo Completo" id="diagrama-flujo-diario">
       <p>Visión general de los 7 pasos: desde la creación de la rama hasta el merge a producción.</p>
 
@@ -161,8 +164,5 @@ git push origin <span class="ck">feat/456-login-con-google</span></code></pre>
         <text x="52" y="347" fill="#9090aa" font-size="10">Feature branch</text>
       </svg>
     </Section>
-
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
-    <Footer />
   </div>
 </Layout>
