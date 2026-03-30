@@ -6,6 +6,7 @@ export interface SectionInfo {
 
 export const sections: SectionInfo[] = [
   { title: "Estructura de Ramas",      href: "/estructura-de-ramas",    group: "Ramas" },
+  { title: "Plan de Transición",       href: "/plan-de-transicion",     group: "Ramas" },
   { title: "Workitems y Ramas",        href: "/workitems-y-ramas",      group: "Ramas" },
   { title: "Nombrado de Ramas",        href: "/nombrado-de-ramas",      group: "Ramas" },
   { title: "Flujo de Trabajo Diario",  href: "/flujo-diario",           group: "Flujo de Trabajo" },
@@ -24,9 +25,9 @@ export const sections: SectionInfo[] = [
 ];
 
 export const groups: { label: string; items: SectionInfo[] }[] = [
-  { label: "Ramas",            items: sections.slice(0, 3)  },
-  { label: "Flujo de Trabajo", items: sections.slice(3, 5)  },
-  { label: "Commits y PRs",    items: sections.slice(5, 9)  },
-  { label: "Releases",         items: sections.slice(9, 11) },
-  { label: "Calidad",          items: sections.slice(11)    },
+  { label: "Ramas",            items: sections.slice(0, 4)  },
+  { label: "Flujo de Trabajo", items: sections.slice(4, 6)  },
+  { label: "Commits y PRs",    items: sections.slice(6, 10)  },
+  { label: "Releases",         items: sections.slice(10, 12) },
+  { label: "Calidad",          items: sections.slice(12)    },
 ];

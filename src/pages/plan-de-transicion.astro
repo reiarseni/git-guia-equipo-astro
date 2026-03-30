@@ -1,0 +1,135 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = sections.findIndex(s => s.href === "/plan-de-transicion") || 0;
+---
+
+<Layout title="Git — Plan de Transición de Forks">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="Plan de Transición de Forks" id="plan-de-transicion">
+      <p>El documento anterior referencia <strong>forks personales</strong> como parte del flujo de trabajo. La versión v3.0 propone un modelo de <strong>Shared Repository con Feature Branches</strong>. Este cambio es necesario para optimizar la colaboración y mantener un único repositorio principal.</p>
+
+      <p>Los desarrolladores que actualmente trabajan con forks deben realizar la siguiente transición para alinearse con el nuevo estándar.</p>
+
+      <h3>Acciones requeridas</h3>
+
+      <ol class="numbered-list">
+        <li>
+          <h4>Subir las ramas activas</h4>
+          <p>Migrar todas las ramas de tu fork local al repositorio principal del proyecto.</p>
+        </li>
+        <li>
+          <h4>Archivar o eliminar el fork</h4>
+          <p>Una vez que todas las ramas activas hayan sido migradas al repositorio principal, se debe archivar o eliminar el fork personal.</p>
+        </li>
+        <li>
+          <h4>Actualizar remotes locales</h4>
+          <p>Configurar los remotes locales para que apunten directamente al repositorio principal del proyecto.</p>
+        </li>
+      </ol>
+
+      <h3>Ejemplo de migración de ramas desde un fork</h3>
+      
+      <div class="code-block">
+        <pre><code># Agregar el repositorio principal como upstream
+git remote add upstream &lt;url-repo-principal&gt;
+
+# Subir cada rama activa al repositorio principal
+git push upstream &lt;nombre-rama&gt;
+
+# Repetir por cada rama activa, luego eliminar el fork</code></pre>
+      </div>
+
+      <div class="tip">
+        <strong>Nota:</strong> Este proceso debe coordinarse con el Team Leader de cada proyecto para evitar pérdida de trabajo en progreso.
+      </div>
+
+      <h3>Ventajas del nuevo modelo</h3>
+      <ul>
+        <li><strong>Visibilidad centralizada:</strong> Todo el código está en un solo repositorio</li>
+        <li><strong>Simplificación:</strong> No más forks múltiples que deben sincronizarse</li>
+        <li><strong>Mejor colaboración:</strong> Todos trabajan sobre el mismo repositorio principal</li>
+        <li><strong>Menos fricción:</strong> Elimina la necesidad de mantener forks sincronizados</li>
+      </ul>
+
+      <p>Una vez completada la transición, todos los desarrolladores trabajarán directamente sobre el repositorio principal, utilizando feature branches siguiendo el estándar establecido en las demás secciones de esta guía.</p>
+    </Section>
+
+    <PageNav
+      prev={idx > 0 ? sections[idx - 1] : null}
+      next={idx < sections.length - 1 ? sections[idx + 1] : null}
+    />
+    <Footer />
+  </div>
+</Layout>
+
+<style>
+  .numbered-list {
+    list-style-type: none;
+    counter-reset: step-counter;
+    margin: 2rem 0;
+    padding: 0;
+  }
+
+  .numbered-list > li {
+    counter-increment: step-counter;
+    position: relative;
+    padding-left: 3.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .numbered-list > li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .numbered-list > li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .numbered-list h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+  }
+
+  .numbered-list p {
+    margin-bottom: 0;
+    color: var(--muted);
+  }
+
+  .code-block {
+    margin: 1.5rem 0;
+  }
+
+  ul {
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  ul li {
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+  }
+</style>
