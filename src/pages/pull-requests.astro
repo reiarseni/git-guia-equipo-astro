@@ -14,36 +14,35 @@ const idx = 6;
   <div class="container">
     <Section title="Pull Requests" id="pull-requests">
       <h3>Formato del título</h3>
-      <p>El número del workitem va <strong>al final</strong> entre corchetes:</p>
+      <p>Se utiliza el formato explícito con relación al workitem:</p>
       <pre><code><span class="cm"># Formato</span>
-Descripción clara de qué hace el PR [#número-issue]
+Título descriptivo del cambio, rel #número-workitem
 
 <span class="cm"># Ejemplos ✅</span>
-<span class="cs">Agrega login con Google [#456]</span>
-<span class="cs">Corrige error en cálculo de descuento [#101]</span>
-<span class="cs">Migra base de datos a PostgreSQL 15 [#789]</span>
-<span class="cs">Fix crítico en procesamiento de pagos [#202]</span></code></pre>
-      <h3>Template de descripción del PR</h3>
-      <p>Crear el archivo <code>.gitlab/merge_request_templates/default.md</code> en el repo con el siguiente contenido. GitLab lo cargará automáticamente en cada nuevo PR:</p>
+<span class="cs">Agrega login con Google, rel #456</span>
+<span class="cs">Corrige error en cálculo de descuento, rel #101</span>
+<span class="cs">Migra base de datos a PostgreSQL 15, rel #789</span></code></pre>
+
+      <div class="info"><strong>Justificación:</strong> El formato <code>rel #número</code> es explícito sobre la relación con el workitem y ya es estándar en los equipos. Evitar el uso de corchetes <code>[#id]</code> por falta de claridad.</div>
+
+      <h3>Template de descripción del MR</h3>
+      <p>Archivo <code>.gitlab/merge_request_templates/default.md</code> obligatorio. Contenido simplificado:</p>
       <div class="template-block">
-        <span class="tpl-section">## ¿Qué hace este PR?</span><br>
+        <span class="tpl-section">## ¿Qué hace este MR?</span><br>
         <span class="tpl-comment">&lt;!-- Descripción breve de los cambios realizados --&gt;</span><br><br>
         <span class="tpl-section">## Workitem</span><br>
         <span class="tpl-content">Closes #</span><span class="tpl-comment">&lt;!-- número del issue --&gt;</span><br><br>
-        <span class="tpl-section">## ¿Cómo probarlo?</span><br>
-        <span class="tpl-content">1. </span><span class="tpl-comment">&lt;!-- Paso 1 --&gt;</span><br>
-        <span class="tpl-content">2. </span><span class="tpl-comment">&lt;!-- Paso 2 --&gt;</span><br><br>
-        <span class="tpl-section">## Capturas / Evidencia</span><br>
-        <span class="tpl-comment">&lt;!-- Screenshots o videos si hay cambios de UI. Borrar si no aplica --&gt;</span><br><br>
         <span class="tpl-section">## Checklist</span><br>
-        <span class="tpl-content">- [ ] Hice rebase sobre testing antes de abrir el PR</span><br>
         <span class="tpl-content">- [ ] El pipeline de CI está en verde</span><br>
         <span class="tpl-content">- [ ] Probé los cambios localmente</span><br>
-        <span class="tpl-content">- [ ] El PR tiene menos de 400 líneas modificadas</span>
+        <span class="tpl-content">- [ ] Integré los cambios a testing para validación QA</span>
       </div>
+
+      <div class="tip"><strong>Importante:</strong> La información de <strong>cómo probar</strong> la funcionalidad y los <strong>cambios relevantes</strong> deben documentarse en el <strong>workitem (tarjeta)</strong>, no en el MR. La checklist de validación de QA también pertenece al workitem.</div>
+
       <h3>Límite de tamaño del PR</h3>
       <div class="rules">
-        <div class="rule"><span class="rule-icon">📏</span><span class="rule-text">Un PR no debería superar las <strong>400 líneas modificadas</strong>. Con más de eso, la revisión se vuelve superficial y aumenta el riesgo de que pasen errores. Si una feature es grande, dividirla en Stories o Tasks más pequeñas.</span></div>
+        <div class="rule"><span class="rule-icon">📏</span><span class="rule-text">Preferiblemente menos de <strong>400 líneas modificadas</strong>. PRs mayores requieren justificación en la descripción. Se recomienda dividir en sub-tasks cuando sea posible.</span></div>
       </div>
     </Section>
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />

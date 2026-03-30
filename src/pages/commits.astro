@@ -34,40 +34,41 @@ const idx = 5;
         <div class="commit-line">
           <div class="commit-label">footer</div>
           <div class="commit-content">
-            <span class="cs">Refs #456</span><span class="cm">   ← referencia el issue sin cerrarlo</span><br>
-            <span class="cs">Closes #456</span><span class="cm"> ← referencia Y cierra el issue al mergear</span>
-            <div class="commit-note">Usar Closes solo cuando ese commit representa la finalización completa del issue.</div>
+            <span class="cs">Refs #456</span><span class="cm">   ← referencia el issue sin cerrarlo (commit parcial)</span><br>
+            <span class="cs">Closes #456</span><span class="cm"> ← referencia Y cierra el issue al mergear (commit final)</span>
+            <div class="commit-note">Usar Closes solo cuando el commit representa la finalización completa del issue.</div>
           </div>
         </div>
+      </div>
+      <h3>Tipos de commit</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead><tr><th>Tipo</th><th>Cuándo usarlo</th><th>Obligatorio</th></tr></thead>
+          <tbody>
+            <tr><td><code>feat</code></td><td>Nueva funcionalidad</td><td>Sí</td></tr>
+            <tr><td><code>fix</code></td><td>Corrección de bug o error</td><td>Sí</td></tr>
+            <tr><td><code>refactor</code></td><td>Mejora de código sin cambiar comportamiento</td><td>Opcional</td></tr>
+            <tr><td><code>docs</code></td><td>Cambios en documentación</td><td>Opcional</td></tr>
+            <tr><td><code>test</code></td><td>Agregar o modificar tests</td><td>Opcional</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="info">
+        <strong>Nota:</strong> Los tipos <code>chore</code> y <code>style</code> del v3.0 original se eliminan por ser ambiguos. <code>chore</code> se absorbe en <code>feat</code> o <code>refactor</code>. <code>style</code> se absorbe en <code>refactor</code>.
       </div>
       <h3>Ejemplos completos</h3>
       <pre><code><span class="cm"># Commit parcial — el issue sigue abierto</span>
 git commit -m <span class="cs">"feat: agrega pantalla de login con Google"</span> \
            -m <span class="cs">"Refs #456"</span>
 
-<span class="cm"># Commit final — el issue se cierra al mergear el PR</span>
+<span class="cm"># Commit final — el issue se cierra al mergear</span>
 git commit -m <span class="cs">"feat: completa flujo de autenticación con Google"</span> \
            -m <span class="cs">"Closes #456"</span>
 
-<span class="cm"># Commit de bug</span>
+<span class="cm"># Corrección de bug</span>
 git commit -m <span class="cs">"fix: corrige cálculo de descuento en carrito"</span> \
            -m <span class="cs">"Closes #101"</span></code></pre>
-      <h3>Tipos de commit</h3>
-      <div class="table-wrapper">
-        <table>
-          <thead><tr><th>Tipo</th><th>Cuándo usarlo</th></tr></thead>
-          <tbody>
-            <tr><td>feat</td><td>Nueva funcionalidad</td></tr>
-            <tr><td>fix</td><td>Corrección de bug</td></tr>
-            <tr><td>refactor</td><td>Mejora de código sin cambiar comportamiento</td></tr>
-            <tr><td>chore</td><td>Tareas de mantenimiento o configuración</td></tr>
-            <tr><td>docs</td><td>Cambios en documentación</td></tr>
-            <tr><td>test</td><td>Agregar o modificar tests</td></tr>
-            <tr><td>style</td><td>Cambios de formato (espacios, comas, etc.)</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="alert"><strong>Prohibido:</strong> Commits tipo <code>wip</code>, <code>cambios</code>, <code>arregle cosas</code> o cualquier commit sin referencia al issue (<code>Refs</code> o <code>Closes</code>).</div>
+      <div class="alert"><strong>Prohibido:</strong> Commits tipo <code>wip</code>, <code>cambios</code>, <code>arregle cosas</code> o cualquier mensaje no descriptivo sin referencia al issue.</div>
     </Section>
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
     <Footer />

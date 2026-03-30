@@ -12,25 +12,23 @@ const idx = 8;
 <Layout title="Git — Draft PRs">
   <Sidebar slot="sidebar" />
   <div class="container">
-    <Section title="Draft PRs — Trabajo en Progreso" id="draft-prs">
-      <p>Un <strong>Draft PR</strong> (o WIP PR) es un Pull Request marcado explícitamente como trabajo en progreso. GitLab bloquea el merge automáticamente hasta que se marque como listo.</p>
-      <h3>Para qué sirven</h3>
+    <Section title="Draft MRs — Trabajo en Progreso" id="draft-prs">
+      <p>Un <strong>Draft MR</strong> es un Merge Request marcado como trabajo en progreso. GitLab bloquea el merge automáticamente hasta que se marque como listo.</p>
+      <h3>Cuándo usarlos</h3>
       <div class="rules">
-        <div class="rule"><span class="rule-icon">👁️</span><span class="rule-text"><strong>Visibilidad temprana:</strong> el equipo puede ver en qué estás trabajando, hacer comentarios anticipados y detectar problemas de arquitectura antes de que estén terminados.</span></div>
-        <div class="rule"><span class="rule-icon">🛡️</span><span class="rule-text"><strong>Protección contra merge accidental:</strong> GitLab impide mergear un Draft PR aunque alguien lo apruebe. Elimina el riesgo de que código incompleto llegue a <code>testing</code>.</span></div>
-        <div class="rule"><span class="rule-icon">💬</span><span class="rule-text"><strong>Feedback continuo:</strong> útil en equipos remotos para mostrar avances diarios sin esperar a tener el trabajo 100% terminado.</span></div>
+        <div class="rule"><span class="rule-icon">👁️</span><span class="rule-text"><strong>Visibilidad temprana:</strong> para dar visibilidad al equipo sobre el trabajo en progreso y recibir feedback anticipado.</span></div>
+        <div class="rule"><span class="rule-icon">🛡️</span><span class="rule-text"><strong>Protección contra merge accidental:</strong> GitLab impide mergear un Draft MR aunque alguien lo apruebe. Elimina el riesgo de que código incompleto llegue a <code>main</code>.</span></div>
+        <div class="rule"><span class="rule-icon">💬</span><span class="rule-text"><strong>Feedback de arquitectura:</strong> útil para validar enfoques técnicos antes de terminar la implementación completa.</span></div>
       </div>
       <h3>Cómo usarlos</h3>
-      <pre><code><span class="cm"># Al crear el PR en GitLab:</span>
-<span class="cm"># Tildar el checkbox "Mark as draft" en el formulario</span>
-<span class="cm"># O agregar el prefijo al título manualmente:</span>
+      <pre><code><span class="cm"># Al crear el MR en GitLab:</span>
+<span class="cm"># Tildar "Mark as draft" o agregar el prefijo manualmente:</span>
 
-<span class="cn">Draft:</span> Agrega login con Google [#456]
+<span class="cn">Draft:</span> Agrega login con Google, rel #456
 
-<span class="cm"># Cuando el trabajo esté listo para revisión formal:</span>
-<span class="cm"># Hacer clic en "Mark as ready" en GitLab</span>
-<span class="cm"># El prefix Draft: desaparece y el PR queda habilitado para merge</span></code></pre>
-      <div class="tip"><strong>Buena práctica:</strong> Abrir el PR como Draft desde el primer push de la rama. Así el equipo tiene visibilidad desde el inicio, y solo se marca como listo cuando está realmente para revisión.</div>
+<span class="cm"># Cuando esté listo para revisión formal:</span>
+<span class="cm"># Hacer clic en "Mark as ready" en GitLab</span></code></pre>
+      <div class="tip"><strong>Buena práctica:</strong> Abrir el MR como Draft desde el primer push de la rama. Marcarlo como listo solo cuando esté preparado para code review.</div>
     </Section>
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
     <Footer />

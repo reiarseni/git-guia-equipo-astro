@@ -17,9 +17,10 @@ const idx = 1;
       <div class="rules">
         <div class="rule"><span class="rule-icon">🔗</span><span class="rule-text">Antes de crear una rama, verificar que el workitem existe y está <strong>asignado a ti</strong> en GitLab.</span></div>
         <div class="rule"><span class="rule-icon">1️⃣</span><span class="rule-text"><strong>Un workitem = una rama.</strong> No mezclar cambios de distintos issues en la misma rama.</span></div>
-        <div class="rule"><span class="rule-icon">🏗️</span><span class="rule-text">Los <strong>Epics</strong> tienen rama propia cuando implican trabajo técnico directo. Sus Stories y Tasks también tienen sus propias ramas y sus PRs van a <code>testing</code>.</span></div>
+        <div class="rule"><span class="rule-icon">🏗️</span><span class="rule-text">Los <strong>Epics</strong> tienen rama propia cuando implican trabajo técnico directo. Sus Stories y Tasks también tienen sus propias ramas.</span></div>
+        <div class="rule"><span class="rule-icon">🎯</span><span class="rule-text"><strong>Los MRs van siempre a <code>main</code>.</strong> El merge a <code>testing</code> se hace directamente sin necesidad de MR formal.</span></div>
       </div>
-      <div class="tip"><strong>Tip:</strong> GitLab permite crear la rama directamente desde el issue con el botón "Create branch". Usarlo cuando sea posible: genera el nombre con el número del issue automáticamente.</div>
+      <div class="tip"><strong>Tip:</strong> GitLab permite crear la rama directamente desde el issue (botón "Create branch"), lo cual genera el ID y slug automáticamente. Solo debes anteponer el tipo (<code>feat/</code> o <code>fix/</code>).</div>
     </Section>
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
     <Footer />

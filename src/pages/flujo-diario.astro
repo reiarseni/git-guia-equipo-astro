@@ -13,31 +13,59 @@ const idx = 3;
   <Sidebar slot="sidebar" />
   <div class="container">
     <Section title="Flujo de Trabajo Diario" id="flujo-diario">
-      <h3>Paso 1 — Actualizar y crear tu rama</h3>
-      <pre><code><span class="cm"># Siempre partir desde testing actualizado</span>
-git checkout testing
-git pull origin testing
+      <h3>Paso 1 — Crear la rama desde <code>main</code> actualizado</h3>
+      <pre><code><span class="cm"># Actualizar main primero</span>
+git checkout main
+git pull origin main
 
 <span class="cm"># Crear la rama con el número del workitem de GitLab</span>
-git checkout -b <span class="ck">story-456/login-con-google</span></code></pre>
-      <h3>Paso 2 — Trabajar, hacer commits y mantener la rama actualizada</h3>
+git checkout -b <span class="ck">feat/456-login-con-google</span></code></pre>
+      <div class="info"><strong>Nota:</strong> La rama se crea siempre desde <code>main</code>, no desde <code>testing</code>.</div>
+      <h3>Paso 2 — Trabajar y hacer commits</h3>
       <pre><code>git add .
 git commit -m <span class="cs">"feat: agrega pantalla de login con Google"</span> \
            -m <span class="cs">"Refs #456"</span>
 
-<span class="cm"># Hacer rebase diario (ver sección Rebase)</span>
-git fetch origin
-git rebase origin/testing
-
-git push origin <span class="ck">story-456/login-con-google</span></code></pre>
-      <h3>Paso 3 — Abrir Pull Request hacia testing</h3>
+git push origin <span class="ck">feat/456-login-con-google</span></code></pre>
+      <h3>Paso 3 — Abrir MR hacia <code>main</code></h3>
+      <p>El MR se abre hacia <code>main</code> desde el primer momento (puede abrirse como Draft). Se debe:</p>
       <div class="rules">
-        <div class="rule"><span class="rule-icon">📌</span><span class="rule-text">El PR se dirige hacia <strong>testing</strong>, nunca directamente a main (excepto hotfix).</span></div>
-        <div class="rule"><span class="rule-icon">🔍</span><span class="rule-text">Se requiere <strong>al menos 1 revisión aprobada</strong> antes de mergear.</span></div>
-        <div class="rule"><span class="rule-icon">✅</span><span class="rule-text">El <strong>pipeline de CI debe estar en verde</strong> antes de poder mergear.</span></div>
-        <div class="rule"><span class="rule-icon">🧪</span><span class="rule-text">QA valida en <code>testing</code>. Una vez aprobado, se abre el PR de <strong>testing → main</strong>.</span></div>
-        <div class="rule"><span class="rule-icon">🗑️</span><span class="rule-text">Eliminar la rama después del merge para mantener el repo limpio.</span></div>
+        <div class="rule"><span class="rule-icon">📌</span><span class="rule-text">El MR se dirige hacia <strong><code>main</code></strong>, nunca directamente a <code>testing</code>. Puede abrirse como Draft desde el primer push.</span></div>
+        <div class="rule"><span class="rule-icon">✅</span><span class="rule-text">El <strong>pipeline de CI debe estar en verde</strong> antes de solicitar revisión.</span></div>
+        <div class="rule"><span class="rule-icon">🔍</span><span class="rule-text">Solicitar revisión al <strong>Team Leader</strong>.</span></div>
       </div>
+      <h3>Paso 4 — Integrar a <code>testing</code> para validación QA</h3>
+      <p>Una vez que el MR está en revisión o aprobado, integrar los cambios a <code>testing</code> para que QA pueda validar:</p>
+      <pre><code>git checkout testing
+git pull origin testing
+git merge <span class="ck">feat/456-login-con-google</span>
+git push origin testing</code></pre>
+      <div class="info"><strong>Nota:</strong> Esto es un merge directo, sin Merge Request. La información de cómo probar la funcionalidad y la checklist de validación de QA van en el <strong>workitem</strong>, no en el MR.</div>
+      <h3>Paso 5 — QA valida en <code>testing</code></h3>
+      <p>QA ejecuta las pruebas definidas en el workitem. Si encuentra errores:</p>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">🔧</span><span class="rule-text">El dev corrige en la feature branch.</span></div>
+        <div class="rule"><span class="rule-icon">📤</span><span class="rule-text">Hace commit y push a la feature branch.</span></div>
+        <div class="rule"><span class="rule-icon">🔄</span><span class="rule-text">Vuelve a integrar a <code>testing</code> (repite Paso 4). El MR hacia <code>main</code> se actualiza automáticamente.</span></div>
+      </div>
+      <h3>Paso 6 — Merge a <code>main</code></h3>
+      <p>Una vez que:</p>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">✅</span><span class="rule-text">El Team Leader aprobó el code review.</span></div>
+        <div class="rule"><span class="rule-icon">🧪</span><span class="rule-text">QA validó la funcionalidad en <code>testing</code>.</span></div>
+        <div class="rule"><span class="rule-icon">🔵</span><span class="rule-text">El pipeline de CI está en verde.</span></div>
+      </div>
+      <p>Se procede a hacer merge del MR a <code>main</code> con <strong>squash commit</strong>.</p>
+      <h3>Paso 7 — Limpieza</h3>
+      <p>Eliminar la feature branch después del merge para mantener el repositorio limpio. GitLab puede configurarse para hacerlo automáticamente.</p>
+      <h3>Mantener la rama actualizada</h3>
+      <p>Para mantener la feature branch sincronizada con los cambios que otros devs han integrado a <code>main</code>:</p>
+      <pre><code>git checkout <span class="ck">feat/456-login-con-google</span>
+git fetch origin main
+git merge origin/main
+<span class="cm"># Resolver conflictos si existen</span>
+git push origin <span class="ck">feat/456-login-con-google</span></code></pre>
+      <div class="tip"><strong>Buena práctica:</strong> Hacer esto periódicamente — al menos al comenzar cada día de trabajo — para minimizar conflictos al momento del MR.</div>
     </Section>
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
     <Footer />

@@ -15,18 +15,25 @@ const idx = 12;
     <Section title="Code Review" id="code-review">
       <h3>Para quien revisa</h3>
       <div class="rules">
-        <div class="rule"><span class="rule-icon">⏱️</span><span class="rule-text"><strong>Revisar en menos de 24 horas hábiles</strong> para no bloquear al compañero.</span></div>
-        <div class="rule"><span class="rule-icon">💬</span><span class="rule-text">Los comentarios deben ser <strong>constructivos y específicos</strong>. Si algo está mal, sugerir cómo mejorarlo.</span></div>
-        <div class="rule"><span class="rule-icon">🔗</span><span class="rule-text">Verificar que el PR <strong>referencia correctamente el workitem</strong> en el título y en los commits.</span></div>
-        <div class="rule"><span class="rule-icon">✅</span><span class="rule-text">Aprobar solo si el código es correcto, legible, no rompe nada existente y el CI está en verde.</span></div>
-        <div class="rule"><span class="rule-icon">🚫</span><span class="rule-text">No aprobar PRs de más de 400 líneas sin pedir que se divida. Revisar código extenso es ineficaz.</span></div>
+        <div class="rule"><span class="rule-icon">⏱️</span><span class="rule-text"><strong>Revisar en menos de 16 horas hábiles</strong> para no bloquear al compañero.</span></div>
+        <div class="rule"><span class="rule-icon">💬</span><span class="rule-text">Los comentarios deben ser <strong>constructivos y específicos</strong>. Sugerir mejoras si algo está mal.</span></div>
+        <div class="rule"><span class="rule-icon">✅</span><span class="rule-text">Aprobar solo si el código es correcto, legible, el CI está en verde y el formato es el adecuado.</span></div>
+        <div class="rule"><span class="rule-icon">🚫</span><span class="rule-text"><strong>MRs extensos (>400 líneas):</strong> evaluar si puede dividirse. Si no, dedicar tiempo suficiente para una revisión rigurosa.</span></div>
       </div>
-      <h3>Para el autor del PR</h3>
+
+      <h3>Para el autor del MR</h3>
       <div class="rules">
-        <div class="rule"><span class="rule-icon">🔬</span><span class="rule-text">Auto-revisar el PR antes de asignarlo. Ser el primero en detectar errores obvios.</span></div>
-        <div class="rule"><span class="rule-icon">📖</span><span class="rule-text">Completar el template de descripción: qué hace, link al issue, cómo probarlo y checklist.</span></div>
+        <div class="rule"><span class="rule-icon">🔬</span><span class="rule-text"><strong>Auto-revisión:</strong> ser el primero en detectar errores obvios antes de asignar el MR.</span></div>
+        <div class="rule"><span class="rule-icon">📖</span><span class="rule-text">Completar el template de descripción. Documentar en el <strong>workitem</strong> los pasos para probar.</span></div>
+        <div class="rule"><span class="rule-icon">🔄</span><span class="rule-text">Mantener la rama actualizada con <code>main</code> (usando merge, no rebase) antes de incorporar correcciones.</span></div>
         <div class="rule"><span class="rule-icon">🤝</span><span class="rule-text">Responder todos los comentarios antes de pedir re-review.</span></div>
-        <div class="rule"><span class="rule-icon">🔄</span><span class="rule-text">Hacer rebase sobre <code>testing</code> antes de incorporar correcciones del review, para mantener la rama actualizada.</span></div>
+      </div>
+
+      <h3>Escalamiento de bloqueos</h3>
+      <p>Si un MR se encuentra bloqueado por falta de review:</p>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">1️⃣</span><span class="rule-text">Notificar al <strong>Team Leader</strong>.</span></div>
+        <div class="rule"><span class="rule-icon">2️⃣</span><span class="rule-text">Si no se resuelve en un plazo prudente, escalar al <strong>Project Manager</strong>.</span></div>
       </div>
     </Section>
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />

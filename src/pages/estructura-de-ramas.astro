@@ -13,29 +13,76 @@ const idx = 0;
   <Sidebar slot="sidebar" />
   <div class="container">
     <Section title="Estructura de Ramas" id="estructura-de-ramas">
-      <p>El repositorio tiene <strong>dos ramas permanentes</strong>. Todas las demás son temporales y se eliminan al fusionarse.</p>
+      <p>El repositorio tiene hasta <strong>tres ramas permanentes</strong>. Todas las demás son temporales y se eliminan al fusionarse.</p>
       <div class="flow">
         <div class="flow-row">
-          <span class="branch-badge b-feature">story-456/login-google</span>
+          <span class="branch-badge b-feature">feat/456-login-google</span>
+          <span class="arrow">→</span>
+          <span class="branch-badge b-main">main</span>
+          <span style="font-size:12px;color:var(--muted);margin-left:8px;font-family:'JetBrains Mono',monospace;">← MR formal</span>
+        </div>
+        <div class="flow-row">
+          <span class="branch-badge b-feature">feat/456-login-google</span>
           <span class="arrow">→</span>
           <span class="branch-badge b-testing">testing</span>
-          <span class="arrow">→</span>
-          <span class="branch-badge b-main">main</span>
+          <span style="font-size:12px;color:var(--muted);margin-left:8px;font-family:'JetBrains Mono',monospace;">← merge directo</span>
         </div>
-        <div class="flow-row flow-row--tight">
-          <span class="branch-badge b-hotfix">hotfix-202/crash-pagos</span>
+        <div class="flow-row">
+          <span class="branch-badge b-feature">feat/456-login-google</span>
           <span class="arrow">→</span>
-          <span class="branch-badge b-main">main</span>
-          <span class="flow-bypass">⚡ saltea testing</span>
+          <span class="branch-badge b-next">next / stage</span>
+          <span style="font-size:12px;color:var(--muted);margin-left:8px;font-family:'JetBrains Mono',monospace;">← condicional</span>
         </div>
+
         <div class="flow-legend">
-          <div class="flow-row"><span class="branch-badge b-main">main</span><span class="flow-desc">Producción. Solo código aprobado y estable.</span></div>
-          <div class="flow-row"><span class="branch-badge b-testing">testing</span><span class="flow-desc">QA e integración. Aquí se validan las features.</span></div>
-          <div class="flow-row"><span class="branch-badge b-feature">&#123;tipo&#125;-&#123;issue&#125;/...</span><span class="flow-desc">Trabajo individual. Una rama por workitem.</span></div>
-          <div class="flow-row"><span class="branch-badge b-hotfix">hotfix-&#123;issue&#125;/...</span><span class="flow-desc">Parche urgente. PR directo a main.</span></div>
+          <div class="flow-row"><span class="branch-badge b-main">main</span><span class="flow-desc">Producción. Solo código aprobado vía MR formal.</span></div>
+          <div class="flow-row"><span class="branch-badge b-testing">testing</span><span class="flow-desc">QA e integración. Permite push/merge directo por developers.</span></div>
+          <div class="flow-row"><span class="branch-badge b-next" style="background:var(--accent3)">next / stage</span><span class="flow-desc">Pre-producción. Solo si el proyecto cuenta con instancia stage.</span></div>
         </div>
       </div>
-      <div class="alert"><strong>Regla de oro:</strong> Nadie hace push directo a <code>main</code> ni a <code>testing</code>. Todo cambio entra exclusivamente por Pull Request.</div>
+
+      <h3>Protección por rama</h3>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Configuración</th>
+              <th><code>main</code></th>
+              <th><code>testing</code></th>
+              <th><code>stage</code></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Merge por</td>
+              <td>Maintainers</td>
+              <td>Developers</td>
+              <td>Maintainers</td>
+            </tr>
+            <tr>
+              <td>Push directo</td>
+              <td>Nadie</td>
+              <td>Developers</td>
+              <td>Maintainers</td>
+            </tr>
+            <tr>
+              <td>Approval MR</td>
+              <td>Sí (mín. 1)</td>
+              <td>N/A</td>
+              <td>N/A</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Reset periódico de <code>testing</code></h3>
+      <p><code>testing</code> puede acumular estado corrupto. Se recomienda resetearlo periódicamente (force-push de <code>main</code> a <code>testing</code>) solo por el Team Leader.</p>
+      <pre><code><span class="cm"># Reset de testing desde main (solo Team Leader)</span>
+git checkout main
+git pull origin main
+git push origin main:testing --force</code></pre>
+
+      <div class="alert"><strong>Regla de oro:</strong> Nunca push directo a <code>main</code>. <code>testing</code> permite push directo por developers para agilizar procesos de integración y QA.</div>
     </Section>
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
     <Footer />
@@ -43,19 +90,14 @@ const idx = 0;
 </Layout>
 
 <style>
-  .flow-row--tight { margin-top: 4px; }
-
-  .flow-bypass {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 13px;
-    color: #ffaa44;
-  }
-
   .flow-legend {
-    margin-top: 20px;
+    margin-top: 24px;
     display: grid;
-    gap: 8px;
+    gap: 12px;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
   }
-
-  .flow-legend .flow-row { margin-bottom: 0; }
+  .b-next { background: var(--accent3); color: #000; }
+  .flow-legend .flow-row { margin-bottom: 0; align-items: flex-start; }
+  .flow-desc { font-size: 14px; margin-top: 4px; }
 </style>

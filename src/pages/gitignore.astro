@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 14;
+---
+
+<Layout title="Git — Gitignore">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="Gitignore" id="gitignore">
+      <p>Cada proyecto debe definir su <code>.gitignore</code> antes del primer push. Previene commitear dependencias, secretos y archivos de entorno por error.</p>
+
+      <h3>Elementos mínimos obligatorios</h3>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">📦</span><span class="rule-text"><strong>Dependencias:</strong> <code>vendor/</code>, <code>node_modules/</code>, <code>.composer/</code>.</span></div>
+        <div class="rule"><span class="rule-icon">🔑</span><span class="rule-text"><strong>Entorno:</strong> <code>.env</code>, <code>.env.local</code>, <code>.env.*.local</code>.</span></div>
+        <div class="rule"><span class="rule-icon">🏗️</span><span class="rule-text"><strong>Builds:</strong> <code>build/</code>, <code>dist/</code>, <code>public/build/</code>.</span></div>
+        <div class="rule"><span class="rule-icon">💾</span><span class="rule-text"><strong>Caches:</strong> <code>.cache/</code>, <code>var/cache/</code>.</span></div>
+        <div class="rule"><span class="rule-icon">📝</span><span class="rule-text"><strong>Logs:</strong> <code>*.log</code>, <code>var/log/</code>.</span></div>
+        <div class="rule"><span class="rule-icon">📤</span><span class="rule-text"><strong>Uploads:</strong> <code>uploads/</code>, <code>public/uploads/</code>.</span></div>
+        <div class="rule"><span class="rule-icon">💻</span><span class="rule-text"><strong>IDEs:</strong> <code>.idea/</code>, <code>.vscode/</code>, <code>*.swp</code>.</span></div>
+        <div class="rule"><span class="rule-icon">🖥️</span><span class="rule-text"><strong>Sistema:</strong> <code>.DS_Store</code>, <code>Thumbs.db</code>.</span></div>
+      </div>
+
+      <div class="alert"><strong>Regla:</strong> Nunca commitear secretos. Claves de API, passwords y tokens van exclusivamente en variables de entorno, nunca en el código fuente.</div>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>

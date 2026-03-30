@@ -13,41 +13,54 @@ const idx = 10;
   <Sidebar slot="sidebar" />
   <div class="container">
     <Section title="Flujo HotFix" id="hotfix">
-      <p>Un HotFix es un parche urgente sobre un bug crítico en producción. <strong>Saltea testing</strong> y va directo a <code>main</code>.</p>
+      <p>Un HotFix es un parche urgente sobre un bug crítico en producción. <strong>No debe saltarse testing</strong>; sigue el flujo estándar de validación pero con prioridad máxima.</p>
+
       <div class="flow">
         <div class="flow-row">
-          <span class="branch-badge b-hotfix">hotfix-202/crash-pagos</span>
-          <span class="arrow">→</span>
-          <span class="branch-badge b-main">main</span>
-          <span style="font-size:13px;color:#ffaa44;font-family:'JetBrains Mono',monospace;">PR urgente</span>
-        </div>
-        <div class="flow-row">
-          <span class="branch-badge b-main">main</span>
+          <span class="branch-badge b-hotfix">fix/202-crash-pagos</span>
           <span class="arrow">→</span>
           <span class="branch-badge b-testing">testing</span>
-          <span style="font-size:13px;color:var(--muted);font-family:'JetBrains Mono',monospace;">PR de sincronización</span>
+          <span style="font-size:13px;color:var(--accent2);font-family:'JetBrains Mono',monospace;">Validación QA Urgente</span>
+        </div>
+        <div class="flow-row">
+          <span class="branch-badge b-hotfix">fix/202-crash-pagos</span>
+          <span class="arrow">→</span>
+          <span class="branch-badge b-main">main</span>
+          <span style="font-size:13px;color:#7c6af7;font-family:'JetBrains Mono',monospace;">MR formal (Squash)</span>
         </div>
       </div>
-      <pre><code><span class="cm"># 1. Crear la rama desde main (no desde testing)</span>
-git checkout main
-git pull origin main
-git checkout -b <span class="ck">hotfix-202/crash-al-procesar-pago</span>
 
-<span class="cm"># 2. Aplicar el fix y commitear</span>
-git commit -m <span class="cs">"fix: corrige crash al procesar pago con tarjeta"</span> \
-           -m <span class="cs">"Closes #202"</span>
+      <h3>Pasos del Hotfix</h3>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">1️⃣</span><span class="rule-text">Crear la rama <code>fix/&#123;id&#125;-&#123;slug&#125;</code> desde <strong><code>main</code></strong> actualizado.</span></div>
+        <div class="rule"><span class="rule-icon">2️⃣</span><span class="rule-text">Aplicar el fix, hacer commit con referencia al issue y subir la rama.</span></div>
+        <div class="rule"><span class="rule-icon">3️⃣</span><span class="rule-text">Integrar a <strong><code>testing</code></strong> mediante merge directo para validación QA inmediata.</span></div>
+        <div class="rule"><span class="rule-icon">4️⃣</span><span class="rule-text">Abrir Merge Request hacia <strong><code>main</code></strong> solicitando revisión urgente.</span></div>
+        <div class="rule"><span class="rule-icon">5️⃣</span><span class="rule-text">Una vez QA valida y el revisor aprueba, mergear a <code>main</code> con squash commit.</span></div>
+      </div>
 
-<span class="cm"># 3. Push y abrir PR hacia main</span>
-git push origin <span class="ck">hotfix-202/crash-al-procesar-pago</span>
-
-<span class="cm"># 4. Después de mergear a main, sincronizar testing</span>
-<span class="cm">#    mediante un PR (no merge directo) para que quede registrado</span>
+      <pre><code><span class="cm"># Flujo rápido de comandos</span>
 git checkout main && git pull origin main
+git checkout -b <span class="ck">fix/202-crash-pago-tarjeta</span>
+
+<span class="cm"># ... aplicar fix ...</span>
+git commit -m <span class="cs">"fix: corrige crash al procesar pago con tarjeta"</span> -m <span class="cs">"Closes #202"</span>
+git push origin <span class="ck">fix/202-crash-pago-tarjeta</span>
+
+<span class="cm"># Integrar a testing</span>
 git checkout testing && git pull origin testing
-<span class="cm"># Abrir PR de main → testing en GitLab con título:</span>
-<span class="cm"># "Sync: incorpora hotfix-202 a testing [main → testing]"</span></code></pre>
-      <div class="warn"><strong>Importante:</strong> La sincronización de <code>main</code> → <code>testing</code> después del hotfix debe hacerse por PR, no con merge directo. Así queda registrada en el historial y QA toma nota del cambio.</div>
-      <div class="alert"><strong>La urgencia no elimina el code review.</strong> Un PR de HotFix requiere igual aprobación. Contactar a un compañero disponible de inmediato.</div>
+git merge <span class="ck">fix/202-crash-pago-tarjeta</span>
+git push origin testing</code></pre>
+
+      <h3>Excepción: Producción completamente caído</h3>
+      <p>Solo en caso de que la instancia de producción se encuentre <strong>inoperativa</strong> (no una funcionalidad parcial):</p>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">⚡</span><span class="rule-text">El hotfix puede mergearse a <code>main</code> con aprobación del <strong>Team Leader</strong>.</span></div>
+        <div class="rule"><span class="rule-icon">🔄</span><span class="rule-text">Inmediatamente después del merge, integrar a <code>testing</code> para validación retroactiva.</span></div>
+        <div class="rule"><span class="rule-icon">📄</span><span class="rule-text">Documentar el incidente y realizar una retrospectiva obligatoria.</span></div>
+      </div>
+
+      <div class="alert"><strong>La urgencia no elimina el code review.</strong> Incluso en la excepción, se requiere aprobación del Team Leader antes del merge.</div>
     </Section>
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
     <Footer />

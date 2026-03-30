@@ -1,0 +1,39 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import Section from '../components/Section.astro';
+import Footer from '../components/Footer.astro';
+import PageNav from '../components/PageNav.astro';
+import { sections } from '../data/sections';
+
+const idx = 15;
+---
+
+<Layout title="Git — Trazabilidad de Testing">
+  <Sidebar slot="sidebar" />
+  <div class="container">
+    <Section title="Trazabilidad de Testing" id="trazabilidad-testing">
+      <p>Dado que <code>testing</code> no requiere MRs formales, implementamos mecanismos de trazabilidad mínima para mantener visibilidad del equipo.</p>
+
+      <h3>Mecanismos recomendados</h3>
+      <div class="rules">
+        <div class="rule">
+          <span class="rule-icon">💬</span>
+          <span class="rule-text"><strong>Webhook a Slack:</strong> configurar notificaciones en el canal del equipo para cada push a <code>testing</code>, identificando autor y cambios integrados.</span>
+        </div>
+        <div class="rule">
+          <span class="rule-icon">🏷️</span>
+          <span class="rule-text"><strong>Etiquetas en GitLab:</strong> usar labels en los workitems para marcar el estado de QA: <code>QA::pendiente</code>, <code>QA::en-progreso</code>, <code>QA::aprobado</code> o <code>QA::rechazado</code>.</span>
+        </div>
+        <div class="rule">
+          <span class="rule-icon">🏁</span>
+          <span class="rule-text"><strong>Milestones:</strong> agrupar workitems por sprint para facilitar el seguimiento del product increment y la generación de releases.</span>
+        </div>
+      </div>
+
+      <div class="info"><strong>Nota:</strong> Estas prácticas evitan que el flujo libre de <code>testing</code> se convierta en una "black box" para el resto del equipo y para QA.</div>
+    </Section>
+    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <Footer />
+  </div>
+</Layout>

@@ -9,70 +9,36 @@ import { sections } from '../data/sections';
 const idx = 4;
 ---
 
-<Layout title="Git — Rebase como Estrategia">
+<Layout title="Git — Merge como Estrategia">
   <Sidebar slot="sidebar" />
   <div class="container">
-    <Section title="Rebase como Estrategia de Actualización" id="rebase">
-      <p>El <strong>rebase</strong> es la herramienta principal para mantener la rama de trabajo sincronizada con <code>testing</code> sin ensuciar el historial. Es una práctica obligatoria en el equipo.</p>
-      <h3>¿Por qué rebase y no merge?</h3>
-      <p>Cuando usas <code>merge</code> para actualizar tu rama con los cambios de <code>testing</code>, Git crea un <em>merge commit</em> que contamina el historial de tu rama con ruido innecesario. El <code>rebase</code> en cambio <strong>reescribe tus commits encima de la punta actual de <code>testing</code></strong>, como si hubieras empezado a trabajar en ese momento.</p>
-      <div class="rebase-visual">
-        <div class="rb-label">Situación inicial — testing avanzó mientras trabajabas</div>
-        <div class="rb-line">
-          <span class="rb-commit rb-c-main">T1</span><span class="rb-arrow">→</span>
-          <span class="rb-commit rb-c-main">T2</span><span class="rb-arrow">→</span>
-          <span class="rb-commit rb-c-main">T3</span><span style="font-size:12px;color:var(--muted);margin-left:8px;font-family:'JetBrains Mono',monospace;">← testing (avanzó)</span>
-        </div>
-        <div class="rb-line" style="margin-left:24px;margin-top:4px;">
-          <span class="rb-commit rb-c-feature">A</span><span class="rb-arrow">→</span>
-          <span class="rb-commit rb-c-feature">B</span><span style="font-size:12px;color:var(--muted);margin-left:8px;font-family:'JetBrains Mono',monospace;">← tu rama (sale de T1)</span>
-        </div>
-        <div class="rb-divider"></div>
-        <div class="rb-label">Después del rebase — tus commits se reaplican sobre T3</div>
-        <div class="rb-line">
-          <span class="rb-commit rb-c-main">T1</span><span class="rb-arrow">→</span>
-          <span class="rb-commit rb-c-main">T2</span><span class="rb-arrow">→</span>
-          <span class="rb-commit rb-c-main">T3</span><span class="rb-arrow">→</span>
-          <span class="rb-commit rb-c-new">A'</span><span class="rb-arrow">→</span>
-          <span class="rb-commit rb-c-new">B'</span><span style="font-size:12px;color:var(--accent2);margin-left:8px;font-family:'JetBrains Mono',monospace;">← tu rama (limpia)</span>
-        </div>
-      </div>
-      <h3>Cuándo hacer rebase</h3>
+    <Section title="Merge como Estrategia de Actualización" id="merge-como-estrategia">
+      <p>La <strong>estrategia estándar</strong> para mantener la rama de trabajo sincronizada con <code>main</code> es <strong>merge</strong>, no rebase. El rebase queda <strong>estrictamente prohibido como práctica estándar</strong>.</p>
+      <h3>¿Por qué merge y no rebase?</h3>
       <div class="rules">
-        <div class="rule"><span class="rule-icon">☀️</span><span class="rule-text"><strong>Todos los días al comenzar a trabajar.</strong> Antes de escribir código nuevo, actualiza tu rama con los cambios que han mergeado tus compañeros.</span></div>
-        <div class="rule"><span class="rule-icon">🔀</span><span class="rule-text"><strong>Antes de abrir un PR.</strong> Nunca abrir un PR con la rama desactualizada. El rebase previo garantiza que los conflictos, si existen, los resuelvas tú y no el reviewer.</span></div>
-        <div class="rule"><span class="rule-icon">💬</span><span class="rule-text"><strong>Cuando el reviewer pide cambios.</strong> Antes de pushear las correcciones, hacer rebase para incorporar lo que pudo haber mergeado el equipo mientras esperabas la revisión.</span></div>
+        <div class="rule"><span class="rule-icon">📜</span><span class="rule-text"><strong>Pérdida de historial original:</strong> al hacer rebase se reescribe el historial del commit y se pierde la referencia de dónde se comenzó la implementación.</span></div>
+        <div class="rule"><span class="rule-icon">⚙️</span><span class="rule-text"><strong>Fricción innecesaria:</strong> implica una dependencia constante de hacer rebase, generando carga operativa para todos los miembros del equipo.</span></div>
+        <div class="rule"><span class="rule-icon">⚠️</span><span class="rule-text"><strong>Requiere conocimiento avanzado:</strong> solo es manejable de forma segura por desarrolladores mid/senior. Para juniors, los conflictos en rebase son significativamente más confusos que en merge.</span></div>
+        <div class="rule"><span class="rule-icon">🔁</span><span class="rule-text"><strong>Conflictos recurrentes:</strong> cada rebase puede reintroducir conflictos que ya fueron resueltos previamente.</span></div>
+        <div class="rule"><span class="rule-icon">💥</span><span class="rule-text"><strong>Riesgo de pérdida de trabajo:</strong> un rebase mal ejecutado puede destruir commits.</span></div>
       </div>
-      <h3>Flujo completo de rebase diario</h3>
-      <pre><code><span class="cm"># 1. Al comenzar el día: traer todos los cambios remotos</span>
-git fetch origin
-
-<span class="cm"># 2. Pararte en tu rama</span>
-git checkout <span class="ck">story-456/login-con-google</span>
-
-<span class="cm"># 3. Hacer rebase sobre testing actualizado</span>
-git rebase origin/testing
-
-<span class="cm"># 4a. Si NO hay conflictos → subir la rama actualizada</span>
-git push origin <span class="ck">story-456/login-con-google</span> --force-with-lease
-
-<span class="cm"># 4b. Si HAY conflictos → Git se pausa y avisa qué archivos tienen conflictos</span>
-<span class="cm">#     Abrir cada archivo conflictivo, resolverlo manualmente, luego:</span>
-git add .
-git rebase --continue
-
-<span class="cm">#     Si querés abortar y volver al estado anterior:</span>
-git rebase --abort</code></pre>
-      <h3>Entendiendo los conflictos en rebase</h3>
-      <p>Cuando hay conflictos, Git aplica tus commits de a uno y se detiene en el primero que choca. Vas a ver marcas como estas en el archivo:</p>
-      <pre><code><span class="cd">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD (testing)</span>
-<span class="cs">código que vino de testing</span>
-<span class="cm">======= </span>
-<span class="ck">tu código del commit que se está aplicando</span>
-<span class="cd">&gt;&gt;&gt;&gt;&gt;&gt;&gt; feat: agrega pantalla de login con Google</span></code></pre>
-      <p>Resuelves eligiendo qué código conservar (o combinando ambos), guardas el archivo, ejecutas <code>git add .</code> y continúas con <code>git rebase --continue</code>. Git repite el proceso por cada commit que tenga conflicto.</p>
-      <div class="alert"><strong>Nunca usar</strong> <code>--force</code> a secas después de un rebase. Siempre <code>--force-with-lease</code>: verifica que nadie más haya pusheado a tu rama antes de sobreescribir, evitando pérdida de trabajo.</div>
-      <div class="info"><strong>Rebase interactivo:</strong> Si tu rama acumuló commits de prueba o WIP que no tienen sentido solos, puedes limpiarlos antes del PR con <code>git rebase -i origin/testing</code>. Esto te permite combinar (<em>squash</em>), reordenar o eliminar commits de tu rama antes de presentarla para revisión.</div>
+      <h3>Estrategia estándar — Merge</h3>
+      <pre><code><span class="cm"># Sincronizar feature branch con main</span>
+git checkout <span class="ck">feat/456-login-con-google</span>
+git fetch origin main
+git merge origin/main
+<span class="cm"># Resolver conflictos si existen</span>
+git push origin <span class="ck">feat/456-login-con-google</span></code></pre>
+      <div class="tip"><strong>Buena práctica:</strong> Hacer esto periódicamente — al menos al comenzar cada día de trabajo — para minimizar conflictos al momento del MR.</div>
+      <h3>Excepciones controladas</h3>
+      <p>El rebase interactivo (<code>git rebase -i</code>) puede utilizarse únicamente cuando:</p>
+      <div class="rules">
+        <div class="rule"><span class="rule-icon">🧹</span><span class="rule-text">Es explícitamente necesario — por ejemplo, limpiar commits basura antes de un MR.</span></div>
+        <div class="rule"><span class="rule-icon">👤</span><span class="rule-text">Es realizado por el <strong>autor de la rama</strong> o por un <strong>Maintainer</strong> del repositorio.</span></div>
+        <div class="rule"><span class="rule-icon">🚫</span><span class="rule-text">No es una práctica obligatoria ni recurrente.</span></div>
+      </div>
+      <div class="info"><strong>Nota:</strong> Los squashed commits no son responsabilidad de los devs. El squash se realiza automáticamente por el mecanismo del Merge Request al integrar a <code>main</code>.</div>
+      <div class="alert"><strong>El rebase está prohibido como práctica estándar.</strong> Usarlo sin el conocimiento necesario puede destruir commits y generar conflictos recurrentes.</div>
     </Section>
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
     <Footer />
