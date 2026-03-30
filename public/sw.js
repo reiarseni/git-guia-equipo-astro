@@ -88,7 +88,7 @@ self.addEventListener('fetch', (e) => {
 // → normaliza trailing slash (evita ERR_FAILED por 301 de GitHub Pages)
 // → sirve desde caché inmediatamente (sin esperar red)
 // → actualiza la caché en segundo plano
-// → si no hay caché y falla la red → offline.html
+// → si no hay caché y falla la red (o timeout) → offline.html
 async function handleNavigation(request) {
   const url = new URL(request.url);
 
@@ -102,8 +102,17 @@ async function handleNavigation(request) {
   const cache  = await caches.open(CACHE);
   const cached = await matchNormalized(cache, request);
 
+  // Fetch con timeout breve para caer rápido a offline cuando no hay red
+  const TIMEOUT_MS = 3000;
+  const fetchWithTimeout = Promise.race([
+    fetch(request),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('timeout')), TIMEOUT_MS)
+    )
+  ]);
+
   // Fetch en background para mantener caché actualizada
-  const network = fetch(request)
+  const network = fetchWithTimeout
     .then(res => { if (res.ok) cache.put(request, res.clone()); return res; })
     .catch(() => null);
 
@@ -112,7 +121,7 @@ async function handleNavigation(request) {
     return cached;
   }
 
-  // Sin caché → esperar red
+  // Sin caché → esperar red (con timeout)
   const fresh = await network;
   if (fresh && fresh.ok) return fresh;
 
