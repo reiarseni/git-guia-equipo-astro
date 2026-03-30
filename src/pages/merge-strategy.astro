@@ -79,6 +79,102 @@ const idx = 7;
       </div>
       <div class="warn"><strong>Crítico:</strong> El título del squash commit en GitLab se toma del título del MR. Por eso es esencial que el título del MR sea claro y siga el formato establecido.</div>
     </Section>
+
+    <Section title="Anexo: Diagrama de Estrategia de Merge" id="diagrama-merge-strategy">
+      <p>Comparación visual entre el squash merge hacia <code>main</code> y el merge directo hacia <code>testing</code>.</p>
+
+      <svg viewBox="0 0 800 320" style="width:100%;display:block;background:#16161a;border-radius:12px;margin:16px 0 8px;">
+        <defs>
+          <marker id="ams-squash" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto">
+            <polygon points="0 0,8 2.5,0 5" fill="#4ecdc4" />
+          </marker>
+          <marker id="ams-direct" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto">
+            <polygon points="0 0,8 2.5,0 5" fill="#f0a040" />
+          </marker>
+        </defs>
+
+        <!-- ════ COLUMNA IZQUIERDA: Squash → main ════ -->
+        <rect x="14" y="14" width="374" height="292" fill="#1c1c22" rx="10" stroke="#2a2a35" stroke-width="1.5" />
+        <text x="28" y="38" fill="#4ecdc4" font-size="13" font-weight="700">Squash merge → main</text>
+        <text x="28" y="54" fill="#9090aa" font-size="10">Múltiples commits se convierten en uno solo limpio</text>
+
+        <!-- commits feature (izquierda) -->
+        <rect x="28" y="68" width="140" height="22" fill="#7c6af7" rx="4" opacity="0.22" stroke="#7c6af7" stroke-width="1" />
+        <text x="36" y="83" fill="#c5bbff" font-size="10">feat: agrega formulario</text>
+
+        <rect x="28" y="98" width="140" height="22" fill="#7c6af7" rx="4" opacity="0.22" stroke="#7c6af7" stroke-width="1" />
+        <text x="36" y="113" fill="#c5bbff" font-size="10">fix: corrige validación</text>
+
+        <rect x="28" y="128" width="140" height="22" fill="#7c6af7" rx="4" opacity="0.22" stroke="#7c6af7" stroke-width="1" />
+        <text x="36" y="143" fill="#c5bbff" font-size="10">refactor: limpia código</text>
+
+        <rect x="28" y="158" width="140" height="22" fill="#7c6af7" rx="4" opacity="0.22" stroke="#7c6af7" stroke-width="1" />
+        <text x="36" y="173" fill="#c5bbff" font-size="10">feat: completa el flujo</text>
+
+        <!-- flecha squash -->
+        <line x1="175" y1="130" x2="218" y2="130" stroke="#4ecdc4" stroke-width="2.5" marker-end="url(#ams-squash)" />
+        <text x="178" y="122" fill="#4ecdc4" font-size="10" font-weight="700">squash</text>
+
+        <!-- resultado: 1 commit en main -->
+        <rect x="228" y="112" width="148" height="40" fill="#4ecdc4" rx="6" opacity="0.18" stroke="#4ecdc4" stroke-width="2" />
+        <text x="238" y="130" fill="#4ecdc4" font-size="11" font-weight="700">1 commit limpio</text>
+        <text x="238" y="146" fill="#9090aa" font-size="10">feat: login google, rel #456</text>
+
+        <!-- badge main -->
+        <rect x="228" y="162" width="60" height="18" fill="#4ecdc4" rx="4" opacity="0.2" />
+        <text x="236" y="174" fill="#4ecdc4" font-size="10" font-weight="700">→ main</text>
+
+        <!-- beneficios izquierda -->
+        <text x="28" y="220" fill="#9090aa" font-size="11" font-weight="600">Beneficios:</text>
+        <text x="28" y="237" fill="#9090aa" font-size="10">✓  Historial limpio y semántico</text>
+        <text x="28" y="252" fill="#9090aa" font-size="10">✓  Revert sencillo por feature completa</text>
+        <text x="28" y="267" fill="#9090aa" font-size="10">✓  Changelog automático legible</text>
+        <text x="28" y="282" fill="#9090aa" font-size="10">✓  1 feature = 1 commit en producción</text>
+
+        <!-- ════ COLUMNA DERECHA: Merge directo → testing ════ -->
+        <rect x="412" y="14" width="374" height="292" fill="#1c1c22" rx="10" stroke="#2a2a35" stroke-width="1.5" />
+        <text x="426" y="38" fill="#f0a040" font-size="13" font-weight="700">Merge directo → testing</text>
+        <text x="426" y="54" fill="#9090aa" font-size="10">Todos los commits se preservan para trazabilidad de QA</text>
+
+        <!-- commits feature (derecha) -->
+        <rect x="426" y="68" width="140" height="22" fill="#7c6af7" rx="4" opacity="0.22" stroke="#7c6af7" stroke-width="1" />
+        <text x="434" y="83" fill="#c5bbff" font-size="10">feat: agrega formulario</text>
+
+        <rect x="426" y="98" width="140" height="22" fill="#7c6af7" rx="4" opacity="0.22" stroke="#7c6af7" stroke-width="1" />
+        <text x="434" y="113" fill="#c5bbff" font-size="10">fix: corrige validación</text>
+
+        <rect x="426" y="128" width="140" height="22" fill="#7c6af7" rx="4" opacity="0.22" stroke="#7c6af7" stroke-width="1" />
+        <text x="434" y="143" fill="#c5bbff" font-size="10">refactor: limpia código</text>
+
+        <rect x="426" y="158" width="140" height="22" fill="#7c6af7" rx="4" opacity="0.22" stroke="#7c6af7" stroke-width="1" />
+        <text x="434" y="173" fill="#c5bbff" font-size="10">feat: completa el flujo</text>
+
+        <!-- flecha merge directo -->
+        <line x1="573" y1="130" x2="616" y2="130" stroke="#f0a040" stroke-width="2.5" marker-end="url(#ams-direct)" />
+        <text x="574" y="122" fill="#f0a040" font-size="10" font-weight="700">merge</text>
+
+        <!-- resultado: 4 commits preservados en testing -->
+        <rect x="626" y="68" width="148" height="116" fill="#f0a040" rx="6" opacity="0.13" stroke="#f0a040" stroke-width="2" />
+        <text x="636" y="88" fill="#f0a040" font-size="11" font-weight="700">4 commits</text>
+        <text x="636" y="103" fill="#9090aa" font-size="10">preservados</text>
+        <text x="636" y="118" fill="#9090aa" font-size="9">feat: formulario</text>
+        <text x="636" y="131" fill="#9090aa" font-size="9">fix: validación</text>
+        <text x="636" y="144" fill="#9090aa" font-size="9">refactor: limpia</text>
+        <text x="636" y="157" fill="#9090aa" font-size="9">feat: completa</text>
+
+        <!-- badge testing -->
+        <rect x="626" y="192" width="66" height="18" fill="#f0a040" rx="4" opacity="0.2" />
+        <text x="634" y="204" fill="#f0a040" font-size="10" font-weight="700">→ testing</text>
+
+        <!-- beneficios derecha -->
+        <text x="426" y="220" fill="#9090aa" font-size="11" font-weight="600">Beneficios:</text>
+        <text x="426" y="237" fill="#9090aa" font-size="10">✓  QA puede rastrear cada cambio</text>
+        <text x="426" y="252" fill="#9090aa" font-size="10">✓  Debug detallado si algo falla</text>
+        <text x="426" y="267" fill="#9090aa" font-size="10">✓  Sin fricción: push directo, sin MR</text>
+        <text x="426" y="282" fill="#9090aa" font-size="10">✓  Historial técnico completo</text>
+      </svg>
+    </Section>
+
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
     <Footer />
   </div>

@@ -63,6 +63,67 @@ git push origin testing</code></pre>
 
       <div class="alert"><strong>La urgencia no elimina el code review.</strong> Incluso en la excepción, se requiere aprobación del Team Leader antes del merge.</div>
     </Section>
+
+    <Section title="Anexo: Diagrama del Flujo HotFix" id="diagrama-hotfix">
+      <p>Flujo urgente desde la detección del bug en producción hasta el merge. Pasa por <code>testing</code> para validación QA incluso en contexto de urgencia.</p>
+
+      <svg viewBox="0 0 800 280" style="width:100%;display:block;background:#16161a;border-radius:12px;margin:16px 0 8px;">
+        <defs>
+          <marker id="ahf-red" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto">
+            <polygon points="0 0,8 2.5,0 5" fill="#ff4757" />
+          </marker>
+        </defs>
+
+        <!-- ── LABELS ── -->
+        <text x="14" y="72" fill="#4ecdc4" font-size="13" font-weight="700">main</text>
+        <text x="14" y="158" fill="#ff4757" font-size="11" font-weight="700">fix/202</text>
+        <text x="14" y="248" fill="#f0a040" font-size="13" font-weight="700">testing</text>
+
+        <!-- ── MAIN ── -->
+        <line x1="100" y1="68" x2="760" y2="68" stroke="#4ecdc4" stroke-width="3" />
+        <circle cx="100" cy="68" r="5" fill="#4ecdc4" />
+        <!-- commit squash al final -->
+        <circle cx="680" cy="68" r="7" fill="#4ecdc4" stroke="#ff4757" stroke-width="2" />
+
+        <!-- ── HOTFIX BRANCH nace de main ── -->
+        <line x1="180" y1="68" x2="180" y2="154" stroke="#ff4757" stroke-width="2" stroke-dasharray="6,4" />
+        <circle cx="180" cy="154" r="5" fill="#ff4757" />
+        <line x1="180" y1="154" x2="600" y2="154" stroke="#ff4757" stroke-width="3" />
+        <!-- commits del fix -->
+        <circle cx="300" cy="154" r="4" fill="#ff4757" />
+        <circle cx="420" cy="154" r="4" fill="#ff4757" />
+        <circle cx="600" cy="154" r="5" fill="#ff4757" />
+
+        <!-- ── TESTING ── -->
+        <line x1="100" y1="244" x2="760" y2="244" stroke="#f0a040" stroke-width="3" />
+        <circle cx="100" cy="244" r="5" fill="#f0a040" />
+
+        <!-- ④ merge directo a testing para QA urgente -->
+        <line x1="420" y1="154" x2="420" y2="244" stroke="#ff4757" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#ahf-red)" />
+        <circle cx="420" cy="244" r="5" fill="#f0a040" stroke="#ff4757" stroke-width="2" />
+        <text x="430" y="198" fill="#ff4757" font-size="11" font-weight="700">QA urgente</text>
+        <text x="432" y="212" fill="#9090aa" font-size="10">(merge directo)</text>
+
+        <!-- ⑤ MR urgente a main -->
+        <line x1="600" y1="154" x2="680" y2="68" stroke="#ff4757" stroke-width="2.5" marker-end="url(#ahf-red)" />
+        <rect x="612" y="95" width="88" height="22" fill="#ff4757" rx="4" opacity="0.20" stroke="#ff4757" stroke-width="1" />
+        <text x="620" y="110" fill="#ffb3b8" font-size="10" font-weight="700">MR urgente → main</text>
+        <text x="628" y="122" fill="#9090aa" font-size="9">squash + approval TL</text>
+
+        <!-- ── PASO LABELS ── -->
+        <text x="178" y="52" fill="#9090aa" font-size="10">① crear rama desde main</text>
+        <text x="295" y="142" fill="#9090aa" font-size="10">② fix + commits</text>
+        <text x="595" y="142" fill="#9090aa" font-size="10">③ listo</text>
+        <text x="422" y="234" fill="#9090aa" font-size="10">④ integrar QA</text>
+        <text x="682" y="58" fill="#9090aa" font-size="10">⑤ merge</text>
+
+        <!-- ── WARNING BAR ── -->
+        <rect x="14" y="262" width="772" height="8" fill="#ff4757" rx="4" opacity="0.0" />
+        <rect x="14" y="260" width="772" height="16" fill="#ff4757" rx="4" opacity="0.12" stroke="#ff4757" stroke-width="1" />
+        <text x="22" y="272" fill="#ff4757" font-size="10" font-weight="700">⚠ No omitir testing salvo que producción esté completamente caída — en ese caso: merge directo a main con approval del TL, luego retroactivo a testing</text>
+      </svg>
+    </Section>
+
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
     <Footer />
   </div>

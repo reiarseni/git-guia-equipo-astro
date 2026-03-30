@@ -14,6 +14,7 @@ const idx = 0;
   <div class="container">
     <Section title="Estructura de Ramas" id="estructura-de-ramas">
       <p>El repositorio tiene hasta <strong>tres ramas permanentes</strong>. Todas las demás son temporales y se eliminan al fusionarse.</p>
+
       <div class="flow">
         <div class="flow-row">
           <span class="branch-badge b-feature">feat/456-login-google</span>
@@ -98,6 +99,68 @@ git push origin main:testing --force</code></pre>
 
       <div class="alert"><strong>Regla de oro:</strong> Nunca push directo a <code>main</code>. <code>testing</code> permite push directo por developers para agilizar procesos de integración y QA.</div>
     </Section>
+
+    <Section title="Anexo: Diagrama de Arquitectura" id="diagrama-estructura">
+      <p>Relación entre las tres ramas permanentes y las feature branches, con sus reglas de integración.</p>
+
+      <svg viewBox="0 0 800 300" style="width:100%;display:block;background:#16161a;border-radius:12px;margin:16px 0 8px;">
+        <defs>
+          <marker id="as-mr" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto">
+            <polygon points="0 0,8 2.5,0 5" fill="#7c6af7" />
+          </marker>
+          <marker id="as-direct" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto">
+            <polygon points="0 0,8 2.5,0 5" fill="#7c6af7" />
+          </marker>
+        </defs>
+
+        <!-- ── MAIN ── -->
+        <rect x="20" y="20" width="760" height="52" fill="#4ecdc4" rx="8" opacity="0.12" stroke="#4ecdc4" stroke-width="2" />
+        <text x="38" y="50" fill="#4ecdc4" font-size="15" font-weight="700">main</text>
+        <text x="130" y="50" fill="#9090aa" font-size="12">Producción · Solo vía MR formal con approval + CI verde · Squash merge</text>
+        <rect x="26" y="26" width="88" height="18" fill="#4ecdc4" rx="3" opacity="0.18" />
+        <text x="34" y="38" fill="#4ecdc4" font-size="10" font-weight="600">🔒 Protegida</text>
+
+        <!-- ── TESTING ── -->
+        <rect x="20" y="102" width="760" height="52" fill="#f0a040" rx="8" opacity="0.12" stroke="#f0a040" stroke-width="2" />
+        <text x="38" y="132" fill="#f0a040" font-size="15" font-weight="700">testing</text>
+        <text x="145" y="132" fill="#9090aa" font-size="12">QA · Push/merge directo por developers · Reconstruible</text>
+        <rect x="26" y="108" width="102" height="18" fill="#f0a040" rx="3" opacity="0.18" />
+        <text x="34" y="120" fill="#f0a040" font-size="10" font-weight="600">⚡ Push directo OK</text>
+
+        <!-- ── NEXT/STAGE (opcional) ── -->
+        <rect x="20" y="184" width="760" height="52" fill="#c084fc" rx="8" opacity="0.10" stroke="#c084fc" stroke-width="2" stroke-dasharray="8,5" />
+        <text x="38" y="214" fill="#c084fc" font-size="15" font-weight="700">next / stage</text>
+        <text x="178" y="214" fill="#9090aa" font-size="12">Pre-producción · Solo si el proyecto tiene instancia stage · Solo Maintainers</text>
+        <rect x="26" y="190" width="140" height="18" fill="#c084fc" rx="3" opacity="0.16" />
+        <text x="34" y="202" fill="#c084fc" font-size="10" font-weight="600">🔒 Protegida (opcional)</text>
+
+        <!-- ── FEATURE BOXES ── -->
+        <rect x="100" y="252" width="160" height="32" fill="#7c6af7" rx="6" opacity="0.20" stroke="#7c6af7" stroke-width="1.5" />
+        <text x="115" y="272" fill="#7c6af7" font-size="11" font-weight="600">feat/456-login-google</text>
+
+        <rect x="320" y="252" width="160" height="32" fill="#7c6af7" rx="6" opacity="0.20" stroke="#7c6af7" stroke-width="1.5" />
+        <text x="337" y="272" fill="#7c6af7" font-size="11" font-weight="600">fix/101-crash-pago</text>
+
+        <!-- feature → main (MR formal) -->
+        <line x1="180" y1="252" x2="210" y2="72" stroke="#7c6af7" stroke-width="2" marker-end="url(#as-mr)" />
+        <rect x="218" y="150" width="62" height="18" fill="#7c6af7" rx="3" opacity="0.22" />
+        <text x="224" y="162" fill="#c5bbff" font-size="10" font-weight="600">MR formal</text>
+
+        <!-- feature → testing (directo) -->
+        <line x1="155" y1="252" x2="155" y2="154" stroke="#7c6af7" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#as-direct)" />
+        <text x="100" y="208" fill="#e8e8f0" font-size="10">merge directo</text>
+
+        <!-- feature2 → main -->
+        <line x1="400" y1="252" x2="370" y2="72" stroke="#7c6af7" stroke-width="2" marker-end="url(#as-mr)" />
+        <rect x="340" y="150" width="62" height="18" fill="#7c6af7" rx="3" opacity="0.22" />
+        <text x="346" y="162" fill="#c5bbff" font-size="10" font-weight="600">MR formal</text>
+
+        <!-- feature2 → testing -->
+        <line x1="430" y1="252" x2="430" y2="154" stroke="#7c6af7" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#as-direct)" />
+        <text x="438" y="210" fill="#e8e8f0" font-size="10">merge directo</text>
+      </svg>
+    </Section>
+
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
     <Footer />
   </div>

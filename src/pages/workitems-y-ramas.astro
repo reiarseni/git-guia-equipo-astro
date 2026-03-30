@@ -22,6 +22,129 @@ const idx = 1;
       </div>
       <div class="tip"><strong>Tip:</strong> GitLab permite crear la rama directamente desde el issue (botón "Create branch"), lo cual genera el ID y slug automáticamente. Solo debes anteponer el tipo (<code>feat/</code> o <code>fix/</code>).</div>
     </Section>
+
+    <Section title="Anexo: Diagramas de Flujo" id="diagramas-workitems">
+      <h3>Flujo estándar: Story / Task</h3>
+      <p>Cada Story o Task genera una rama desde <code>main</code>. El MR apunta siempre a <code>main</code>. El merge a <code>testing</code> es directo y paralelo, sin MR formal.</p>
+
+      <svg viewBox="0 0 800 240" style="width:100%;display:block;background:#16161a;border-radius:12px;margin:16px 0 28px;">
+        <defs>
+          <marker id="ah-wi" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto">
+            <polygon points="0 0,8 2.5,0 5" fill="#7c6af7" />
+          </marker>
+        </defs>
+
+        <!-- labels -->
+        <text x="16" y="72" fill="#4ecdc4" font-size="13" font-weight="700">main</text>
+        <text x="16" y="148" fill="#7c6af7" font-size="11" font-weight="600">feat/456</text>
+        <text x="16" y="222" fill="#f0a040" font-size="13" font-weight="700">testing</text>
+
+        <!-- main -->
+        <line x1="100" y1="68" x2="770" y2="68" stroke="#4ecdc4" stroke-width="3" />
+        <circle cx="100" cy="68" r="5" fill="#4ecdc4" />
+
+        <!-- feature branch nace de main -->
+        <line x1="180" y1="68" x2="180" y2="144" stroke="#7c6af7" stroke-width="2" stroke-dasharray="6,4" />
+        <circle cx="180" cy="144" r="5" fill="#7c6af7" />
+        <line x1="180" y1="144" x2="620" y2="144" stroke="#7c6af7" stroke-width="3" />
+        <circle cx="300" cy="144" r="4" fill="#7c6af7" />
+        <circle cx="440" cy="144" r="4" fill="#7c6af7" />
+        <circle cx="620" cy="144" r="5" fill="#7c6af7" />
+
+        <!-- testing -->
+        <line x1="100" y1="218" x2="770" y2="218" stroke="#f0a040" stroke-width="3" />
+        <circle cx="100" cy="218" r="5" fill="#f0a040" />
+
+        <!-- merge directo a testing -->
+        <line x1="440" y1="144" x2="440" y2="218" stroke="#7c6af7" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#ah-wi)" />
+        <circle cx="440" cy="218" r="5" fill="#f0a040" stroke="#7c6af7" stroke-width="2" />
+
+        <!-- MR a main desde ultimo commit -->
+        <line x1="620" y1="144" x2="680" y2="68" stroke="#7c6af7" stroke-width="2" marker-end="url(#ah-wi)" />
+        <circle cx="680" cy="68" r="6" fill="#4ecdc4" stroke="#7c6af7" stroke-width="2" />
+
+        <!-- squash badge -->
+        <rect x="692" y="54" width="70" height="20" fill="#7c6af7" rx="4" opacity="0.25" stroke="#7c6af7" stroke-width="1" />
+        <text x="700" y="67" fill="#c5bbff" font-size="10" font-weight="600">squash merge</text>
+
+        <!-- anotaciones -->
+        <text x="175" y="50" fill="#9090aa" font-size="10">① crear rama</text>
+        <text x="295" y="132" fill="#9090aa" font-size="10">② commits</text>
+        <text x="445" y="186" fill="#e8e8f0" font-size="11">merge directo</text>
+        <text x="450" y="199" fill="#9090aa" font-size="10">(sin MR)</text>
+        <text x="628" y="112" fill="#7c6af7" font-size="12" font-weight="700">MR → main</text>
+      </svg>
+
+      <h3>Flujo alternativo: Epic con trabajo técnico</h3>
+      <p>El Epic tiene rama propia creada desde <code>main</code>. Cada Story/Task crea su rama desde la <strong>rama del Epic</strong> y abre su MR hacia esa rama. Cuando todas las Stories están integradas, el Epic abre un único MR hacia <code>main</code>.</p>
+
+      <svg viewBox="0 0 800 310" style="width:100%;display:block;background:#16161a;border-radius:12px;margin:16px 0 8px;">
+        <defs>
+          <marker id="ah-epic" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto">
+            <polygon points="0 0,8 2.5,0 5" fill="#c084fc" />
+          </marker>
+          <marker id="ah-story" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto">
+            <polygon points="0 0,8 2.5,0 5" fill="#7c6af7" />
+          </marker>
+        </defs>
+
+        <!-- labels -->
+        <text x="16" y="53" fill="#4ecdc4" font-size="13" font-weight="700">main</text>
+        <text x="16" y="130" fill="#c084fc" font-size="11" font-weight="700">epic/100</text>
+        <text x="16" y="200" fill="#7c6af7" font-size="10" font-weight="600">story/101</text>
+        <text x="16" y="282" fill="#7c6af7" font-size="10" font-weight="600">story/102</text>
+
+        <!-- main -->
+        <line x1="100" y1="48" x2="770" y2="48" stroke="#4ecdc4" stroke-width="3" />
+        <circle cx="100" cy="48" r="5" fill="#4ecdc4" />
+
+        <!-- epic nace de main -->
+        <line x1="155" y1="48" x2="155" y2="126" stroke="#c084fc" stroke-width="2" stroke-dasharray="6,4" />
+        <circle cx="155" cy="126" r="5" fill="#c084fc" />
+        <line x1="155" y1="126" x2="680" y2="126" stroke="#c084fc" stroke-width="3" />
+        <circle cx="280" cy="126" r="3" fill="#c084fc" />
+        <circle cx="490" cy="126" r="3" fill="#c084fc" />
+        <circle cx="680" cy="126" r="5" fill="#c084fc" />
+
+        <!-- story 1 nace del epic -->
+        <line x1="230" y1="126" x2="230" y2="196" stroke="#7c6af7" stroke-width="2" stroke-dasharray="5,4" />
+        <circle cx="230" cy="196" r="4" fill="#7c6af7" />
+        <line x1="230" y1="196" x2="430" y2="196" stroke="#7c6af7" stroke-width="2.5" />
+        <circle cx="320" cy="196" r="3" fill="#7c6af7" />
+        <circle cx="430" cy="196" r="4" fill="#7c6af7" />
+
+        <!-- story 1 MR al epic -->
+        <line x1="430" y1="196" x2="460" y2="126" stroke="#7c6af7" stroke-width="2" marker-end="url(#ah-story)" />
+        <circle cx="460" cy="126" r="5" fill="#c084fc" stroke="#7c6af7" stroke-width="2" />
+        <text x="438" y="163" fill="#9090aa" font-size="9">MR → epic</text>
+
+        <!-- story 2 nace del epic -->
+        <line x1="380" y1="126" x2="380" y2="278" stroke="#7c6af7" stroke-width="2" stroke-dasharray="5,4" />
+        <circle cx="380" cy="278" r="4" fill="#7c6af7" />
+        <line x1="380" y1="278" x2="580" y2="278" stroke="#7c6af7" stroke-width="2.5" />
+        <circle cx="480" cy="278" r="3" fill="#7c6af7" />
+        <circle cx="580" cy="278" r="4" fill="#7c6af7" />
+
+        <!-- story 2 MR al epic -->
+        <line x1="580" y1="278" x2="618" y2="126" stroke="#7c6af7" stroke-width="2" marker-end="url(#ah-story)" />
+        <circle cx="618" cy="126" r="5" fill="#c084fc" stroke="#7c6af7" stroke-width="2" />
+        <text x="598" y="205" fill="#9090aa" font-size="9">MR → epic</text>
+
+        <!-- epic MR a main -->
+        <line x1="680" y1="126" x2="720" y2="48" stroke="#c084fc" stroke-width="2.5" marker-end="url(#ah-epic)" />
+        <circle cx="720" cy="48" r="6" fill="#4ecdc4" stroke="#c084fc" stroke-width="2" />
+        <text x="692" y="88" fill="#c084fc" font-size="12" font-weight="700">MR Epic</text>
+        <text x="690" y="101" fill="#9090aa" font-size="9">→ main (squash)</text>
+
+        <!-- anotaciones -->
+        <text x="153" y="32" fill="#9090aa" font-size="10">① epic desde main</text>
+        <text x="228" y="186" fill="#9090aa" font-size="10">② story 1 desde epic</text>
+        <text x="378" y="266" fill="#9090aa" font-size="10">③ story 2 desde epic</text>
+      </svg>
+
+      <div class="info"><strong>Importante:</strong> En el flujo Epic, cada Story/Task crea su rama desde la rama del Epic y abre su MR hacia la rama del Epic (no hacia <code>main</code>). Una vez integradas todas las Stories al Epic, el Epic completo hace un único MR a <code>main</code> con squash.</div>
+    </Section>
+
     <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
     <Footer />
   </div>
