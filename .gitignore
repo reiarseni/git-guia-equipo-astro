@@ -29,3 +29,5 @@ Thumbs.db
 
 # Astro-specific
 .astro/
+
+.claude/settings.local.json
