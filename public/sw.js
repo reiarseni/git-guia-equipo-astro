@@ -1,7 +1,7 @@
 // Service Worker — Git Guía Equipo
 // Estrategia: install-time shell + stale-while-revalidate + progressive background cache
 
-const CACHE = 'git-guia-v5';
+const CACHE = 'git-guia-v6';
 const BASE  = '/git-guia-equipo-astro';
 
 // ── Shell: se cachea en install (bloquea hasta tenerlo) ──────────
@@ -13,19 +13,22 @@ const SHELL = [
 // ── Páginas en orden de prioridad ────────────────────────────────
 const PAGES = [
   BASE + '/estructura-de-ramas/',
+  BASE + '/plan-de-transicion/',
   BASE + '/workitems-y-ramas/',
   BASE + '/nombrado-de-ramas/',
   BASE + '/flujo-diario/',
-  BASE + '/rebase/',
+  BASE + '/merge-como-estrategia/',
   BASE + '/commits/',
   BASE + '/pull-requests/',
   BASE + '/merge-strategy/',
   BASE + '/draft-prs/',
-  BASE + '/release/',
+  BASE + '/versionado-y-tags/',
   BASE + '/hotfix/',
   BASE + '/cicd-branch-protection/',
   BASE + '/code-review/',
   BASE + '/reglas-generales/',
+  BASE + '/gitignore/',
+  BASE + '/trazabilidad-testing/',
 ];
 
 // ── Install: shell + primera página (crítico) ────────────────────
@@ -97,15 +100,9 @@ async function handleNavigation(request) {
   const cache  = await caches.open(CACHE);
   const cached = await matchNormalized(cache, request);
 
-  const TIMEOUT_MS = 3000;
-  const fetchWithTimeout = Promise.race([
-    fetch(request),
-    new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('timeout')), TIMEOUT_MS)
-    )
-  ]);
-
-  const network = fetchWithTimeout
+  // Sin timeout artificial: los errores de red reales lanzan excepción inmediatamente.
+  // Un timeout cortaría páginas que no están en caché cuando el servidor tarda (dev mode, cold start).
+  const network = fetch(request)
     .then(res => { if (res.ok) cache.put(request, res.clone()); return res; })
     .catch(() => null);
 
