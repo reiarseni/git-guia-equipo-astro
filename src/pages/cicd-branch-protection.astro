@@ -4,9 +4,6 @@ import Sidebar from '../components/Sidebar.astro';
 import Section from '../components/Section.astro';
 import Footer from '../components/Footer.astro';
 import PageNav from '../components/PageNav.astro';
-import { sections } from '../data/sections';
-
-const idx = 11;
 ---
 
 <Layout title="Git — CI/CD y Branch Protection">
@@ -67,7 +64,7 @@ const idx = 11;
         <div class="rule"><span class="rule-icon">🏗️</span><span class="rule-text"><strong>Build exitoso:</strong> verifica que la aplicación construye sin errores.</span></div>
       </div>
     </Section>
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <PageNav />
     <Footer />
   </div>
 </Layout>

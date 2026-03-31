@@ -4,9 +4,6 @@ import Sidebar from '../components/Sidebar.astro';
 import Section from '../components/Section.astro';
 import Footer from '../components/Footer.astro';
 import PageNav from '../components/PageNav.astro';
-import { sections } from '../data/sections';
-
-const idx = 6;
 ---
 
 <Layout title="Git — Pull Requests">
@@ -45,7 +42,7 @@ Título descriptivo del cambio, rel #número-workitem
         <div class="rule"><span class="rule-icon">📏</span><span class="rule-text">Preferiblemente menos de <strong>400 líneas modificadas</strong>. PRs mayores requieren justificación en la descripción. Se recomienda dividir en sub-tasks cuando sea posible.</span></div>
       </div>
     </Section>
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <PageNav />
     <Footer />
   </div>
 </Layout>

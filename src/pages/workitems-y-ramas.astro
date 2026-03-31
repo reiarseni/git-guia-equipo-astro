@@ -4,9 +4,6 @@ import Sidebar from '../components/Sidebar.astro';
 import Section from '../components/Section.astro';
 import Footer from '../components/Footer.astro';
 import PageNav from '../components/PageNav.astro';
-import { sections } from '../data/sections';
-
-const idx = 1;
 ---
 
 <Layout title="Git — Workitems y Ramas">
@@ -145,7 +142,7 @@ const idx = 1;
       <div class="info"><strong>Importante:</strong> En el flujo Epic, cada Story/Task crea su rama desde la rama del Epic y abre su MR hacia la rama del Epic (no hacia <code>main</code>). Una vez integradas todas las Stories al Epic, el Epic completo hace un único MR a <code>main</code> con squash.</div>
     </Section>
 
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <PageNav />
     <Footer />
   </div>
 </Layout>

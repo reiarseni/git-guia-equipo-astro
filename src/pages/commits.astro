@@ -4,9 +4,6 @@ import Sidebar from '../components/Sidebar.astro';
 import Section from '../components/Section.astro';
 import Footer from '../components/Footer.astro';
 import PageNav from '../components/PageNav.astro';
-import { sections } from '../data/sections';
-
-const idx = 5;
 ---
 
 <Layout title="Git — Commits">
@@ -68,7 +65,7 @@ git commit -m <span class="cs">"fix: corrige cálculo de descuento en carrito"</
            -m <span class="cs">"Closes #101"</span></code></pre>
       <div class="alert"><strong>Prohibido:</strong> Commits tipo <code>wip</code>, <code>cambios</code>, <code>arregle cosas</code> o cualquier mensaje no descriptivo sin referencia al issue.</div>
     </Section>
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <PageNav />
     <Footer />
   </div>
 </Layout>

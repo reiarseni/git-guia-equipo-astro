@@ -4,9 +4,6 @@ import Sidebar from '../components/Sidebar.astro';
 import Section from '../components/Section.astro';
 import Footer from '../components/Footer.astro';
 import PageNav from '../components/PageNav.astro';
-import { sections } from '../data/sections';
-
-const idx = 4;
 ---
 
 <Layout title="Git — Merge como Estrategia">
@@ -40,7 +37,7 @@ git push origin <span class="ck">feat/456-login-con-google</span></code></pre>
       <div class="info"><strong>Nota:</strong> Los squashed commits no son responsabilidad de los devs. El squash se realiza automáticamente por el mecanismo del Merge Request al integrar a <code>main</code>.</div>
       <div class="alert"><strong>El rebase está prohibido como práctica estándar.</strong> Usarlo sin el conocimiento necesario puede destruir commits y generar conflictos recurrentes.</div>
     </Section>
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <PageNav />
     <Footer />
   </div>
 </Layout>

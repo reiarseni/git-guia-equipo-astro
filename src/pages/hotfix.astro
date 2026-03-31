@@ -4,9 +4,6 @@ import Sidebar from '../components/Sidebar.astro';
 import Section from '../components/Section.astro';
 import Footer from '../components/Footer.astro';
 import PageNav from '../components/PageNav.astro';
-import { sections } from '../data/sections';
-
-const idx = 10;
 ---
 
 <Layout title="Git — Flujo HotFix">
@@ -64,7 +61,7 @@ git push origin testing</code></pre>
       <div class="alert"><strong>La urgencia no elimina el code review.</strong> Incluso en la excepción, se requiere aprobación del Team Leader antes del merge.</div>
     </Section>
 
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <PageNav />
     <Footer />
 
     <Section title="Anexo: Diagrama del Flujo HotFix" id="diagrama-hotfix">

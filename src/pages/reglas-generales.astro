@@ -4,9 +4,6 @@ import Sidebar from '../components/Sidebar.astro';
 import Section from '../components/Section.astro';
 import Footer from '../components/Footer.astro';
 import PageNav from '../components/PageNav.astro';
-import { sections } from '../data/sections';
-
-const idx = 13;
 ---
 
 <Layout title="Git — Reglas Generales">
@@ -28,7 +25,7 @@ const idx = 13;
         <div class="rule"><span class="rule-icon">🧪</span><span class="rule-text"><strong>Información de QA en workitem.</strong> La info de prueba y checklist de QA van en la tarjeta, no en el MR.</span></div>
       </div>
     </Section>
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <PageNav />
     <Footer />
   </div>
 </Layout>

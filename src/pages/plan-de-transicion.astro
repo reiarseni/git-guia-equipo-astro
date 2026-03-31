@@ -4,9 +4,6 @@ import Sidebar from '../components/Sidebar.astro';
 import Section from '../components/Section.astro';
 import Footer from '../components/Footer.astro';
 import PageNav from '../components/PageNav.astro';
-import { sections } from '../data/sections';
-
-const idx = sections.findIndex(s => s.href === "/plan-de-transicion") || 0;
 ---
 
 <Layout title="Git — Plan de Transición de Forks">
@@ -61,10 +58,7 @@ git push upstream &lt;nombre-rama&gt;
       <p>Una vez completada la transición, todos los desarrolladores trabajarán directamente sobre el repositorio principal, utilizando feature branches siguiendo el estándar establecido en las demás secciones de esta guía.</p>
     </Section>
 
-    <PageNav
-      prev={idx > 0 ? sections[idx - 1] : null}
-      next={idx < sections.length - 1 ? sections[idx + 1] : null}
-    />
+    <PageNav />
     <Footer />
   </div>
 </Layout>

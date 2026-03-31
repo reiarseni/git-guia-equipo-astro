@@ -4,9 +4,6 @@ import Sidebar from '../components/Sidebar.astro';
 import Section from '../components/Section.astro';
 import Footer from '../components/Footer.astro';
 import PageNav from '../components/PageNav.astro';
-import { sections } from '../data/sections';
-
-const idx = 12;
 ---
 
 <Layout title="Git — Code Review">
@@ -37,7 +34,7 @@ const idx = 12;
         <div class="rule"><span class="rule-icon">2️⃣</span><span class="rule-text">Si no se resuelve en un plazo prudente, escalar al <strong>Project Manager</strong>.</span></div>
       </div>
     </Section>
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <PageNav />
     <Footer />
   </div>
 </Layout>

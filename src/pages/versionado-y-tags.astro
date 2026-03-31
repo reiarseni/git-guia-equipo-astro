@@ -4,9 +4,6 @@ import Sidebar from '../components/Sidebar.astro';
 import Section from '../components/Section.astro';
 import Footer from '../components/Footer.astro';
 import PageNav from '../components/PageNav.astro';
-import { sections } from '../data/sections';
-
-const idx = 9;
 ---
 
 <Layout title="Git — Versionado y Tags">
@@ -48,7 +45,7 @@ git push origin v1.2.0</code></pre>
 
       <div class="tip"><strong>Recomendación:</strong> Aprovechar el historial limpio de <code>main</code> (gracias al squash) para generar changelogs automáticos con: <br><code>git log --oneline v1.1.0..v1.2.0</code></div>
     </Section>
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <PageNav />
     <Footer />
   </div>
 </Layout>

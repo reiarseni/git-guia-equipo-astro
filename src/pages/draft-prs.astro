@@ -4,9 +4,6 @@ import Sidebar from '../components/Sidebar.astro';
 import Section from '../components/Section.astro';
 import Footer from '../components/Footer.astro';
 import PageNav from '../components/PageNav.astro';
-import { sections } from '../data/sections';
-
-const idx = 8;
 ---
 
 <Layout title="Git — Draft PRs">
@@ -30,7 +27,7 @@ const idx = 8;
 <span class="cm"># Hacer clic en "Mark as ready" en GitLab</span></code></pre>
       <div class="tip"><strong>Buena práctica:</strong> Abrir el MR como Draft desde el primer push de la rama. Marcarlo como listo solo cuando esté preparado para code review.</div>
     </Section>
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <PageNav />
     <Footer />
   </div>
 </Layout>

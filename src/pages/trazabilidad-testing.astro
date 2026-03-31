@@ -4,9 +4,6 @@ import Sidebar from '../components/Sidebar.astro';
 import Section from '../components/Section.astro';
 import Footer from '../components/Footer.astro';
 import PageNav from '../components/PageNav.astro';
-import { sections } from '../data/sections';
-
-const idx = 15;
 ---
 
 <Layout title="Git — Trazabilidad de Testing">
@@ -33,7 +30,7 @@ const idx = 15;
 
       <div class="info"><strong>Nota:</strong> Estas prácticas evitan que el flujo libre de <code>testing</code> se convierta en una "black box" para el resto del equipo y para QA.</div>
     </Section>
-    <PageNav prev={sections[idx - 1] ?? null} next={sections[idx + 1] ?? null} />
+    <PageNav />
     <Footer />
   </div>
 </Layout>
