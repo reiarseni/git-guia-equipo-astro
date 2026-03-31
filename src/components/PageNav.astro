@@ -1,12 +1,13 @@
 ---
 import type { SectionInfo } from '../data/sections';
+import { sections } from '../data/sections';
 
-interface Props {
-  prev?: SectionInfo | null;
-  next?: SectionInfo | null;
-}
+// Calcular índice dinámicamente desde el pathname
+const pathname = Astro.url.pathname.replace(/^\/git-guia-equipo-astro/, '') || '/';
+const idx = sections.findIndex(s => s.href === pathname);
+const prev = idx > 0 ? sections[idx - 1] : null;
+const next = idx < sections.length - 1 ? sections[idx + 1] : null;
 
-const { prev, next } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
