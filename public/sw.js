@@ -1,7 +1,7 @@
 // Service Worker — Git Guía Equipo
 // Estrategia: install-time shell + stale-while-revalidate + progressive background cache
 
-const CACHE = 'git-guia-v4';
+const CACHE = 'git-guia-v5';
 const BASE  = '/git-guia-equipo-astro';
 
 // ── Shell: se cachea en install (bloquea hasta tenerlo) ──────────
@@ -11,8 +11,6 @@ const SHELL = [
 ];
 
 // ── Páginas en orden de prioridad ────────────────────────────────
-// La primera se cachea en install junto al shell.
-// Las demás se cachean progresivamente en background tras activate.
 const PAGES = [
   BASE + '/estructura-de-ramas/',
   BASE + '/workitems-y-ramas/',
@@ -35,7 +33,7 @@ self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE)
       .then(c => c.addAll([...SHELL, PAGES[0]]))
-      .then(() => self.skipWaiting())
+    // NO skipWaiting aquí — esperamos a que el cliente confirme la actualización
   );
 });
 
@@ -51,8 +49,14 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-// Cachea las páginas 2-14 una a una con pausa entre requests.
-// No bloquea la activación; corre en segundo plano.
+// ── Message: el cliente puede pedir skipWaiting ──────────────────
+self.addEventListener('message', (e) => {
+  if (e.data === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+// Cachea las páginas restantes una a una con pausa entre requests.
 async function backgroundCache() {
   const cache = await caches.open(CACHE);
   for (const url of PAGES.slice(1)) {
@@ -71,10 +75,8 @@ async function backgroundCache() {
 self.addEventListener('fetch', (e) => {
   const { request } = e;
 
-  // Solo GET dentro del scope de la app
   if (request.method !== 'GET') return;
   if (!request.url.startsWith(self.location.origin + BASE)) return;
-  // No interceptar el propio SW
   if (request.url.includes('/sw.js')) return;
 
   e.respondWith(
@@ -85,16 +87,9 @@ self.addEventListener('fetch', (e) => {
 });
 
 // Stale-While-Revalidate para páginas HTML
-// → normaliza trailing slash (evita ERR_FAILED por 301 de GitHub Pages)
-// → sirve desde caché inmediatamente (sin esperar red)
-// → actualiza la caché en segundo plano
-// → si no hay caché y falla la red (o timeout) → offline.html
 async function handleNavigation(request) {
   const url = new URL(request.url);
 
-  // GitHub Pages emite 301 para rutas sin trailing slash.
-  // Resolver aquí evita que el browser reciba una respuesta redirect
-  // que puede derivar en ERR_FAILED en algunos contextos de SW.
   if (!url.pathname.endsWith('/') && !url.pathname.split('/').pop().includes('.')) {
     return Response.redirect(url.origin + url.pathname + '/' + url.search, 301);
   }
@@ -102,7 +97,6 @@ async function handleNavigation(request) {
   const cache  = await caches.open(CACHE);
   const cached = await matchNormalized(cache, request);
 
-  // Fetch con timeout breve para caer rápido a offline cuando no hay red
   const TIMEOUT_MS = 3000;
   const fetchWithTimeout = Promise.race([
     fetch(request),
@@ -111,21 +105,18 @@ async function handleNavigation(request) {
     )
   ]);
 
-  // Fetch en background para mantener caché actualizada
   const network = fetchWithTimeout
     .then(res => { if (res.ok) cache.put(request, res.clone()); return res; })
     .catch(() => null);
 
   if (cached) {
-    network.catch(() => {}); // fire-and-forget, silenciar errores
+    network.catch(() => {});
     return cached;
   }
 
-  // Sin caché → esperar red (con timeout)
   const fresh = await network;
   if (fresh && fresh.ok) return fresh;
 
-  // Sin red y sin caché → página offline
   const offline = await cache.match(BASE + '/offline.html');
   return offline ?? new Response('<h1>Offline</h1>', {
     status: 503,
@@ -148,7 +139,6 @@ async function handleAsset(request) {
   }
 }
 
-// Intenta cachear con y sin trailing slash para tolerar ambos formatos de URL
 async function matchNormalized(cache, request) {
   const direct = await cache.match(request);
   if (direct) return direct;

@@ -12,7 +12,6 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@vite-pwa/astro": "^1.2.0",
     "astro": "^6.0.0"
   },
   "devDependencies": {

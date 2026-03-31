@@ -144,6 +144,8 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e as BeforeInstallPromptEvent;
+    // Compartir el prompt con otros componentes (ej: botón del sidebar)
+    (window as Window & { __pwaPrompt?: BeforeInstallPromptEvent }).__pwaPrompt = deferredPrompt;
   });
 
   // ── Anti-spam ─────────────────────────────────────────
@@ -219,6 +221,7 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         ocultar('pwa-chromium');
         const { outcome } = await deferredPrompt!.prompt();
         deferredPrompt = null;
+        (window as Window & { __pwaPrompt?: BeforeInstallPromptEvent }).__pwaPrompt = undefined;
         outcome === 'accepted' ? instalada() : cerrar();
       });
 

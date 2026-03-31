@@ -8,7 +8,6 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
 <div class="sidebar-inner">
   <div class="sidebar-head">
     <a href={import.meta.env.BASE_URL} class="sidebar-home-link">
-
       <p class="sidebar-title">Git Guía v4.0</p>
     </a>
     <div class="offline-pill offline-pill--sidebar" id="offlineBadgeSidebar" aria-live="polite" aria-atomic="true" hidden>
@@ -37,6 +36,17 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
     ))}
   </nav>
 
+  <!-- Botón de instalación PWA (permanente) -->
+  <div class="sidebar-foot" id="sidebar-install-foot" hidden>
+    <button id="sidebar-install-btn" class="sidebar-install-btn" type="button">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="7 10 12 15 17 10"/>
+        <line x1="12" y1="15" x2="12" y2="3"/>
+      </svg>
+      Instalar como app
+    </button>
+  </div>
 </div>
 
 <style>
@@ -55,19 +65,6 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
   .sidebar-home-link {
     text-decoration: none;
     display: block;
-  }
-
-  .sidebar-badge {
-    display: inline-block;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.12em;
-    color: var(--accent);
-    background: rgba(124, 106, 247, 0.1);
-    border: 1px solid rgba(124, 106, 247, 0.22);
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-bottom: 10px;
   }
 
   .sidebar-title {
@@ -152,17 +149,99 @@ const pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
     white-space: nowrap;
   }
 
+  /* ── Footer con botón de instalación ── */
   .sidebar-foot {
-    padding: 14px 20px;
+    padding: 12px 14px;
     border-top: 1px solid var(--border);
     flex-shrink: 0;
   }
 
-  .sidebar-foot-text {
-    font-size: 10px;
-    color: var(--muted);
-    font-family: 'JetBrains Mono', monospace;
-    line-height: 1.6;
-    opacity: 0.7;
+  .sidebar-install-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 9px 12px;
+    background: rgba(124, 106, 247, 0.08);
+    border: 1px solid rgba(124, 106, 247, 0.2);
+    border-radius: 8px;
+    color: #a090f0;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    font-family: inherit;
+  }
+
+  .sidebar-install-btn:hover,
+  .sidebar-install-btn:focus-visible {
+    background: rgba(124, 106, 247, 0.15);
+    color: #c0b0ff;
+    border-color: rgba(124, 106, 247, 0.4);
+    outline: none;
   }
 </style>
+
+<script>
+  interface BeforeInstallPromptEvent extends Event {
+    prompt(): Promise<{ outcome: 'accepted' | 'dismissed' }>;
+  }
+
+  // Escuchar el evento capturado por PwaInstallPrompt
+  // El prompt se almacena en window.__pwaPrompt para compartirlo
+  const foot = document.getElementById('sidebar-install-foot');
+  const btn  = document.getElementById('sidebar-install-btn');
+
+  function yaInstalada(): boolean {
+    return window.matchMedia('(display-mode: standalone)').matches
+        || (navigator as Navigator & { standalone?: boolean }).standalone === true;
+  }
+
+  function estadoPermanente(): boolean {
+    try {
+      const d = JSON.parse(localStorage.getItem('pwa-install-state') || 'null');
+      return d?.permanent === true;
+    } catch { return false; }
+  }
+
+  function esIOS(): boolean {
+    return /iPhone|iPad|iPod/i.test(navigator.userAgent)
+        && !(window as Window & { MSStream?: unknown }).MSStream;
+  }
+
+  function mostrarBoton() {
+    if (!foot || !btn) return;
+    if (yaInstalada()) return;
+    if (estadoPermanente()) return;
+    foot.hidden = false;
+  }
+
+  // Mostrar botón si corresponde
+  mostrarBoton();
+
+  btn?.addEventListener('click', () => {
+    const prompt = (window as Window & { __pwaPrompt?: BeforeInstallPromptEvent }).__pwaPrompt;
+
+    if (prompt) {
+      prompt.prompt().then(({ outcome }) => {
+        if (outcome === 'accepted') {
+          foot!.hidden = true;
+          localStorage.setItem('pwa-install-state', JSON.stringify({ permanent: true }));
+        }
+        (window as Window & { __pwaPrompt?: BeforeInstallPromptEvent }).__pwaPrompt = undefined;
+      });
+    } else if (esIOS()) {
+      // Activar el banner iOS
+      const iosBanner = document.getElementById('pwa-ios');
+      if (iosBanner) {
+        iosBanner.hidden = false;
+        requestAnimationFrame(() => iosBanner.classList.add('visible'));
+      }
+    }
+  });
+
+  // Esconder el botón si el usuario instala desde el banner
+  window.addEventListener('appinstalled', () => {
+    if (foot) foot.hidden = true;
+  });
+</script>
