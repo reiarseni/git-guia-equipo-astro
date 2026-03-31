@@ -115,16 +115,6 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
     window.addEventListener('online',  () => setOffline(false));
   </script>
 
-  <!-- Service Worker -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      /* @vite-ignore */
-      navigator.serviceWorker.register(
-        '/git-guia-equipo-astro/sw.js',
-        { scope: '/git-guia-equipo-astro/' }
-      ).catch(() => { /* SW opcional, no bloquear si falla */ });
-    }
-  </script>
 
   <PwaInstallPrompt />
 </body>
